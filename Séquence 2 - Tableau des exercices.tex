@@ -1,0 +1,108 @@
+
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage[left=1cm,right=1cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage{pifont}
+\usepackage{frcursive}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fontawesome5}
+\definecolor{calcblue}{HTML}{1C7ED6}
+\newcommand{\Vj}[1]{\overrightarrow{\text{#1}}}
+\renewcommand{\familydefault}{\sfdefault}
+\DeclareSymbolFont{sfnumbers}{OT1}{cmss}{m}{n}
+\SetSymbolFont{sfnumbers}{bold}{OT1}{cmss}{bx}{n}
+\DeclareMathSymbol{0}{\mathalpha}{sfnumbers}{`0}
+\DeclareMathSymbol{1}{\mathalpha}{sfnumbers}{`1}
+\DeclareMathSymbol{2}{\mathalpha}{sfnumbers}{`2}
+\DeclareMathSymbol{3}{\mathalpha}{sfnumbers}{`3}
+\DeclareMathSymbol{4}{\mathalpha}{sfnumbers}{`4}
+\DeclareMathSymbol{5}{\mathalpha}{sfnumbers}{`5}
+\DeclareMathSymbol{6}{\mathalpha}{sfnumbers}{`6}
+\DeclareMathSymbol{7}{\mathalpha}{sfnumbers}{`7}
+\DeclareMathSymbol{8}{\mathalpha}{sfnumbers}{`8}
+\DeclareMathSymbol{9}{\mathalpha}{sfnumbers}{`9}
+\titleformat{\section}{\Large\bfseries\color{black}}{}{0pt}{}[{\color{gray!40}\titlerule}]
+\titlespacing*{\section}{0pt}{18pt}{10pt}
+\setlength{\parindent}{0pt}
+\graphicspath{{./}}
+\newcommand*{\textcircledd}[1]{\begin{tikzpicture}[baseline=(letter.base)]\node[draw,circle,inner sep=1pt] (letter) {#1};\end{tikzpicture}}
+\newcommand{\numeroCerne}[1]{\protect\textcircledd{\bfseries\scriptsize #1}}
+\setlist[enumerate,1]{label=\numeroCerne{\arabic*}, leftmargin=*, labelsep=6pt, itemsep=4pt, topsep=4pt, partopsep=0pt, parsep=0pt}
+\title{\textbf{S\'equence 2 --- Tableau des exercices}\\[4pt]\large Vecteurs}
+\author{Manuel du Livre Scolaire p.~184--212~\textbullet~{\color{calcblue}\href{https://www.lelivrescolaire.fr/}{\faIcon{external-link-alt}~\ttfamily\small lelivrescolaire.fr}} --- Lyc\'ee Lebrun Coutances}
+\date{}
+\begin{document}
+\maketitle
+\vspace{6pt}
+
+% Tableau Objectifs x difficult\'e, crois\'e avec les exercices manuel
+% (banque) et ceux de "S\'equence 2 - Feuille d'exercices - Vecteurs.tex"
+% (Feuille 2), sur le mod\`ele du tableau de la S\'equence 1.
+\definecolor{diffgreen}{HTML}{40C057}
+\definecolor{diffblue}{HTML}{228BE6}
+\definecolor{diffred}{HTML}{FA5252}
+\newcommand{\starfull}[1]{{\color{#1}\ding{72}}}
+\newcommand{\starempty}{{\color{gray!45}\ding{73}}}
+\newcommand{\cellA}[1]{\parbox[c][1.7cm][c]{4.3cm}{\raggedright #1}}
+\newcommand{\cellB}[1]{\parbox[c][1.7cm][c]{4.3cm}{\raggedright\footnotesize #1}}
+\newcommand{\headcell}[1]{\parbox[c][0.75cm][c]{4.3cm}{\centering \scalebox{1.6}{#1}}}
+\begin{center}
+{\footnotesize
+\begin{tabular}{|p{4.3cm}|p{4.3cm}|p{4.3cm}|p{4.3cm}|}
+\cline{2-4}
+\multicolumn{1}{c|}{} & \headcell{\starfull{diffgreen}\starempty\starempty} & \headcell{\starempty\starfull{diffblue}\starempty} & \headcell{\starempty\starempty\starfull{diffred}} \\
+\hline
+\cellA{\textbf{Objectif 1}\\{\small Vecteur $\Vj{MM'}$ d'une translation --- direction, sens et norme}} &
+\cellB{Manuel - Ex~28, 30 p.\,185\\Feuille 2 - Ex~1, 2, 9} &
+\cellB{Manuel - Ex~32 p.\,185} &
+\cellB{} \\
+\hline
+\cellA{\textbf{Objectif 2}\\{\small \'Egalit\'e de deux vecteurs, vecteur nul}} &
+\cellB{Manuel - Ex~23, 27 p.\,185} &
+\cellB{Manuel - Ex~18 p.\,183\\Feuille 2 - Ex~3, 4, 5,\\6, 7} &
+\cellB{} \\
+\hline
+\cellA{\textbf{Objectif 3}\\{\small Repr\'esentants d'un vecteur}} &
+\cellB{} &
+\cellB{Manuel - Ex~31 p.\,185} &
+\cellB{} \\
+\hline
+\cellA{\textbf{Objectif 4}\\{\small Somme de deux vecteurs et relation de Chasles}} &
+\cellB{Manuel - Ex~39 p.186,\\42 p.187\\Feuille 2 - Ex~11} &
+\cellB{Manuel - Ex~33, 35,\\38 p.185-186, 43,\\45 p.187, 72 p.192\\Feuille 2 - Ex~10, 12} &
+\cellB{} \\
+\hline
+\cellA{\textbf{Objectif 5}\\{\small Produit d'un vecteur par un nombre r\'eel et colin\'earit\'e de deux vecteurs}} &
+\cellB{Manuel - Ex~19 p.207,\\42, 44 p.208-210,\\61 p.210} &
+\cellB{Manuel - Ex~41 p.208-210,\\74 p.212\\Feuille 2 - Ex~13, 14, 15} &
+\cellB{Manuel - Ex~45 p.208-210,\\75 p.212} \\
+\hline
+\cellA{\textbf{Objectif 6}\\{\small D\'ecomposition d'un vecteur en fonction de deux vecteurs non colin\'eaires}} &
+\cellB{} &
+\cellB{} &
+\cellB{Feuille 2 - Ex~16} \\
+\hline
+\cellA{\textbf{Objectif 7}\\{\small Caract\'erisation vectorielle du milieu d'un segment}} &
+\cellB{} &
+\cellB{} &
+\cellB{Feuille 2 - Ex~8} \\
+\hline
+\end{tabular}
+}
+\end{center}
+
+\end{document}
