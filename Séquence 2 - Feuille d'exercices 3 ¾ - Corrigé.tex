@@ -1,0 +1,224 @@
+% !TEX program = lualatex
+\documentclass[10pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage[left=1cm,right=1cm,top=1.3cm,bottom=1.3cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{multicol}
+\raggedcolumns
+\usepackage{pifont}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,shapes.misc}
+\tikzset{ptcross/.style={cross out,draw,thick,minimum size=3pt,inner sep=0pt}}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins}
+\usepackage[hidelinks]{hyperref}
+\definecolor{calcblue}{HTML}{1C7ED6}
+\definecolor{skyblue}{HTML}{339AF0}
+\definecolor{objorange}{HTML}{F76707}
+\definecolor{repred}{HTML}{E03131}
+\newcommand{\Vj}[1]{\overrightarrow{\text{#1}}}
+\newcommand{\Pt}[1]{\textsf{\footnotesize #1}}
+\renewcommand{\familydefault}{\sfdefault}
+\DeclareSymbolFont{sfnumbers}{OT1}{cmss}{m}{n}
+\SetSymbolFont{sfnumbers}{bold}{OT1}{cmss}{bx}{n}
+\DeclareMathSymbol{0}{\mathalpha}{sfnumbers}{`0}
+\DeclareMathSymbol{1}{\mathalpha}{sfnumbers}{`1}
+\DeclareMathSymbol{2}{\mathalpha}{sfnumbers}{`2}
+\DeclareMathSymbol{3}{\mathalpha}{sfnumbers}{`3}
+\DeclareMathSymbol{4}{\mathalpha}{sfnumbers}{`4}
+\DeclareMathSymbol{5}{\mathalpha}{sfnumbers}{`5}
+\DeclareMathSymbol{6}{\mathalpha}{sfnumbers}{`6}
+\DeclareMathSymbol{7}{\mathalpha}{sfnumbers}{`7}
+\DeclareMathSymbol{8}{\mathalpha}{sfnumbers}{`8}
+\DeclareMathSymbol{9}{\mathalpha}{sfnumbers}{`9}
+\setlength{\parindent}{0pt}
+\setlength{\columnsep}{18pt}
+\graphicspath{{./}}
+\newcommand*{\textcircledd}[1]{\begin{tikzpicture}[baseline=(letter.base)]\node[draw,circle,inner sep=1pt] (letter) {#1};\end{tikzpicture}}
+\newcommand{\numeroCerne}[1]{\protect\textcircledd{\bfseries\scriptsize #1}}
+\setlist[enumerate,1]{label=\numeroCerne{\arabic*}, leftmargin=*, labelsep=5pt, itemsep=2pt, topsep=1pt, partopsep=0pt, parsep=0pt, beginpenalty=10000}
+\setlist[itemize,1]{beginpenalty=10000}
+\setlist[enumerate,2]{label=(\alph*), leftmargin=*, labelsep=4pt, itemsep=1pt, topsep=1pt, partopsep=0pt, parsep=0pt}
+\setlength{\abovedisplayskip}{3pt}\setlength{\belowdisplayskip}{3pt}\setlength{\abovedisplayshortskip}{3pt}\setlength{\belowdisplayshortskip}{3pt}
+
+% Ligne de corrig\'e : num\'ero d'exercice en pastille bleu ciel (m\^eme
+% couleur que les cartes d'exercice de la feuille), suivi de la r\'eponse.
+\newcommand{\Corr}[2]{%
+\par\vspace{6pt}
+\noindent\tcbox[on line, colback=skyblue, colframe=skyblue, boxsep=1pt, left=4pt, right=4pt, top=1pt, bottom=1pt, arc=2pt]{\textcolor{white}{\bfseries Exercice~#1}}\par\nobreak\vspace{3pt}\nobreak
+\noindent\ignorespaces #2
+\par
+}
+
+% Bandeau d'objectif, comme sur la feuille d'exercices.
+\newcommand{\Objectif}[2]{%
+\par\vspace{8pt}
+\noindent\begin{minipage}{\linewidth}
+{\large\color{objorange}\bfseries Objectif #1~:}\\{\large\color{objorange}#2}
+\end{minipage}\par\nobreak
+\vspace{2pt}\nobreak
+}
+
+% \'El\'ements construits (points plac\'es, vecteurs trac\'es) : en rouge.
+\newcommand{\Rep}[1]{{\color{repred}#1}}
+
+\author{2nde --- Lyc\'ee Lebrun Coutances}
+\date{}
+\title{\textbf{S\'equence 2 --- Feuille d'exercices n\textdegree{}3\,\textsuperscript{3/4} : Vecteurs et d\'emonstrations}\\[4pt]\large Corrig\'e}
+\begin{document}
+\maketitle
+\vspace{-18pt}
+
+\begin{multicols}{2}
+
+\Objectif{5}{Produit d'un vecteur par un nombre r\'eel et colin\'earit\'e de deux vecteurs}
+
+\Corr{1}{
+\begin{minipage}{\linewidth}
+\begin{enumerate}
+\item $\Vj{AC}$ correspond \`a 1 carreau \`a droite et 2 en haut, donc $\Vj{BM}=2\Vj{AC}$ \`a 2 carreaux \`a droite et 4 en haut \`a partir de $B$.\\
+$\Vj{BC}$ correspond \`a 2 carreaux \`a gauche et 2 en haut, donc $\Vj{AN}=\dfrac12\Vj{BC}$ \`a 1 carreau \`a gauche et 1 en haut \`a partir de $A$.
+\begin{center}
+\begin{tikzpicture}[scale=0.55]
+\draw[thin,gray!35] (-2,-1) grid (6,5);
+\coordinate (A) at (0,0); \coordinate (B) at (3,0); \coordinate (C) at (1,2);
+\coordinate (M) at (5,4); \coordinate (N) at (-1,1);
+\draw[thick] (A)--(B)--(C)--cycle;
+\draw[-{Stealth},thick,repred] (B)--(M); \draw[-{Stealth},thick,repred] (A)--(N);
+\draw[gray,dashed] (N)--(M);
+\node[ptcross] at (A) {}; \node[below left] at (A) {\Pt{A}};
+\node[ptcross] at (B) {}; \node[below right] at (B) {\Pt{B}};
+\node[ptcross] at (C) {}; \node[above left] at (C) {\Pt{C}};
+\node[ptcross,repred] at (M) {}; \node[above,repred] at (M) {\Pt{M}};
+\node[ptcross,repred] at (N) {}; \node[above,repred] at (N) {\Pt{N}};
+\end{tikzpicture}
+\end{center}
+\textbf{Observation}~: les points $C$, $M$ et $N$ semblent align\'es.
+\end{enumerate}
+\end{minipage}
+\begin{enumerate}[start=2]
+\item \textbf{D'une part}, d'apr\`es la relation de Chasles~:
+\[\Vj{CM}=\Vj{CB}+\Vj{BM}=\Vj{CB}+2\,\Vj{AC}.\]
+\textbf{D'autre part}, d'apr\`es la relation de Chasles~:
+\[\Vj{CN}=\Vj{CA}+\Vj{AN}=-\Vj{AC}+\dfrac12\,\Vj{BC}=-\dfrac12\,\Vj{CB}-\Vj{AC}.\]
+\item On remarque que $\Vj{CM}=-2\,\Vj{CN}$. En effet~:
+\[-2\,\Vj{CN}=-2\left(-\dfrac12\,\Vj{CB}-\Vj{AC}\right)=\Vj{CB}+2\,\Vj{AC}=\Vj{CM}.\]
+Donc les vecteurs $\Vj{CM}$ et $\Vj{CN}$ sont colin\'eaires.\\[3pt]
+\textbf{Ainsi}~: les points $C$, $M$ et $N$ sont align\'es.
+\end{enumerate}
+}
+
+\Corr{2}{
+\begin{minipage}{\linewidth}
+\begin{enumerate}
+\item $\Vj{AB}$ correspond \`a 4 carreaux \`a droite, donc $M$ est \`a 1 carreau \`a droite de $A$.\\
+$\Vj{BC}$ correspond \`a 2 carreaux \`a droite et 4 en haut, donc $\Vj{BN}=\dfrac34\Vj{BC}$ \`a $1{,}5$ carreau \`a droite et 3 en haut \`a partir de $B$.
+\begin{center}
+\begin{tikzpicture}[scale=0.55]
+\draw[thin,gray!35] (-1,-1) grid (7,5);
+\coordinate (A) at (0,0); \coordinate (B) at (4,0); \coordinate (C) at (6,4);
+\coordinate (M) at (1,0); \coordinate (N) at (5.5,3);
+\draw[thick] (A)--(B)--(C)--cycle;
+\draw[repred,thick] (M)--(N);
+\node[ptcross] at (A) {}; \node[below left] at (A) {\Pt{A}};
+\node[ptcross] at (B) {}; \node[below right] at (B) {\Pt{B}};
+\node[ptcross] at (C) {}; \node[above] at (C) {\Pt{C}};
+\node[ptcross,repred] at (M) {}; \node[below,repred] at (M) {\Pt{M}};
+\node[ptcross,repred] at (N) {}; \node[right,repred] at (N) {\Pt{N}};
+\end{tikzpicture}
+\end{center}
+\textbf{Observation}~: les droites $(MN)$ et $(AC)$ semblent parall\`eles.
+\end{enumerate}
+\end{minipage}
+\begin{enumerate}[start=2]
+\item \textbf{Tout d'abord}, exprimons $\Vj{MB}$ en fonction de $\Vj{AB}$~:
+\[\Vj{MB}=\Vj{MA}+\Vj{AB}=-\dfrac14\,\Vj{AB}+\Vj{AB}=\dfrac34\,\Vj{AB}.\]
+\textit{Justifications}~: relation de Chasles~; $\Vj{MA}=-\Vj{AM}=-\dfrac14\Vj{AB}$~; puis $-\dfrac14+1=\dfrac34$.\\[4pt]
+\textbf{Ensuite},
+\[\Vj{MN}=\Vj{MB}+\Vj{BN}=\dfrac34\,\Vj{AB}+\dfrac34\,\Vj{BC}=\dfrac34\left(\Vj{AB}+\Vj{BC}\right)=\dfrac34\,\Vj{AC}.\]
+\textit{Justifications}~: relation de Chasles~; on remplace $\Vj{MB}$ et $\Vj{BN}$ par leurs expressions~; on factorise par $\dfrac34$~; relation de Chasles.\\[4pt]
+\textbf{Conclusion}~: $\Vj{MN}=\dfrac34\,\Vj{AC}$, donc les vecteurs $\Vj{MN}$ et $\Vj{AC}$ sont colin\'eaires.\\[3pt]
+\textbf{Ainsi}~: les droites $(MN)$ et $(AC)$ sont parall\`eles.
+\end{enumerate}
+}
+
+\Corr{3}{
+\begin{enumerate}
+\item $\Vj{AM}=-\dfrac12\Vj{AB}$~: $M$ est \`a 2 carreaux \`a gauche et 1 en bas de $A$. $\Vj{AN}=-\dfrac12\Vj{AC}$~: $N$ est \`a 1 carreau \`a droite et 1 en bas de $A$.
+\begin{center}
+\begin{tikzpicture}[scale=0.55]
+\draw[thin,gray!35] (0,0) grid (9,5);
+\coordinate (A) at (4,2); \coordinate (B) at (8,4); \coordinate (C) at (2,4);
+\coordinate (M) at (2,1); \coordinate (N) at (5,1);
+\draw[thick] (A)--(B)--(C)--cycle;
+\draw[repred,thick] (M)--(N);
+\node[ptcross] at (A) {}; \node[below left] at (A) {\Pt{A}};
+\node[ptcross] at (B) {}; \node[below right] at (B) {\Pt{B}};
+\node[ptcross] at (C) {}; \node[above left] at (C) {\Pt{C}};
+\node[ptcross,repred] at (M) {}; \node[below,repred] at (M) {\Pt{M}};
+\node[ptcross,repred] at (N) {}; \node[below,repred] at (N) {\Pt{N}};
+\end{tikzpicture}
+\end{center}
+\item D'apr\`es la relation de Chasles~:
+\[\Vj{MN}=\Vj{MA}+\Vj{AN}=\dfrac12\,\Vj{AB}-\dfrac12\,\Vj{AC}=\dfrac12\left(\Vj{AB}-\Vj{AC}\right).\]
+Or $\Vj{AB}-\Vj{AC}=\Vj{AB}+\Vj{CA}=\Vj{CA}+\Vj{AB}=\Vj{CB}=-\Vj{BC}$.\\
+Donc $\Vj{MN}=-\dfrac12\,\Vj{BC}$.
+\item Comme $\Vj{MN}=-\dfrac12\,\Vj{BC}$, les vecteurs $\Vj{MN}$ et $\Vj{BC}$ sont colin\'eaires~: les droites $(MN)$ et $(BC)$ sont parall\`eles.
+\end{enumerate}
+}
+
+\Corr{4}{
+\begin{enumerate}
+\item Figure (les points $A$, $E$ et $F$ semblent align\'es)~:
+\begin{center}
+\begin{tikzpicture}[scale=0.75]
+\coordinate (A) at (0,0); \coordinate (B) at (3,0); \coordinate (D) at (1,2); \coordinate (C) at (4,2);
+\coordinate (E) at ($(B)!0.5!(C)$); \coordinate (F) at ($(D)!2!(C)$);
+\draw (A)--(B)--(C)--(D)--cycle;
+\draw[repred] (C)--(F); \draw[repred,dashed] (A)--(F);
+\node[below] at (A) {\Pt{A}}; \node[below] at (B) {\Pt{B}}; \node[above] at (C) {\Pt{C}}; \node[above] at (D) {\Pt{D}};
+\node[ptcross,repred] at (E) {}; \node[right,repred,inner sep=2pt] at (E) {\Pt{E}};
+\node[ptcross,repred] at (F) {}; \node[above,repred] at (F) {\Pt{F}};
+\end{tikzpicture}
+\end{center}
+\item Comme $ABCD$ est un parall\'elogramme, $\Vj{BC}=\Vj{AD}$. Donc
+\[\Vj{AE}=\Vj{AB}+\Vj{BE}=\Vj{AB}+\dfrac12\,\Vj{BC}=\Vj{AB}+\dfrac12\,\Vj{AD}.\]
+\item De m\^eme $\Vj{DC}=\Vj{AB}$, donc
+\[\Vj{AF}=\Vj{AD}+\Vj{DF}=\Vj{AD}+2\,\Vj{DC}=\Vj{AD}+2\,\Vj{AB}.\]
+\item On remarque que $2\,\Vj{AE}=2\,\Vj{AB}+\Vj{AD}=\Vj{AF}$. Les vecteurs $\Vj{AE}$ et $\Vj{AF}$ sont donc colin\'eaires~: les points $A$, $E$ et $F$ sont align\'es.
+\end{enumerate}
+}
+
+\Objectif{7}{Caract\'erisation vectorielle du milieu d'un segment}
+
+\Corr{5}{
+\begin{enumerate}
+\item Figure~:
+\begin{center}
+\begin{tikzpicture}[scale=0.5]
+\coordinate (A) at (0,0); \coordinate (B) at (3,0); \coordinate (D) at (1,2); \coordinate (C) at (4,2);
+\coordinate (E) at ($(A)!2!(B)$); \coordinate (F) at ($(A)!2!(D)$);
+\draw (A)--(B)--(C)--(D)--cycle;
+\draw[repred] (B)--(E); \draw[repred] (D)--(F); \draw[repred,dashed] (E)--(F);
+\node[below] at (A) {\Pt{A}}; \node[below] at (B) {\Pt{B}}; \node[above right,inner sep=1pt] at (C) {\Pt{C}}; \node[left] at (D) {\Pt{D}};
+\node[ptcross,repred] at (E) {}; \node[below,repred] at (E) {\Pt{E}};
+\node[ptcross,repred] at (F) {}; \node[above,repred] at (F) {\Pt{F}};
+\end{tikzpicture}
+\end{center}
+\item $B$ est le milieu de $[AE]$, donc $\Vj{BE}=\Vj{AB}$. Comme $ABCD$ est un parall\'elogramme, $\Vj{CB}=\Vj{DA}=-\Vj{AD}$. Ainsi
+\[\Vj{CE}=\Vj{CB}+\Vj{BE}=-\Vj{AD}+\Vj{AB}=\Vj{AB}-\Vj{AD}.\]
+\item De m\^eme, $D$ est le milieu de $[AF]$, donc $\Vj{DF}=\Vj{AD}$, et $\Vj{CD}=\Vj{BA}=-\Vj{AB}$. Ainsi
+\[\Vj{CF}=\Vj{CD}+\Vj{DF}=-\Vj{AB}+\Vj{AD}.\]
+\item On constate que $\Vj{CF}=-\Vj{CE}$, c'est-\`a-dire $\Vj{CE}+\Vj{CF}=\vec 0$~: c'est la caract\'erisation vectorielle du milieu. Donc $C$ est le milieu du segment $[EF]$.
+\end{enumerate}
+}
+
+\end{multicols}
+\end{document}

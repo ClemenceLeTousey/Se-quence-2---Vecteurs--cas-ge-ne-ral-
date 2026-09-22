@@ -15,6 +15,11 @@
 \graphicspath{{../TeX - Polycopié et Exercices/}}
 \geometry{footskip=0.5cm}
 
+% Croix de placement des points sur quadrillage (reprise de "Séquence 2 -
+% Feuille d'exercices - Vecteurs.tex"), pour l'Exemple 2 (au lieu d'un
+% point plein) : shapes.misc (cross out) déjà chargée par CLT2627.sty.
+\tikzset{ptcross/.style={cross out,draw,thick,minimum size=1.5mm,inner sep=0pt}}
+
 % Trou à compléter à la main par l'élève : espace blanc de largeur
 % réglable (sans pointillés), à la place des \textcolor{red}{...} /
 % \textcolor{J1}{...} du poly (réponses réservées au professeur).
@@ -41,14 +46,36 @@
 \definecolor{diffred}{HTML}{FA5252}
 \newcommand{\starfull}[1]{{\color{#1}\ding{72}}}
 \newcommand{\starempty}{{\color{gray!45}\ding{73}}}
-% Colonne "Objectif" réduite (5.2cm -> 3.4cm) et colonnes de difficulté
-% élargies d'autant (3.6cm -> 4.6cm chacune), police des listes
-% d'exercices resserrée (\footnotesize -> \tiny) : pour que chaque liste
-% "Manuel - ..." / "Feuille 2 - ..." tienne sur une seule ligne plutôt
-% que de retourner à la ligne au milieu d'une même liste.
-\newcommand{\cellObj}[1]{\parbox[t]{3.4cm}{\raggedright\vspace{2pt}#1\vspace{2pt}}}
-\newcommand{\cellDiff}[1]{\parbox[t]{4.6cm}{\centering\tiny\vspace{2pt}#1\vspace{2pt}}}
-\newcommand{\headcellV}[1]{\parbox[t]{3.6cm}{\centering\vspace{2pt} \scalebox{1.1}{#1}\vspace{2pt}}}
+% Colonne "Objectif" à 5.2cm et police des listes d'exercices en
+% \footnotesize (plutôt que 2.8cm/\tiny) : largeur et police reprises de
+% la version complétée, préférées par l'enseignante pour la lisibilité,
+% quitte à ce que les colonnes de difficulté (3.2cm) laissent un peu plus
+% souvent les listes "Manuel - ..." / "Feuille 2 - ..." retourner à la
+% ligne. Ça tient toujours sur la largeur de page disponible (~19cm) avec
+% la 5e colonne (code Capytale).
+% \parbox[c] (et non [t]) : centre verticalement le contenu dans sa
+% propre boîte, combiné à la colonne "m" (array) qui centre cette boîte
+% dans la hauteur réelle de la ligne.
+% Centrage vertical réel : ni la colonne "m" (array) ni \parbox[c] ni
+% \vcenter ne le produisaient ici (testé isolément : "m" se comporte
+% comme "p", calé en haut). \cellObj prend donc un 2e argument optionnel
+% = espace à ajouter avant le texte pour le centrer "à la main" dans la
+% hauteur réelle de sa ligne (mesurée visuellement pour chaque ligne du
+% tableau) — même principe que le calage de la carte Capytale plus bas.
+\newcommand{\cellObj}[2][0pt]{\parbox[t]{5.2cm}{\raggedright\vspace{2pt}\vspace{#1}#2\vspace{2pt}}}
+\newcommand{\cellDiff}[2][0pt]{\parbox[t]{3.2cm}{\centering\footnotesize\vspace{2pt}\vspace{#1}#2\vspace{2pt}}}
+% Variantes à largeur explicite (2e argument obligatoire) : pour les
+% tableaux dont les colonnes ne font pas 5.2cm/3.2cm (ex. Objectif 4).
+\newcommand{\cellObjW}[3][0pt]{\parbox[t]{#2}{\raggedright\vspace{2pt}\vspace{#1}#3\vspace{2pt}}}
+\newcommand{\cellDiffW}[3][0pt]{\parbox[t]{#2}{\centering\footnotesize\vspace{2pt}\vspace{#1}#3\vspace{2pt}}}
+\newcommand{\headcellV}[1]{\parbox[t]{3.2cm}{\centering\vspace{2pt} \scalebox{1.1}{#1}\vspace{2pt}}}
+
+% Pictogrammes "Manuel" / "Feuille 2" / "Feuille 3" des listes d'exercices : lettre(s)
+% entourée(s) (\textcircledd, CLT2627.sty) plutôt que le mot en toutes
+% lettres, pour gagner de la place dans les colonnes de difficulté.
+\newcommand{\IconManuel}{\textcircledd{\bfseries\scriptsize M}}
+\newcommand{\IconFeuilleDeux}{\textcircledd{\bfseries\scriptsize F2}}
+\newcommand{\IconFeuilleTrois}{\textcircledd{\bfseries\scriptsize F3}}
 
 % Cartes vidéos Yvan Monka, reprises telles quelles de "Séquence 1 - Cours
 % - Calculs Numériques.tex" : une ligne horizontale par vidéo (icône
@@ -98,6 +125,16 @@
     \VideoYvanLigne{#3}{#4}
   \end{minipage}
 \par}}
+% Carte vidéo compacte empilée (icône, QR, titre), pour une cellule de
+% tableau plutôt qu'une ligne pleine largeur — reprend le motif utilisé
+% pour les vidéos posées à côté d'une boîte (Théorème 1, Définition 6...).
+% #1 = titre, #2 = url.
+\newcommand{\VideoCardCell}[2]{%
+  \centering
+  {\small\faPlayCircle}\\[3pt]
+  \ClickableQR{1.3cm}{#2}\qrcode*[height=1.3cm, level=M]{#2}\\[3pt]
+  {\footnotesize\href{#2}{#1}}%
+}
 
 % Titre de séquence, repris tel quel de "Séquence 1 - Cours - Calculs
 % Numériques.tex" (coins arrondis, étiquette posée via overlay qui
@@ -207,8 +244,8 @@ Le point D est l'image de C par la translation de vecteur $\Vj{AB}$ \fbox{si et 
 \begin{tikzpicture}[yscale=0.7]
 \draw[-latex,thick,blue](0,0) node[below left]{A}--(3,1) node[above right]{B};
 \draw[-latex,thick,blue](1,-1) node[below left]{C}--(4,0) node[above right]{D};
-\draw (0,0)--(4,0);
-\draw (1,-1)--(3,1);
+\draw[dotted,J1] (0,0)--(4,0);
+\draw[dotted,J1] (1,-1)--(3,1);
 \draw[red,thick] (1,0) node[scale=0.5]{|};
 \draw[red,thick] (3,0) node[scale=0.5]{|};
 \draw[red,thick] (1.5,-0.5) node[rotate=45,scale=0.5]{||};
@@ -244,10 +281,10 @@ Cela équivaut aussi à dire que les segments [AD] et [BC] ont le \textcolor{J1}
     \coordinate (C) at (3,3);
     \coordinate (D) at (1,2);
     \draw[thick] (A) -- (B) -- (C) -- (D) -- cycle;
-    \fill (A) circle (2pt) node[below left] {$A$};
-    \fill (B) circle (2pt) node[below right] {$B$};
-    \fill (C) circle (2pt) node[above right] {$C$};
-    \fill (D) circle (2pt) node[above left] {$D$};
+    \node[ptcross] at (A) {}; \node[anchor=north east] at (A) {$A$};
+    \node[ptcross] at (B) {}; \node[anchor=north west] at (B) {$B$};
+    \node[ptcross] at (C) {}; \node[anchor=south west] at (C) {$C$};
+    \node[ptcross] at (D) {}; \node[anchor=south east] at (D) {$D$};
 \end{tikzpicture}
 \end{minipage}
 }
@@ -333,12 +370,12 @@ Utiliser le quadrillage pour déterminer si les vecteurs suivants sont égaux : 
 \begin{tikzpicture}[x=0.5cm, y=0.5cm]
     \draw[gray, line width=0.3pt,step=1] (0,0) grid (10,8);
     \path
-        (2,7) node[circle, fill, inner sep=1.5pt, label=above: A] (A) {}
-        (7,7) node[circle, fill, inner sep=1.5pt, label=above: B] (B) {}
-        (9,4) node[circle, fill, inner sep=1.5pt, label=right: C] (C) {}
-        (4,4) node[circle, fill, inner sep=1.5pt, label=left: D] (D) {}
-        (1,1) node[circle, fill, inner sep=1.5pt, label=below:E] (E) {}
-        (6,1) node[circle, fill, inner sep=1.5pt, label=below: F] (F) {};
+        (2,7) node[ptcross, label=above: A] (A) {}
+        (7,7) node[ptcross, label=above: B] (B) {}
+        (9,4) node[ptcross, label=right: C] (C) {}
+        (4,4) node[ptcross, label=left: D] (D) {}
+        (1,1) node[ptcross, label=below:E] (E) {}
+        (6,1) node[ptcross, label=below: F] (F) {};
 \end{tikzpicture}
 \end{minipage}
 }
@@ -425,79 +462,100 @@ Le vecteur $-\Vj{AB}$ a donc la même direction et la même norme que $\Vj{AB}$ 
 % du même coup la remarque "peut être éventuellement plat" juste
 % au-dessus. \vspace*{1.5cm} de calage (pensé pour une page neuve)
 % retiré : inutile maintenant que le schéma est plus bas et moins haut.
-% Colonnes texte/figure resserrées (12cm/4cm -> 11cm/3.4cm) pour loger
-% une 3e colonne, la carte vidéo Yvan Monka, sans repousser la boîte
-% (\Thm, \breakable via CLT2627.sty) sur la page suivante : un essai
-% avec \needspace pour forcer un passage de page propre en cas de
-% dépassement s'est avéré inutile une fois les colonnes resserrées —
-% la boîte entière (texte + figure + vidéo) tient telle quelle en bas
-% de page 2.
+% Boîte Théorème 1 (\Thm, \breakable via CLT2627.sty) rétrécie en la
+% plaçant dans une minipage de largeur fixe (15.3cm, au lieu de la pleine
+% largeur du cours) : la vidéo Yvan Monka se pose ensuite à côté, hors
+% boîte, sur le fond blanc de la page plutôt que sur le fond teinté du
+% tcolorbox.
+\noindent
+\begin{minipage}[t]{15.3cm}
 \Thm{\par
-\begin{minipage}{11cm}
+\begin{minipage}{10.8cm}
 $ABCD$ est un parallélogramme \fbox{si et seulement si} \textcolor{J1}{$\Vj{AB}$ = $\Vj{DC}$}.
 
 \smallskip
 
 Le parallélogramme peut-être éventuellement \og plat\fg{}.
 
-\medskip
+\smallskip
 
 \textbf{Notation : } \textcolor{J1}{on note aussi que cette égalité entraîne $\Vj{AD}=\Vj{BC}$.}
 \end{minipage}
 \hspace*{0.4cm}
 \begin{minipage}{3.4cm}
 \centering
-\begin{tikzpicture}[yscale=0.55]
+% yscale encore réduit (0.55 -> 0.4) pour regagner la place perdue par
+% l'ajout de la vidéo (Théorème 1 tenait en bas de page à 0.55 avant
+% qu'elle n'arrive) : le schéma est un peu plus aplati mais reste lisible.
+\begin{tikzpicture}[yscale=0.3]
 \draw[dashed] (1,1) -- (2,3);
 \draw[dashed] (4,4) -- (3,2);
-\draw[-{Stealth[length=3pt,width=2.5pt]}, line width=1.6pt] (2,3) -- (4,4);
-\draw[-{Stealth[length=3pt,width=2.5pt]}, line width=1.6pt] (1,1) -- (3,2);
+\draw[-{Stealth[length=6pt,width=5pt]}, line width=1.6pt] (2,3) -- (4,4);
+\draw[-{Stealth[length=6pt,width=5pt]}, line width=1.6pt] (1,1) -- (3,2);
 \node[anchor=east, font=\scriptsize] at (1,1) {A};
 \node[anchor=north west, font=\scriptsize] at (3,2) {B};
 \node[anchor=south east, font=\scriptsize] at (2,3) {D};
 \node[anchor=south west, font=\scriptsize] at (4,4) {C};
 \end{tikzpicture}
 \end{minipage}
-\hspace*{0.3cm}
-% Carte vidéo compacte (icône + QR empilés, titre en \tiny en dessous) :
-% casée dans la marge droite de la boîte plutôt qu'en pleine largeur
-% dessous, pour que Théorème 1 tienne toujours en bas de page 2 une fois
-% la vidéo ajoutée.
-\begin{minipage}{2.3cm}
-\centering
-{\tiny\faPlayCircle}\\[2pt]
-\ClickableQR{1.3cm}{https://www.youtube.com/watch?v=XokpP_8mTOE&list=PLVUDmbpupCaoKRWtIqAp-FOFSQwftAOtA}\qrcode*[height=1.3cm, level=M]{https://www.youtube.com/watch?v=XokpP_8mTOE&list=PLVUDmbpupCaoKRWtIqAp-FOFSQwftAOtA}\\[2pt]
-{\tiny\href{https://www.youtube.com/watch?v=XokpP_8mTOE&list=PLVUDmbpupCaoKRWtIqAp-FOFSQwftAOtA}{Utiliser des propri\'et\'es sur les vecteurs}}
-\end{minipage}
 }
+\end{minipage}
+\hspace*{0.3cm}
+% Carte vidéo compacte (icône + QR empilés, titre en dessous), sur fond
+% blanc à côté de la boîte plutôt que dedans.
+\begin{minipage}[t]{3cm}
+\centering
+{\small\faPlayCircle}\\[3pt]
+\ClickableQR{1.4cm}{https://www.youtube.com/watch?v=XokpP_8mTOE&list=PLVUDmbpupCaoKRWtIqAp-FOFSQwftAOtA}\qrcode*[height=1.4cm, level=M]{https://www.youtube.com/watch?v=XokpP_8mTOE&list=PLVUDmbpupCaoKRWtIqAp-FOFSQwftAOtA}\\[3pt]
+{\footnotesize\href{https://www.youtube.com/watch?v=XokpP_8mTOE&list=PLVUDmbpupCaoKRWtIqAp-FOFSQwftAOtA}{Utiliser des propri\'et\'es sur les vecteurs}}
+\end{minipage}
 
 \bigskip
 
 \begin{center}
 {\scriptsize
-\begin{tabular}{|p{3.4cm}|p{4.6cm}|p{4.6cm}|p{4.6cm}|}
-\cline{2-4}
-\multicolumn{1}{c|}{} & \headcellV{\starfull{diffgreen}\starempty\starempty} & \headcellV{\starfull{diffblue}\starfull{diffblue}\starempty} & \headcellV{\starfull{diffred}\starfull{diffred}\starfull{diffred}} \\
-\hline
+% Colonnes de difficulté uniformisées à 3.2cm via \cellDiff, comme les
+% deux autres tableaux du document (plus de resserrement local à
+% 3.4/2.1cm propre à ce tableau-ci). Colonnes 2-4 en type "m" (array) au
+% lieu de "p" : centre verticalement les étoiles de l'en-tête (et le
+% contenu des lignes Objectif) dans la hauteur réelle de leur ligne,
+% plutôt que les caler en haut — utile ici car la ligne d'en-tête serait
+% sinon bien plus haute que son contenu réel.
+\begin{tabular}{|>{\raggedright\arraybackslash}m{5.2cm}|>{\centering\arraybackslash}m{3.2cm}|>{\centering\arraybackslash}m{3.2cm}|>{\centering\arraybackslash}m{3.2cm}||p{2.1cm}|}
+\cline{2-5}
+\multicolumn{1}{c|}{} & \headcellV{\starfull{diffgreen}\starempty\starempty} & \headcellV{\starfull{diffblue}\starfull{diffblue}\starempty} & \headcellV{\starfull{diffred}\starfull{diffred}\starfull{diffred}} & \multirow{4}{*}{\parbox{2.1cm}{\centering
+% \multirow centre par défaut sur une hauteur de ligne "standard"
+% (baselineskip), qui sous-estime fortement la vraie hauteur ici
+% (lignes d'objectif multi-lignes très variables) : la carte reste
+% collée en haut sans le \vspace ci-dessous, mesuré empiriquement pour
+% ce tableau à 4 lignes d'objectif (hauteur totale ~8.15cm, carte
+% ~2.7cm) afin de la centrer visuellement.
+\vspace{1.8cm}
+\href{https://capytale2.ac-paris.fr/web/c/183d-11585990/edn}{\begin{minipage}{2.1cm}\centering
+\faLaptop~\textbf{Code Capytale}\\[2pt]
+\textbf{D\'efinitions}\\[2pt]
+{\ttfamily\bfseries\scriptsize 183d-11585990}
+\end{minipage}}\par\smallskip
+\textcolor{black}{\qrcode*[height=1.1cm, level=M]{https://capytale2.ac-paris.fr/web/c/183d-11585990/edn}}
+}} \\
+\cline{1-4}
 \cellObj{\textbf{Objectif 1} -- Vecteur $\Vj{MM'}$ associ\'e \`a la translation qui transforme $M$ en $M'$ ; direction, sens et norme} &
-\cellDiff{Manuel - Ex~28, 30 p.185\\Feuille 2 - Ex~1, 2, 13} &
-\cellDiff{Manuel - Ex~32 p.185} &
-\cellDiff{Feuille 2 - Ex~4} \\
-\hline
+\cellDiff[0.16cm]{\IconManuel\ Ex~15 p.183\\\IconFeuilleDeux\ Ex~1, 2} &
+\cellDiff[0.16cm]{\IconManuel\ Ex~28 p.184\\\IconManuel\ Ex~30 p.185\\\IconFeuilleDeux\ Ex~3} &
+\cellDiff[0.32cm]{\IconFeuilleDeux\ Ex~4} &
+\\
+\cline{1-4}
 \cellObj{\textbf{Objectif 2} -- \'Egalit\'e de deux vecteurs, vecteur nul} &
-\cellDiff{Manuel - Ex~23, 27 p.185} &
-\cellDiff{Manuel - Ex~18 p.183\\Feuille 2 - Ex~3, 5, 6, 7, 8, 9} &
-\cellDiff{Feuille 2 - Ex~10} \\
-\hline
+\cellDiff{\IconManuel\ Ex~18 p.183\\\IconManuel\ Ex~23, 27 p.184\\\IconFeuilleDeux\ Ex~5, 6} &
+\cellDiff[0.16cm]{\IconFeuilleDeux\ Ex~7\\\IconManuel\ Ex~31 p.185} &
+\cellDiff{\IconManuel\ Ex~35 p.185\\\IconManuel\ Ex~37, 38 p.186\\\IconFeuilleDeux\ Ex~8, 9} &
+\\
+\cline{1-4}
 \cellObj{\textbf{Objectif 3} -- Repr\'esentants d'un vecteur} &
-\cellDiff{Feuille 2 - Ex~11} &
-\cellDiff{Manuel - Ex~31 p.185} &
-\cellDiff{Feuille 2 - Ex~12\\(apr\`es Obj.~4)} \\
-\hline
-\cellObj{\textbf{Objectif 7} -- Caract\'erisation vectorielle du milieu d'un segment} &
-\cellDiff{Feuille 2 - Ex~23} &
-\cellDiff{Feuille 2 - Ex~24} &
-\cellDiff{Feuille 2 - Ex~25} \\
+\cellDiff{\IconFeuilleDeux\ Ex~10, 11} &
+\cellDiff{\IconFeuilleDeux\ Ex~12} &
+\cellDiff{} &
+\\
 \hline
 \end{tabular}
 }
@@ -513,54 +571,73 @@ La \textbf{somme} de $\Vj{u}$ et $\Vj{v}$ est le vecteur $\Vj{w}=\Vj{u}+\Vj{v}$ 
 à la translation résultant de l'enchainement des translations de vecteurs $\Vj{u}$ et de vecteur $\Vj{v}$.
 }
 
-\VideoYvanSolo{Construire un point \`a partir d'une somme de vecteurs}{https://www.youtube.com/watch?v=nzABUzFM6p8&list=PLVUDmbpupCaoKRWtIqAp-FOFSQwftAOtA}
-
-\bigskip
+\medskip
 
 \fbox{\textbf{{\large Méthode de construction bout à bout d'une somme de vecteurs.}}}
 
-\begin{multicols}{3}
- \begin{enumerate}
- \item[] On veut construire la somme des vecteurs $\Vj{u}$ et $\Vj{v}$
+% Reconstruit sans multicols/enumerate : deux rangées synchronisées de
+% 3 minipages (texte, puis quadrillages) plutôt qu'un enumerate multicol
+% à \columnbreak — la rangée de texte peut avoir 3 hauteurs différentes
+% (1, 2 ou 3 lignes selon la colonne) sans perturber la rangée de
+% quadrillages qui suit, puisqu'elle démarre après la ligne de texte la
+% plus haute : les 3 quadrillages s'alignent donc verticalement entre
+% eux, quelle que soit la longueur du texte au-dessus. Numéros cerclés
+% via \numeroCerne (CLT2627.sty), le même style que produisait
+% automatiquement \begin{enumerate} plus haut.
+\noindent
+\begin{minipage}[t]{5.6cm}
+On veut construire la somme des vecteurs $\Vj{u}$ et $\Vj{v}$
+\end{minipage}
+\hspace*{0.3cm}
+\begin{minipage}[t]{5.6cm}
+\numeroCerne{1}\ Si l'origine du vecteur somme n'est pas imposée, on choisit un point M quelconque\\
+\numeroCerne{2}\ On construit N tel que \\ $\Vj{MN}=\Vj{u}$.
+\end{minipage}
+\hspace*{0.3cm}
+\begin{minipage}[t]{5.6cm}
+\numeroCerne{3}\ On construit P tel que $\Vj{NP}=\Vj{v}$. \\
+Alors $\boxed{\Vj{u}+\Vj{v}=\Vj{MP}}$.\\[4pt]
+\numeroCerne{4}\ On repère en \textcolor{red}{rouge} le vecteur somme et on n'oublie pas de le nommer
+\end{minipage}
 
- \begin{tikzpicture}[scale=0.8]
+\medskip
+
+\noindent
+\begin{minipage}[t]{5.6cm}
+\centering
+\begin{tikzpicture}[scale=0.6]
 \draw[thin, gray,opacity=0.7] (0,0) grid (6,6);
 \draw[-{Stealth},thick,blue] (0,0) node[left]{}--(2,1) node[above]{} node[midway,rotate=30,above]{{\large $\Vj u$}};
 \draw[-{Stealth},thick,blue] (2,5)--(4,2) node[right]{} node[midway,rotate=-60,above]{{\large $\Vj v$}};
 \end{tikzpicture}
-
-\columnbreak
-
-\item On choisit un point M quelconque
-\item On construit N tel que $\Vj{MN}=\Vj{u}$.
-
-\begin{tikzpicture}[scale=0.8]
+\end{minipage}
+\hspace*{0.3cm}
+\begin{minipage}[t]{5.6cm}
+\centering
+\begin{tikzpicture}[scale=0.6]
 \draw[thin, gray,opacity=0.7] (0,0) grid (6,6);
 %\draw[-{Stealth},very thick,J1, dotted] (1,4) node[left]{$M$}--(3,5) node[above]{$N$} node[midway,rotate=30,above]{{\large $\Vj u$}};
 \end{tikzpicture}
-
-\columnbreak
-
-\item On construit P tel que $\Vj{NP}=\Vj{v}$. \\
-Alors $\Vj{u}+\Vj{v}=\Vj{MP}$.
-\item On repère en \textcolor{red}{rouge} le vecteur somme
-
-\begin{tikzpicture}[scale=0.8]
+\end{minipage}
+\hspace*{0.3cm}
+\begin{minipage}[t]{5.6cm}
+\centering
+\begin{tikzpicture}[scale=0.6]
 \draw[thin, gray,opacity=0.7] (0,0) grid (6,6);
 %\draw[-{Stealth},thick,J1] (1,4) node[left]{$M$}--(3,5) node[above]{$N$} node[midway,rotate=30,above]{{\large $\Vj u$}};
 %\draw[-{Stealth},thick,J1, dotted] (3,5)--(5,2) node[right]{$P$} node[midway,rotate=-60,above]{{\large $\Vj v$}};
 %\draw[-{Stealth},thick,red, dashed] (1,4)--(5,2) node[midway,rotate=-25,below]{{\large $\Vj u+\Vj v$}};
 \end{tikzpicture}
+\end{minipage}
 
-\end{enumerate}
-\end{multicols}
+\ANoter{L'ordre dans une somme de vecteurs n'a pas d'importance : $\Vj{u}+\Vj{v}=\Vj{v}+\Vj{u}$.}
 
 \Exemple{\par
-\begin{minipage}{8.5cm}
-Construire le point $D$ tel que $\Vj{ED}=\Vj{BA}+\Vj{AC}$.
+\begin{minipage}{6.5cm}
+Construire le point $D$ \\ tel que $\Vj{ED}=\Vj{BA}+\Vj{CA}$.
 \begin{center}
-\begin{tikzpicture}[scale=0.6]
-\draw[thin, gray,opacity=0.7] (-1,0) grid (5,5);
+\begin{tikzpicture}[scale=0.65]
+\draw[thin, gray,opacity=0.7] (-2,0) grid (5,6);
 \draw [ ] (0,2) node[above left]{A} -- ++(-3pt,-3pt) -- ++(6pt,6pt) ++(-6pt,0) -- ++(6pt,-6pt);
 \draw [ ] (3,3) node[above left]{B} -- ++(-3pt,-3pt) -- ++(6pt,6pt) ++(-6pt,0) -- ++(6pt,-6pt);
 \draw [ ] (1,1) node[above left]{C} -- ++(-3pt,-3pt) -- ++(6pt,6pt) ++(-6pt,0) -- ++(6pt,-6pt);
@@ -571,16 +648,16 @@ Construire le point $D$ tel que $\Vj{ED}=\Vj{BA}+\Vj{AC}$.
 % le quadrillage gris derrière) — même principe que le \phantom utilisé
 % pour les réponses textuelles ailleurs dans ce document.
 \draw[->,thick,white,opacity=0] (3,5)--(0,4) ;
-\draw[->,thick,white,opacity=0] (0,4)--(1,3) ;
-\draw [white,opacity=0] (1,3) node[above right]{D} -- ++(-3pt,-3pt) -- ++(6pt,6pt) ++(-6pt,0) -- ++(6pt,-6pt);
+\draw[->,thick,white,opacity=0] (0,4)--(-1,5) ;
+\draw [white,opacity=0] (-1,5) node[above right]{D} -- ++(-3pt,-3pt) -- ++(6pt,6pt) ++(-6pt,0) -- ++(6pt,-6pt);
 \end{tikzpicture}
 \end{center}
 \end{minipage}
-\hspace{1cm}
-\begin{minipage}{8.5cm}
-Construire le point $F$ tel que $\Vj{GF}=\Vj{AB}-\Vj{AC}$.
+\hspace*{0.25cm}
+\begin{minipage}{6.5cm}
+Construire le point $F$ \\ tel que $\Vj{GF}=\Vj{AB}-\Vj{AC}$.
 \begin{center}
-\begin{tikzpicture}[scale=0.6]
+\begin{tikzpicture}[scale=0.65]
 \draw[thin, gray,opacity=0.7] (-1,0) grid (5,5);
 \draw [ ] (0,2) node[above left]{A} -- ++(-3pt,-3pt) -- ++(6pt,6pt) ++(-6pt,0) -- ++(6pt,-6pt);
 \draw [ ] (3,3) node[above right]{B} -- ++(-3pt,-3pt) -- ++(6pt,6pt) ++(-6pt,0) -- ++(6pt,-6pt);
@@ -591,6 +668,19 @@ Construire le point $F$ tel que $\Vj{GF}=\Vj{AB}-\Vj{AC}$.
 \draw [white,opacity=0] (3,2) node[above right]{F} -- ++(-3pt,-3pt) -- ++(6pt,6pt) ++(-6pt,0) -- ++(6pt,-6pt);
 \end{tikzpicture}
 \end{center}
+\end{minipage}
+\hspace*{0.25cm}
+% Carte vidéo compacte, à droite des deux constructions (colonnes D/F
+% resserrées à 6.5cm et consignes passées sur 2 lignes pour lui faire
+% de la place). \hspace* (et non \hspace) partout dans ce bloc : sinon
+% la glue redevient un point de coupure légal pour l'algorithme de
+% justification, qui renvoie la carte vidéo à la ligne suivante dès que
+% la largeur totale dépasse tant soit peu le \linewidth de l'Exemple.
+\begin{minipage}{2.8cm}
+\centering
+{\small\faPlayCircle}\\[3pt]
+\ClickableQR{1.3cm}{https://www.youtube.com/watch?v=nzABUzFM6p8&list=PLVUDmbpupCaoKRWtIqAp-FOFSQwftAOtA}\qrcode*[height=1.3cm, level=M]{https://www.youtube.com/watch?v=nzABUzFM6p8&list=PLVUDmbpupCaoKRWtIqAp-FOFSQwftAOtA}\\[3pt]
+{\footnotesize\href{https://www.youtube.com/watch?v=nzABUzFM6p8&list=PLVUDmbpupCaoKRWtIqAp-FOFSQwftAOtA}{Construire un point \`a partir d'une somme de vecteurs}}
 \end{minipage}
 }
 
@@ -603,7 +693,6 @@ Soient $A$ et $B$ deux points du plan. Pour tout point $M$, on a :
 \[
 \Vj{AB}=\Vj{AM}+\Vj{MB}.
 \]
-Aller d'Annoville à Brainville, puis de Brainville à Coutances, c'est finalement aller d'Annoville à Coutances.
 \end{minipage}
 \hspace{3cm}
 \begin{minipage}{5cm}
@@ -614,12 +703,25 @@ Aller d'Annoville à Brainville, puis de Brainville à Coutances, c'est finaleme
 \end{minipage}
 }
 
-\VideosYvanMonka{Appliquer la relation de Chasles}{https://www.youtube.com/watch?v=fbVrdYiY0qc&list=PLVUDmbpupCaoKRWtIqAp-FOFSQwftAOtA}{EXERCICE : Appliquer la relation de Chasles}{https://www.youtube.com/watch?v=vqkWtfsCfOo&list=PLVUDmbpupCaoKRWtIqAp-FOFSQwftAOtA}
+\noindent
+\begin{minipage}[c]{0.6\linewidth}
+\ANoter{Aller d'Annoville à Brainville, puis de Brainville à Coutances, c'est finalement aller d'Annoville à Coutances.}
+\end{minipage}%
+\hfill
+\begin{minipage}[c]{0.38\linewidth}
+\VideoYvanSolo{Appliquer la relation de Chasles}{https://www.youtube.com/watch?v=vqkWtfsCfOo&list=PLVUDmbpupCaoKRWtIqAp-FOFSQwftAOtA}
+\end{minipage}
 
 \needspace{12\baselineskip}
 \Exemple{
 Simplifier les expressions en utilisant la relation de Chasles :
 \begin{enumerate}
+\item$\Vj{TR}+\Vj{RP}$\\
+\phantom{$\Vj{TR}+\Vj{RP} = \Vj{TP}$.}
+\medskip
+\item$\Vj{GT}+\Vj{AG}$\\
+\phantom{$\Vj{GT}+\Vj{AG} = \Vj{AG}+\Vj{GT} = \Vj{AT}$.}
+\medskip
 \item$\Vj{AB}-\Vj{AC}-\Vj{CB}$\\
 \phantom{$\Vj{AB}-\Vj{AC}-\Vj{CB} = \Vj{AB}-(\Vj{AC}+\Vj{CB}) = \Vj{AB}-\Vj{AB} = \Vj{0}$.}
 \medskip
@@ -628,18 +730,82 @@ Simplifier les expressions en utilisant la relation de Chasles :
 \end{enumerate}
 }
 
-\bigskip
+\subsection{Méthode du parallélogramme}
+
+\fbox{\textbf{{\large Méthode de construction par parallélogramme d'une somme de vecteurs.}}}
+
+\noindent
+\begin{minipage}[t]{5.6cm}
+On veut construire la somme des vecteurs $\Vj{u}$ et $\Vj{v}$ ayant comme origine commune le point M.
+\end{minipage}
+\hspace*{0.3cm}
+\begin{minipage}[t]{5.6cm}
+\numeroCerne{1}\ On repère N et P tels que \\ $\Vj{MN}=\Vj{u}$ et $\Vj{MP}=\Vj{v}$.
+\end{minipage}
+\hspace*{0.3cm}
+\begin{minipage}[t]{5.6cm}
+\numeroCerne{2}\ On construit Q tel que MNQP soit un parallélogramme. \\
+Alors $\boxed{\Vj{u}+\Vj{v}=\Vj{MQ}}$.
+\end{minipage}
+
+\medskip
+
+\noindent
+\begin{minipage}[t]{5.6cm}
+\centering
+\begin{tikzpicture}[scale=0.6]
+\draw[thin, gray,opacity=0.7] (0,0) grid (6,6);
+\draw[-{Stealth},thick,blue] (1,1)--(3,2) node[midway,rotate=27,below]{{\large $\Vj u$}};
+\draw[-{Stealth},thick,blue] (1,1)--(2,4) node[midway,rotate=72,above]{{\large $\Vj v$}};
+\node[ptcross] at (1,1) {};
+\node[anchor=north east] at (1,1) {M};
+\end{tikzpicture}
+\end{minipage}
+\hspace*{0.3cm}
+\begin{minipage}[t]{5.6cm}
+\centering
+\begin{tikzpicture}[scale=0.6]
+\draw[thin, gray,opacity=0.7] (0,0) grid (6,6);
+\draw[-{Stealth},thick,blue] (1,1)--(3,2) node[midway,rotate=27,below]{{\large $\Vj u$}};
+\draw[-{Stealth},thick,blue] (1,1)--(2,4) node[midway,rotate=72,above]{{\large $\Vj v$}};
+\node[ptcross] at (1,1) {};
+\node[anchor=north east] at (1,1) {M};
+\end{tikzpicture}
+\end{minipage}
+\hspace*{0.3cm}
+\begin{minipage}[t]{5.6cm}
+\centering
+\begin{tikzpicture}[scale=0.6]
+\draw[thin, gray,opacity=0.7] (0,0) grid (6,6);
+\draw[-{Stealth},thick,blue] (1,1)--(3,2) node[midway,rotate=27,below]{{\large $\Vj u$}};
+\draw[-{Stealth},thick,blue] (1,1)--(2,4) node[midway,rotate=72,above]{{\large $\Vj v$}};
+\node[ptcross] at (1,1) {};
+\node[anchor=north east] at (1,1) {M};
+\end{tikzpicture}
+\end{minipage}
+
+\medskip
 
 \begin{center}
 {\scriptsize
-\begin{tabular}{|p{3.4cm}|p{4.6cm}|p{4.6cm}|p{4.6cm}|}
-\cline{2-4}
-\multicolumn{1}{c|}{} & \headcellV{\starfull{diffgreen}\starempty\starempty} & \headcellV{\starfull{diffblue}\starfull{diffblue}\starempty} & \headcellV{\starfull{diffred}\starfull{diffred}\starfull{diffred}} \\
-\hline
-\cellObj{\textbf{Objectif 4} -- Somme de deux vecteurs et relation de Chasles} &
-\cellDiff{Manuel - Ex~39 p.186,\\42 p.187\\Feuille 2 - Ex~15} &
-\cellDiff{Manuel - Ex~33, 35, 38 p.185-186,\\43, 45 p.187, 72 p.192\\Feuille 2 - Ex~14, 17} &
-\cellDiff{Feuille 2 - Ex~16} \\
+\begin{tabular}{|>{\raggedright\arraybackslash}m{3.6cm}|>{\centering\arraybackslash}m{4.8cm}|>{\centering\arraybackslash}m{3.2cm}|>{\centering\arraybackslash}m{3.2cm}||p{2.5cm}|}
+\cline{2-5}
+\multicolumn{1}{c|}{} & \headcellV{\starfull{diffgreen}\starempty\starempty} & \headcellV{\starfull{diffblue}\starfull{diffblue}\starempty} & \headcellV{\starfull{diffred}\starfull{diffred}\starfull{diffred}} & \multirow{2}{*}{\parbox{2.5cm}{\centering
+\vspace{0.6cm}
+\href{https://capytale2.ac-paris.fr/web/c/b218-11585991/edn}{\begin{minipage}{2.5cm}\centering
+\faLaptop~\textbf{Code Capytale}\\[2pt]
+\textbf{Somme}\\[2pt]
+{\ttfamily\bfseries b218-11585991}
+\end{minipage}}\par\smallskip
+\textcolor{black}{\qrcode*[height=1.2cm, level=M]{https://capytale2.ac-paris.fr/web/c/b218-11585991/edn}}
+\par\rule{0pt}{0.5cm}
+}} \\
+\cline{1-4}
+\cellObjW[0.4cm]{3.6cm}{\textbf{Objectif 4} -- Somme de deux vecteurs et relation de Chasles} &
+\cellDiffW{4.8cm}{\IconFeuilleDeux\ Ex~13\\\IconManuel\ Ex~42, 43, 45, 46 p.187\\\IconFeuilleDeux\ Ex~14\\\IconManuel\ Ex~39 p.186 \\ \phantom{RD} } &
+\cellDiff[0.16cm]{\IconFeuilleDeux\ Ex~15, 16\\\IconManuel\ Ex~41 p.186} &
+\cellDiff[0.32cm]{\IconManuel\ Ex~71 p.192\\\IconManuel\ \faLaptop\ Ex~72, 73 p.192} &
+\\
 \hline
 \end{tabular}
 }
@@ -648,12 +814,11 @@ Simplifier les expressions en utilisant la relation de Chasles :
 \needspace{10\baselineskip}
 \section{Multiplication par un scalaire}
 
-\needspace{20\baselineskip}
 % \\ juste après l'accolade ouvrante : ferme la ligne de titre auto-générée
 % ("Exemple 6 (introductif) :") avant le \begin{minipage} qui suit, sinon
 % ce titre se justifie seul sur toute la largeur de la boîte (gros
 % espaces entre les mots) faute de ponctuation de phrase pour le clore.
-\Exemple[introductif]{\\
+\Exemple{\\
 \begin{minipage}{8cm}
 \begin{enumerate}
 	\item $\Vj{u}$ est le vecteur
@@ -687,8 +852,13 @@ Simplifier les expressions en utilisant la relation de Chasles :
 % \needspace{10\baselineskip} retiré : empêchait la Définition 6 de
 % tenir en bas de la page 4 (elle est \breakable via CLT2627.sty et
 % tient largement dans l'espace restant, elle-même needspace déjà
-% 4\baselineskip en interne).
-\Dfn[Produit d'un vecteur par un nombre réel]{
+% 4\baselineskip en interne). Boîte rétrécie (minipage 15cm) pour loger
+% la vidéo à droite, sur fond blanc ; \\ juste après l'accolade ouvrante
+% pour renvoyer le contenu à la ligne suivant le titre "Définition 6 -
+% ... :", comme pour \ANoter/\Exemple[introductif] plus haut.
+\noindent
+\begin{minipage}[t]{15cm}
+\Dfn[Produit d'un vecteur par un nombre réel]{\\
 Soit $\Vj{u}$ un vecteur non nul et soit $k$ un réel non nul. Alors le vecteur {\Large $\Vj{v}= \textcolor{red}{k}\Vj{u}$} est :
 \begin{center}
 \begin{tabular}{|p{5cm}|p{5cm}|}
@@ -702,8 +872,14 @@ de norme $k$ fois celle de $\Vj{u}$ & de norme $(-k)$ fois celle de $\Vj{u}$\\
 \end{tabular}
 \end{center}
 }
-
-\VideoYvanSolo{Construire un vecteur comme produit et somme de vecteurs}{https://www.youtube.com/watch?v=ak1WcdhOaFA&list=PLVUDmbpupCaoKRWtIqAp-FOFSQwftAOtA}
+\end{minipage}
+\hspace*{0.3cm}
+\begin{minipage}[t]{3cm}
+\centering
+{\small\faPlayCircle}\\[3pt]
+\ClickableQR{1.4cm}{https://www.youtube.com/watch?v=ak1WcdhOaFA&list=PLVUDmbpupCaoKRWtIqAp-FOFSQwftAOtA}\qrcode*[height=1.4cm, level=M]{https://www.youtube.com/watch?v=ak1WcdhOaFA&list=PLVUDmbpupCaoKRWtIqAp-FOFSQwftAOtA}\\[3pt]
+{\footnotesize\href{https://www.youtube.com/watch?v=ak1WcdhOaFA&list=PLVUDmbpupCaoKRWtIqAp-FOFSQwftAOtA}{Construire un vecteur comme produit et somme de vecteurs}}
+\end{minipage}
 
 \needspace{20\baselineskip}
 \Exemple{
@@ -713,96 +889,140 @@ de norme $k$ fois celle de $\Vj{u}$ & de norme $(-k)$ fois celle de $\Vj{u}$\\
 \\[0.5em]
 \begin{tabular}{p{0.5\textwidth} p{0.5\textwidth}}
 \begin{tikzpicture}[x=1.5cm, y=1cm, >=stealth]
-    \draw[->] (-0.5,0) -- (2.5,0);
+    \draw (-0.5,0) -- (2.5,0);
     \foreach \x in {-0.5,0,...,2.5} {
         \draw (\x, 0.08) -- (\x, -0.08);
     }
-    \fill (0,0) circle (2pt) node[above=2pt] {$A$};
-    \fill (1,0) circle (2pt) node[above=2pt] {$B$};
-    \fill (2,0) circle (2pt) node[above=2pt] {$C$};
+    \node[ptcross] at (0,0) {};
+    \node[anchor=south,yshift=2pt] at (0,0) {$A$};
+    \node[ptcross] at (1,0) {};
+    \node[anchor=south,yshift=2pt] at (1,0) {$B$};
+    \node[ptcross] at (2,0) {};
+    \node[anchor=south,yshift=2pt] at (2,0) {$C$};
     \node at (1,-0.6) {\phantom{$\Vj{AC}=2\Vj{AB}$}};
 \end{tikzpicture}
 &
 \begin{tikzpicture}[x=1.5cm, y=1cm, >=stealth]
-    \draw[->] (-2,0) -- (2,0);
+    \draw (-2,0) -- (2,0);
     \foreach \x in {-2,-1.5,...,2} {
         \draw (\x, 0.08) -- (\x, -0.08);
     }
-    \fill (1,0) circle (2pt) node[above=2pt] {$A$};
-    \fill (1.5,0) circle (2pt) node[above=2pt] {$B$};
-    \fill (-1.5,0) circle (2pt) node[above=2pt] {$C$};
+    \node[ptcross] at (1,0) {};
+    \node[anchor=south,yshift=2pt] at (1,0) {$A$};
+    \node[ptcross] at (1.5,0) {};
+    \node[anchor=south,yshift=2pt] at (1.5,0) {$B$};
+    \node[ptcross] at (-1.5,0) {};
+    \node[anchor=south,yshift=2pt] at (-1.5,0) {$C$};
     \node at (0,-0.6) {\phantom{$\Vj{AC}=-5\Vj{AB}$}};
 \end{tikzpicture}
 \end{tabular}
 
-\medskip
+\vspace{2cm}
 
 \item Dans chacun des cas suivants, représenter le vecteur $\Vj{AC}$ tel que :
 \\[0.5em]
 \begin{tabular}{p{0.5\textwidth} p{0.5\textwidth}}
  $\Vj{AC} = -3\Vj{AB}$ & $\Vj{AC} = \dfrac{1}{3}\Vj{AB}$ \\[1em]
 \begin{tikzpicture}[x=1.2cm, y=1cm, >=stealth]
-    \draw[->] (-2,0) -- (2.5,0);
+    \draw (-2,0) -- (2.5,0);
     \foreach \x in {-2,-1.5,...,2.5} {
         \draw (\x, 0.08) -- (\x, -0.08);
     }
-    \fill (0,0) circle (2pt) node[above=2pt] {$A$};
-    \fill (0.5,0) circle (2pt) node[above=2pt] {$B$};
-    \fill[white,opacity=0] (-1.5,0) circle (2pt) node[above=2pt] {\phantom{$C$}};
+    \node[ptcross] at (0,0) {};
+    \node[anchor=south,yshift=2pt] at (0,0) {$A$};
+    \node[ptcross] at (0.5,0) {};
+    \node[anchor=south,yshift=2pt] at (0.5,0) {$B$};
+    \node[ptcross,white,opacity=0] at (-1.5,0) {};
+    \node[anchor=south,yshift=2pt,white,opacity=0] at (-1.5,0) {\phantom{$C$}};
 \end{tikzpicture}
 &
 \begin{tikzpicture}[x=1.2cm, y=1cm, >=stealth]
-    \draw[->] (-1.5,0) -- (2.5,0);
+    \draw (-1.5,0) -- (2.5,0);
     \foreach \x in {-1.5,-1,...,2.5} {
         \draw (\x, 0.08) -- (\x, -0.08);
     }
-    \fill (0,0) circle (2pt) node[above=2pt] {$A$};
-    \fill (1.5,0) circle (2pt) node[above=2pt] {$B$};
-    \fill[white,opacity=0] (0.5,0) circle (2pt) node[above=2pt] {\phantom{$C$}};
+    \node[ptcross] at (0,0) {};
+    \node[anchor=south,yshift=2pt] at (0,0) {$A$};
+    \node[ptcross] at (1.5,0) {};
+    \node[anchor=south,yshift=2pt] at (1.5,0) {$B$};
+    \node[ptcross,white,opacity=0] at (0.5,0) {};
+    \node[anchor=south,yshift=2pt,white,opacity=0] at (0.5,0) {\phantom{$C$}};
 \end{tikzpicture}
 \end{tabular}
 
-\medskip
+\vspace{3cm}
 
-\item Construire dans la figure ci-dessous des représentants des vecteurs $2\Vj{u}$, $-\Vj{u}$ et $\dfrac12\Vj{u}$ :
+\end{enumerate}
+}
+
+\newpage
+\Exemple{\\
+\noindent
+\begin{minipage}[t]{9.2cm}
+\numeroCerne{1}\ Placer les points H, I et J tels que :\\
+(a) $\Vj{AH}=\dfrac54\Vj{AB}$\ \hfill (b) $\Vj{BI}=\dfrac23\Vj{BC}$\ \hfill  (c) $\Vj{DJ}=\dfrac59\Vj{DC}$
 
 \begin{center}
-\begin{tikzpicture}
+\begin{tikzpicture}[scale=0.55]
+\draw[thin,gray,opacity=0.5] (0,0) grid (10,6);
+\draw[very thick,magenta] (3,5) -- (6,5) -- (9,2) -- (1,1) -- cycle;
+\node[ptcross] at (3,5) {};
+\node[anchor=south] at (3,5) {\textsf{A}};
+\node[ptcross] at (4,5) {};
+\node[anchor=south] at (4,5) {\textsf{E}};
+\node[ptcross] at (6,5) {};
+\node[anchor=south] at (6,5) {\textsf{B}};
+\node[ptcross] at (9,2) {};
+\node[anchor=west] at (9,2) {\textsf{C}};
+\node[ptcross] at (1,1) {};
+\node[anchor=north east] at (1,1) {\textsf{D}};
+\node[ptcross] at (2,3) {};
+\node[anchor=east] at (2,3) {\textsf{F}};
+\node[ptcross,white,opacity=0] at (6.75,5) {};
+\node[anchor=south,white,opacity=0] at (6.75,5) {\textsf{\phantom{H}}};
+\node[ptcross,white,opacity=0] at (8,3) {};
+\node[anchor=west,white,opacity=0] at (8,3) {\textsf{\phantom{I}}};
+\node[ptcross,white,opacity=0] at (5.4,1.6) {};
+\node[anchor=south,white,opacity=0] at (5.4,1.6) {\textsf{\phantom{J}}};
+\end{tikzpicture}
+\end{center}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{7cm}
+\numeroCerne{2}\ Construire dans la figure ci-dessous des représentants des vecteurs $2\Vj{u}$, $-\Vj{u}$ et $\dfrac12\Vj{u}$ :
+
+\begin{center}
+\begin{tikzpicture}[scale=0.62]
 \draw[thin,gray,opacity=0.7] (-3,-1) grid (6,3);
-\draw[->,thick,blue] (0,0) -- (3,1) node[midway,rotate=20,above]{$\Vj{u}$};
+\draw[->,thick,blue] (0,0) -- (3,1) node[midway,above]{$\Vj{u}$};
 \draw[->,thick,white,opacity=0] (-2,-1) -- (4,1) node[midway,rotate=20,above]{$2\Vj{u}$};
 \draw[->,thick,white,opacity=0] (2,3) -- (-1,2) node[midway,rotate=20,above]{$-\Vj{u}$};
 \draw[->,thick,white,opacity=0] (-3,2) -- (-1.5,2.5) node[midway,rotate=20,above]{$\frac12\Vj{u}$};
 \end{tikzpicture}
 \end{center}
-
-\end{enumerate}
+\end{minipage}
 }
 
 \section{Vecteurs colinéaires}
 
-\needspace{16\baselineskip}
+% needspace retiré (au lieu de 16\baselineskip) : la Définition 7 et
+% l'Exemple 8 (quadrillage réduit à scale=0.5) tiennent tous les deux en
+% bas de la page 5 sans lui, alors qu'un seuil trop haut les renvoyait
+% en bloc page 6 malgré la place restante.
 \noindent
 \begin{minipage}[t]{0.55\linewidth}
-\Dfn[Vecteurs colinéaires]{par
+\Dfn[Vecteurs colinéaires]{\par
 Deux vecteurs $\Vj{u}$ et $\Vj{v}$ sont dit \textbf{colinéaires} s'il existe un réel $k$ tel que $\Vj{v}=k\Vj{u}$ ou $\Vj{u}=k\Vj{v}$.
 }
-\ANoter{
-\begin{itemize}
-\item deux vecteurs sont colinéaires si et seulement s'ils ont \textbf{même direction}.
-\item le vecteur nul est colinéaire à n'importe quel vecteur. En effet, $\Vj{0}=0\Vj{u}$.
-\end{itemize}
-}
-
 \end{minipage}%
 \hspace{1.2em}
 \begin{minipage}[t]{0.40\linewidth}
 \Exemple{\par
 \centering
-\begin{tikzpicture}[scale=0.65]
+\begin{tikzpicture}[scale=0.5]
 \draw[thin,gray,opacity=0.5] (0,0) grid (6,4);
-\draw[->,thick,blue] (0.5,0.5) -- (1.5,1) node[midway,rotate=27,above]{$\Vj u$};
-\draw[->,thick,J1] (5,3) -- (3,2) node[midway,rotate=27,above]{$\Vj v$};
+\draw[->,thick,blue] (1,3) -- (3,4) node[midway,above]{$\Vj u$};
+\draw[->,thick,J1] (5,3) -- (1,1) node[midway,above]{$\Vj v$};
 \end{tikzpicture}
 
 \smallskip
@@ -814,20 +1034,25 @@ Deux vecteurs $\Vj{u}$ et $\Vj{v}$ sont dit \textbf{colinéaires} s'il existe un
 
 \medskip
 
-\medskip
+\ANoter{
+\begin{itemize}
+\item deux vecteurs sont colinéaires si et seulement s'ils ont \textbf{même direction}.
+\item le vecteur nul est colinéaire à n'importe quel vecteur. En effet, $\Vj{0}=0\Vj{u}$.
+\item la notion de colinéarité est fortement liée à celle de parallélisme et d'alignement.
+\end{itemize}
+}
 
-\ANoter[À retenir]{la notion de colinéarité est fortement liée à celle de parallélisme et d'alignement.}
-
-\needspace{20\baselineskip}
 \Prp[Colinéarité et parallélisme]{
 \begin{spacing}{1.7}
 Soient A, B, C et D quatre points.
 
 \medskip
 
-Les vecteurs $\Vj{AB}$ et $\Vj{CD}$ sont colinéaires si et seulement si les droites (AB) et (CD) sont \textcolor{J1}{parallèles (ou confondues)}.
+Les vecteurs $\Vj{AB}$ et $\Vj{CD}$ sont colinéaires \fbox{si et seulement si} les droites (AB) et (CD) sont \textcolor{J1}{parallèles (ou confondues)}.
 \end{spacing}
-\hspace{1cm}
+}
+
+\Exemple{\\
 \begin{minipage}{6cm}
 \begin{tikzpicture}[scale=0.7]
 \draw[thin,gray,opacity=0.5] (0,0) grid (8,5);
@@ -842,13 +1067,13 @@ Les vecteurs $\Vj{AB}$ et $\Vj{CD}$ sont colinéaires si et seulement si les dro
 \begin{minipage}{12cm}
 \textbf{Rédaction : }
 
-\vspace*{1cm}
+\vspace*{3cm}
 
-Ici, on a : $\Vj{CD} = \textcolor{J1}{-2} \  \Vj{AB}$ donc $\Vj{AB}$ et $\Vj{CD}$ sont \textcolor{J1}{colinéaires}.
+%Ici, on a : $\Vj{CD} = \textcolor{J1}{-2} \  \Vj{AB}$ donc $\Vj{AB}$ et $\Vj{CD}$ sont \textcolor{J1}{colinéaires}.
 
 \medskip
 
-Ainsi : les droites \textcolor{J1}{$(AB)$} et \textcolor{J1}{$(CD)$} sont \textcolor{J1}{parallèles}.
+%Ainsi : les droites \textcolor{J1}{$(AB)$} et \textcolor{J1}{$(CD)$} sont \textcolor{J1}{parallèles}.
 \end{minipage}
 }
 
@@ -859,15 +1084,15 @@ Soient A, B et C trois points distincts.
 
 \medskip
 
-Les points A, B et C sont alignés si et seulement si les vecteurs $\Vj{AB}$ et $\Vj{AC}$ sont \textcolor{J1}{colinéaires}.
+Les points A, B et C sont alignés \fbox{si et seulement si} les vecteurs $\Vj{AB}$ et $\Vj{AC}$ sont \textcolor{J1}{colinéaires}.
 \end{spacing}
+}
 
-\medskip
-
+\Exemple{\\
 \begin{minipage}{10cm}
-\textbf{Notation : }
+%\textbf{Rédaction : }
 
-\vspace*{1cm}
+\vspace*{0.5cm}
 
 Ici, on a : $\Vj{AB} = \dfrac35 \  \Vj{AC}$ donc \textcolor{J1}{$\Vj{AB}$} et \textcolor{J1}{$\Vj{AC}$} sont \textcolor{J1}{colinéaires}.
 
@@ -886,37 +1111,52 @@ Ainsi : \textcolor{J1}{les points A, B et C sont alignés.}
 \end{minipage}
 }
 
-\VideosYvanMonka{D\'emontrer que deux vecteurs sont colin\'eaires}{https://www.youtube.com/watch?v=FjUbd9Pbhmg&list=PLVUDmbpupCaoKRWtIqAp-FOFSQwftAOtA}{EXERCICE : D\'emontrer que deux vecteurs sont colin\'eaires}{https://www.youtube.com/watch?v=62Uh6UKz-Wk&list=PLVUDmbpupCaoKRWtIqAp-FOFSQwftAOtA}
-
-\medskip
-
-% Ce duo exploite \`a la fois la somme de vecteurs (Objectif 4) et la
-% colin\'earit\'e (Objectif 5) : plac\'e ici plut\^ot que pr\`es du
-% Th\'eor\`eme 1 (\'egalit\'e de vecteurs, Objectif 2), pour rester
-% apr\`es les deux notions qu'il mobilise.
-\VideosYvanMonka{Construire un point \`a partir d'une \'egalit\'e vectorielle}{https://www.youtube.com/watch?v=JxYpPE6iPEA&list=PLVUDmbpupCaoKRWtIqAp-FOFSQwftAOtA}{EXERCICE : Construire un point \`a partir d'une \'egalit\'e vectorielle}{https://www.youtube.com/watch?v=1C6KEwbO-b8&list=PLVUDmbpupCaoKRWtIqAp-FOFSQwftAOtA}
-
-\medskip
-
-\VideoYvanSolo{Exprimer un vecteur en fonction de deux autres}{https://www.youtube.com/watch?v=ODZGKdIKewo&list=PLVUDmbpupCaoKRWtIqAp-FOFSQwftAOtA}
+% 3 vidéos "exercice" (celle sur l'égalité vectorielle exploite à la
+% fois la somme, Objectif 4, et la colinéarité, Objectif 5 : posée ici
+% plutôt que près du Théorème 1, pour rester après les deux notions
+% qu'elle mobilise), regroupées sur 3 colonnes sans bordures plutôt
+% qu'empilées en \VideosYvanMonka — intitulés simplifiés (plus de
+% préfixe "EXERCICE :", vidéos de cours correspondantes retirées).
+% 3 minipages plutôt qu'un vrai tabular : le "&" des url YouTube
+% (?v=...&list=...) est un caractère actif (séparateur de colonne) dans
+% un tabular, il casserait la compilation.
+\begin{center}
+\begin{minipage}{5.5cm}\VideoCardCell{D\'emontrer que deux vecteurs sont colin\'eaires}{https://www.youtube.com/watch?v=62Uh6UKz-Wk&list=PLVUDmbpupCaoKRWtIqAp-FOFSQwftAOtA}\end{minipage}%
+\hfill
+\begin{minipage}{5.5cm}\VideoCardCell{Construire un point \`a partir d'une \'egalit\'e vectorielle}{https://www.youtube.com/watch?v=1C6KEwbO-b8&list=PLVUDmbpupCaoKRWtIqAp-FOFSQwftAOtA}\end{minipage}%
+\hfill
+\begin{minipage}{5.5cm}\VideoCardCell{Exprimer un vecteur en fonction de deux autres}{https://www.youtube.com/watch?v=ODZGKdIKewo&list=PLVUDmbpupCaoKRWtIqAp-FOFSQwftAOtA}\end{minipage}
+\end{center}
 
 \bigskip
 
 \begin{center}
 {\scriptsize
-\begin{tabular}{|p{3.4cm}|p{4.6cm}|p{4.6cm}|p{4.6cm}|}
-\cline{2-4}
-\multicolumn{1}{c|}{} & \headcellV{\starfull{diffgreen}\starempty\starempty} & \headcellV{\starfull{diffblue}\starfull{diffblue}\starempty} & \headcellV{\starfull{diffred}\starfull{diffred}\starfull{diffred}} \\
-\hline
+\begin{tabular}{|>{\raggedright\arraybackslash}m{5.2cm}|>{\centering\arraybackslash}m{3.2cm}|>{\centering\arraybackslash}m{3.2cm}|>{\centering\arraybackslash}m{3.2cm}||p{2.5cm}|}
+\cline{2-5}
+\multicolumn{1}{c|}{} & \headcellV{\starfull{diffgreen}\starempty\starempty} & \headcellV{\starfull{diffblue}\starfull{diffblue}\starempty} & \headcellV{\starfull{diffred}\starfull{diffred}\starfull{diffred}} & \multirow{3}{*}{\parbox{2.5cm}{\centering
+% Même correctif que pour le 1er tableau, valeur plus petite (tableau à
+% 2 lignes d'objectif, donc moins de hauteur à combler).
+\vspace{1.2cm}
+\href{https://capytale2.ac-paris.fr/web/c/bd09-11585993/edn}{\begin{minipage}{2.5cm}\centering
+\faLaptop~\textbf{Code Capytale}\\[2pt]
+\textbf{Colin\'earit\'e}\\[2pt]
+{\ttfamily\bfseries bd09-11585993}
+\end{minipage}}\par\smallskip
+\textcolor{black}{\qrcode*[height=1.2cm, level=M]{https://capytale2.ac-paris.fr/web/c/bd09-11585993/edn}}
+}} \\
+\cline{1-4}
 \cellObj{\textbf{Objectif 5} -- Produit d'un vecteur par un nombre r\'eel et colin\'earit\'e de deux vecteurs} &
-\cellDiff{Manuel - Ex~19 p.207,\\42, 44 p.208-210, 61 p.210} &
-\cellDiff{Manuel - Ex~41 p.208-210,\\74 p.212\\Feuille 2 - Ex~18, 19, 22} &
-\cellDiff{Manuel - Ex~45 p.208-210,\\75 p.212} \\
-\hline
-\cellObj{\textbf{Objectif 6} -- D\'ecomposition d'un vecteur en fonction de deux vecteurs non colin\'eaires} &
-\cellDiff{Feuille 2 - Ex~20} &
-\cellDiff{Feuille 2 - Ex~21} &
-\cellDiff{Feuille 2 - Ex~22} \\
+\cellDiff{\IconFeuilleTrois\ Ex~1, 2\\\IconManuel\ Ex~18, 19 p.207\\\IconManuel\ Ex~41, 42 p.208} &
+\cellDiff[0.32cm]{\IconFeuilleTrois\ Ex~3 \\ \IconManuel\ Ex~43, 44 p.209} &
+\cellDiff{} &
+\\
+\cline{1-4}
+\cellObj[0.32cm]{\textbf{Objectif 6} -- D\'ecomposition d'un vecteur en fonction de deux vecteurs non colin\'eaires} &
+\cellDiff[0.32cm]{\IconFeuilleTrois\ Ex~4, 5} &
+\cellDiff[0.16cm]{\IconFeuilleTrois\ Ex~6, 7\\\IconManuel\ Ex~45 p.209 \\ \IconManuel\  74 p.212} &
+\cellDiff[0.16cm]{\IconFeuilleTrois\ Ex~8\\ \IconManuel\ Ex~75, 78 p.212} &
+\\
 \hline
 \end{tabular}
 }

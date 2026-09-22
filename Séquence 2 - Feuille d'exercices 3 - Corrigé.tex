@@ -1,0 +1,202 @@
+% !TEX program = lualatex
+\documentclass[10pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage[left=1cm,right=1cm,top=1.3cm,bottom=1.3cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{multicol}
+\raggedcolumns
+\usepackage{pifont}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,shapes.misc}
+\tikzset{ptcross/.style={cross out,draw,thick,minimum size=3pt,inner sep=0pt}}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins}
+\usepackage[hidelinks]{hyperref}
+\definecolor{calcblue}{HTML}{1C7ED6}
+\definecolor{skyblue}{HTML}{339AF0}
+\definecolor{objorange}{HTML}{F76707}
+\definecolor{repred}{HTML}{E03131}
+\newcommand{\Vj}[1]{\overrightarrow{\text{#1}}}
+\newcommand{\Pt}[1]{\textsf{\footnotesize #1}}
+\renewcommand{\familydefault}{\sfdefault}
+\DeclareSymbolFont{sfnumbers}{OT1}{cmss}{m}{n}
+\SetSymbolFont{sfnumbers}{bold}{OT1}{cmss}{bx}{n}
+\DeclareMathSymbol{0}{\mathalpha}{sfnumbers}{`0}
+\DeclareMathSymbol{1}{\mathalpha}{sfnumbers}{`1}
+\DeclareMathSymbol{2}{\mathalpha}{sfnumbers}{`2}
+\DeclareMathSymbol{3}{\mathalpha}{sfnumbers}{`3}
+\DeclareMathSymbol{4}{\mathalpha}{sfnumbers}{`4}
+\DeclareMathSymbol{5}{\mathalpha}{sfnumbers}{`5}
+\DeclareMathSymbol{6}{\mathalpha}{sfnumbers}{`6}
+\DeclareMathSymbol{7}{\mathalpha}{sfnumbers}{`7}
+\DeclareMathSymbol{8}{\mathalpha}{sfnumbers}{`8}
+\DeclareMathSymbol{9}{\mathalpha}{sfnumbers}{`9}
+\setlength{\parindent}{0pt}
+\setlength{\columnsep}{18pt}
+\graphicspath{{./}}
+\newcommand*{\textcircledd}[1]{\begin{tikzpicture}[baseline=(letter.base)]\node[draw,circle,inner sep=1pt] (letter) {#1};\end{tikzpicture}}
+\newcommand{\numeroCerne}[1]{\protect\textcircledd{\bfseries\scriptsize #1}}
+\setlist[enumerate,1]{label=\numeroCerne{\arabic*}, leftmargin=*, labelsep=5pt, itemsep=2pt, topsep=1pt, partopsep=0pt, parsep=0pt, beginpenalty=10000}
+\setlist[itemize,1]{beginpenalty=10000}
+\setlist[enumerate,2]{label=(\alph*), leftmargin=*, labelsep=4pt, itemsep=1pt, topsep=1pt, partopsep=0pt, parsep=0pt}
+\setlength{\abovedisplayskip}{3pt}\setlength{\belowdisplayskip}{3pt}\setlength{\abovedisplayshortskip}{3pt}\setlength{\belowdisplayshortskip}{3pt}
+
+% Ligne de corrig\'e : num\'ero d'exercice en pastille bleu ciel (m\^eme
+% couleur que les cartes d'exercice de la feuille), suivi de la r\'eponse.
+\newcommand{\Corr}[2]{%
+\par\vspace{6pt}
+\noindent\tcbox[on line, colback=skyblue, colframe=skyblue, boxsep=1pt, left=4pt, right=4pt, top=1pt, bottom=1pt, arc=2pt]{\textcolor{white}{\bfseries Exercice~#1}}\par\nobreak\vspace{3pt}\nobreak
+\noindent\ignorespaces #2
+\par
+}
+
+% Bandeau d'objectif, comme sur la feuille d'exercices.
+\newcommand{\Objectif}[2]{%
+\par\vspace{8pt}
+\noindent\begin{minipage}{\linewidth}
+{\large\color{objorange}\bfseries Objectif #1~:}\\{\large\color{objorange}#2}
+\end{minipage}\par\nobreak
+\vspace{2pt}\nobreak
+}
+
+% \'El\'ements construits (points plac\'es, vecteurs trac\'es) : en rouge.
+\newcommand{\Rep}[1]{{\color{repred}#1}}
+
+\author{2nde --- Lyc\'ee Lebrun Coutances}
+\date{}
+\title{\textbf{S\'equence 2 --- Feuille d'exercices n\textdegree{}3 : Vecteurs du plan}\\[4pt]\large Corrig\'e}
+% Axe gradu\'e du corrig\'e : #1 = facteur x, #2 = d\'ebut, #3 = fin,
+% #4 = liste des graduations, #5 = points (A, B donn\'es), #6 = point C construit.
+\newcommand{\Axe}[6]{{\par\smallskip\centering
+\begin{tikzpicture}[x=#1,y=0.5cm]
+\draw (#2,0) -- (#3,0);
+\foreach \x in {#4} \draw (\x,-0.08) -- (\x,0.08);
+#5
+#6
+\end{tikzpicture}\par}\smallskip}
+\begin{document}
+\maketitle
+\vspace{-18pt}
+
+\begin{multicols}{2}
+
+\Objectif{5}{Produit d'un vecteur par un nombre r\'eel et colin\'earit\'e de deux vecteurs}
+
+\Corr{1}{
+On compte les longueurs en graduations. Le signe est n\'egatif quand $\Vj{AC}$ et $\Vj{AB}$ sont de sens oppos\'e.
+\begin{enumerate}
+\item Sens oppos\'e. $AC=3$ et $AB=4$, donc $AC$ vaut $\dfrac34$ de $AB$.\\
+On a donc $\Vj{AC}=-\dfrac34\,\Vj{AB}$.
+\item M\^eme sens. $AC=4$ et $AB=1$, donc $AC$ vaut $\dfrac41=4$ fois $AB$.\\
+On a donc $\Vj{AC}=4\,\Vj{AB}$.
+\item Sens oppos\'e, $AC=3$ et $AB=1$~: $\Vj{AC}=-3\,\Vj{AB}$.
+\item Sens oppos\'e, $AC=1$ et $AB=2$~: $\Vj{AC}=-\dfrac12\,\Vj{AB}$.
+\item M\^eme sens, $AC=2$ et $AB=7$~: $\Vj{AC}=\dfrac27\,\Vj{AB}$.
+\item M\^eme sens, $AC=1$ et $AB=6$~: $\Vj{AC}=\dfrac16\,\Vj{AB}$.
+\end{enumerate}
+}
+
+\Corr{2}{
+\begin{enumerate}
+\item $-\dfrac32<0$~: sens oppos\'e. $AB=2$ graduations, donc $AC=\dfrac32\times2=3$ graduations. On place $C$ \`a 3 graduations de $A$, \`a l'oppos\'e de $B$.\par
+\Axe{1.6cm}{-2}{3}{-1.5,-1,-0.5,0.5,1.5,2,2.5}{\node[ptcross] at (0,0) {}; \node[above] at (0,0) {\Pt{A}}; \node[ptcross] at (1,0) {}; \node[above] at (1,0) {\Pt{B}};}{\node[ptcross,repred] at (-1.5,0) {}; \node[above,repred] at (-1.5,0) {\Pt{C}};}
+\item $\dfrac78>0$~: m\^eme sens. $AB=8$, donc $AC=\dfrac78\times8=7$ graduations.\par
+\Axe{1.33cm}{-1.5}{4.5}{-1,0,0.5,1,1.5,2,2.5,3,4}{\node[ptcross] at (-0.5,0) {}; \node[above] at (-0.5,0) {\Pt{A}}; \node[ptcross] at (3.5,0) {}; \node[above] at (3.5,0) {\Pt{B}};}{\node[ptcross,repred] at (3,0) {}; \node[below,repred] at (3,0) {\Pt{C}};}
+\item M\^eme sens, $AB=4$, $AC=\dfrac14\times4=1$ graduation.\par
+\Axe{2cm}{-1}{3}{-0.5,0.5,1,1.5,2.5}{\node[ptcross] at (0,0) {}; \node[above] at (0,0) {\Pt{A}}; \node[ptcross] at (2,0) {}; \node[above] at (2,0) {\Pt{B}};}{\node[ptcross,repred] at (0.5,0) {}; \node[above,repred] at (0.5,0) {\Pt{C}};}
+\item Sens oppos\'e, $AB=6$, $AC=\dfrac12\times6=3$ graduations.\par
+\Axe{1.33cm}{-2}{4}{-1.5,-1,-0.5,0.5,1,1.5,2,2.5,3,3.5}{\node[ptcross] at (0,0) {}; \node[above] at (0,0) {\Pt{A}}; \node[ptcross] at (3,0) {}; \node[above] at (3,0) {\Pt{B}};}{\node[ptcross,repred] at (-1.5,0) {}; \node[above,repred] at (-1.5,0) {\Pt{C}};}
+\item M\^eme sens, $AB=3$, $AC=\dfrac23\times3=2$ graduations.\par
+\Axe{2.28cm}{-1}{2.5}{-0.5,0.5,1,2}{\node[ptcross] at (0,0) {}; \node[above] at (0,0) {\Pt{A}}; \node[ptcross] at (1.5,0) {}; \node[above] at (1.5,0) {\Pt{B}};}{\node[ptcross,repred] at (1,0) {}; \node[above,repred] at (1,0) {\Pt{C}};}
+\item Sens oppos\'e, $AB=6$, $AC=\dfrac43\times6=8$ graduations.\par
+\Axe{1cm}{-2}{6}{-1.5,-1,-0.5,0,0.5,1,1.5,2.5,3,3.5,4,4.5,5.5}{\node[ptcross] at (2,0) {}; \node[above] at (2,0) {\Pt{A}}; \node[ptcross] at (5,0) {}; \node[above] at (5,0) {\Pt{B}};}{\node[ptcross,repred] at (-2,0) {}; \node[above,repred] at (-2,0) {\Pt{C}};}
+\end{enumerate}
+}
+
+\Corr{3}{
+\begin{minipage}{\linewidth}
+\begin{enumerate}[label=(\alph*)]
+\item $3\Vj{AB}+\dfrac12\Vj{AB}=\left(3+\dfrac12\right)\Vj{AB}=\dfrac72\Vj{AB}$, donc $m=\dfrac72$.
+\item $2(3\Vj{BA})=6\Vj{BA}=-6\Vj{AB}$, donc $n=-6$.
+\item $2\Vj{AB}-\Vj{BA}=2\Vj{AB}+\Vj{AB}=3\Vj{AB}$, donc $p=3$.
+\item $3\Vj{BA}-4\Vj{AB}=-3\Vj{AB}-4\Vj{AB}=-7\Vj{AB}$, donc $q=-7$.
+\end{enumerate}
+\end{minipage}
+}
+
+\Objectif{6}{D\'ecomposition d'un vecteur en fonction de deux vecteurs non colin\'eaires}
+
+\Corr{4}{
+\begin{minipage}{\linewidth}
+$\vec u$~: 2 carreaux vers la droite~; $\vec v$~: 1 carreau vers la droite et 1 vers le haut.
+\begin{enumerate}[label=(\alph*)]
+\item $\vec u+2\vec v$~: 2 carreaux \`a droite, puis deux fois (1 \`a droite, 1 en haut).
+\item $2\vec u-\vec v$~: 4 carreaux \`a droite, puis 1 \`a gauche et 1 en bas.
+\item $-\vec u+3\vec v$~: 2 carreaux \`a gauche, puis trois fois (1 \`a droite, 1 en haut).
+\end{enumerate}
+\begin{center}
+\begin{tikzpicture}[scale=0.5]
+\draw[thin,gray!35] (0,0) grid (11,6);
+\draw[-{Stealth},thick,blue] (1,5) -- (3,5) node[midway,above]{$\vec u$};
+\draw[-{Stealth},thick,red] (5,5) -- (6,6) node[midway,below right]{$\vec v$};
+\coordinate (A) at (1,1); \node[ptcross] at (A) {}; \node[below] at (A) {\Pt{A}};
+\coordinate (B) at (4,4); \node[ptcross] at (B) {}; \node[above left,inner sep=1pt] at (B) {\Pt{B}};
+\coordinate (C) at (9,1); \node[ptcross] at (C) {}; \node[below] at (C) {\Pt{C}};
+% M = A + u + 2v
+\draw[-{Stealth},blue,dashed] (A) -- (3,1); \draw[-{Stealth},red,dashed] (3,1) -- (4,2); \draw[-{Stealth},red,dashed] (4,2) -- (5,3);
+\draw[-{Stealth},thick,repred] (A) -- (5,3);
+\node[ptcross,repred] at (5,3) {}; \node[right,repred] at (5,3) {\Pt{M}};
+% N = B + 2u - v
+\draw[-{Stealth},blue,dashed] (B) -- (6,4); \draw[-{Stealth},blue,dashed] (6,4) -- (8,4); \draw[-{Stealth},red,dashed] (8,4) -- (7,3);
+\draw[-{Stealth},thick,repred] (B) -- (7,3);
+\node[ptcross,repred] at (7,3) {}; \node[below,repred] at (7,3) {\Pt{N}};
+% R = C - u + 3v
+\draw[-{Stealth},blue,dashed] (C) -- (7,1); \draw[-{Stealth},red,dashed] (7,1) -- (8,2); \draw[-{Stealth},red,dashed] (8,2) -- (9,3); \draw[-{Stealth},red,dashed] (9,3) -- (10,4);
+\draw[-{Stealth},thick,repred] (C) -- (10,4);
+\node[ptcross,repred] at (10,4) {}; \node[above,repred] at (10,4) {\Pt{R}};
+\end{tikzpicture}
+\end{center}
+\end{minipage}
+}
+
+\Corr{5}{
+On lit le nombre de carreaux vers la droite (multiple de $\vec u$) et vers le haut (multiple de $\vec v$)~:
+\[\vec{w_1}=3\vec u+2\vec v\,;\qquad \vec{w_2}=-\vec u+3\vec v\,;\qquad \vec{w_3}=2\vec u-\vec v.\]
+}
+
+\Corr{6}{
+On compte les parall\'elogrammes travers\'es dans la direction de $\vec u$, puis dans celle de $\vec v$~:
+\[\Vj{AB}=3\vec u+\vec v\,;\quad \Vj{AC}=\vec u+3\vec v\,;\quad \Vj{BD}=\vec u+\vec v\,;\]
+\[\Vj{DC}=-3\vec u+\vec v\,;\quad \Vj{EB}=3\vec u-\vec v.\]
+}
+
+\Corr{7}{
+D'apr\`es la relation de Chasles, $\Vj{AI}=\Vj{AD}+\Vj{DI}$.\\
+$I$ est le milieu de $[DC]$, donc $\Vj{DI}=\dfrac12\Vj{DC}$~; et comme $ABCD$ est un parall\'elogramme, $\Vj{DC}=\Vj{AB}=\vec u$.\\
+Ainsi $\Vj{AI}=\vec v+\dfrac12\vec u$.
+}
+
+\Corr{8}{
+\begin{minipage}{\linewidth}
+\begin{enumerate}
+\item $D$ est le sym\'etrique de $A$ par rapport \`a $O$~: $\Vj{OD}=-\Vj{OA}=-\vec u$. De m\^eme $\Vj{OE}=-\Vj{OB}=-\vec v$.\\
+$OABC$ est un parall\'elogramme (losange form\'e de deux triangles \'equilat\'eraux), donc $\Vj{OC}=\Vj{AB}=\Vj{AO}+\Vj{OB}=-\vec u+\vec v$.\\
+Enfin $\Vj{OF}=-\Vj{OC}=\vec u-\vec v$.
+\item Avec la relation de Chasles en passant par $O$~:\\
+$\Vj{CB}=\Vj{CO}+\Vj{OB}=-(-\vec u+\vec v)+\vec v=\vec u$~;\\
+$\Vj{AB}=\Vj{AO}+\Vj{OB}=-\vec u+\vec v$~;\\
+$\Vj{DF}=\Vj{DO}+\Vj{OF}=\vec u+(\vec u-\vec v)=2\vec u-\vec v$~;\\
+$\Vj{CD}=\Vj{CO}+\Vj{OD}=(\vec u-\vec v)-\vec u=-\vec v$.
+\end{enumerate}
+\end{minipage}
+}
+
+\end{multicols}
+\end{document}

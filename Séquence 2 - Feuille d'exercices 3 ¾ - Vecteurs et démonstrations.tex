@@ -1,0 +1,365 @@
+% !TEX program = xelatex
+\documentclass[10pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage[left=0.6cm,right=0.6cm,top=1cm,bottom=1cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage{pifont}
+\usepackage{frcursive}
+% Correctif du bug de crénage de frcursive sous XeLaTeX (repris de CLT2627.sty) :
+% sans lui, certaines paires de lettres consécutives dans \cursive explosent
+% (une lettre projetée loin à droite), ce qui coupe des mots comme "Représenter".
+\makeatletter
+\ifdefined\XeTeXcharclass
+\XeTeXcharclass `a 201 \XeTeXcharclass `b 201 \XeTeXcharclass `c 201
+\XeTeXcharclass `d 201 \XeTeXcharclass `e 201 \XeTeXcharclass `f 201
+\XeTeXcharclass `g 201 \XeTeXcharclass `h 201 \XeTeXcharclass `i 201
+\XeTeXcharclass `j 201 \XeTeXcharclass `k 201 \XeTeXcharclass `l 201
+\XeTeXcharclass `m 201 \XeTeXcharclass `n 201 \XeTeXcharclass `o 201
+\XeTeXcharclass `p 201 \XeTeXcharclass `q 201 \XeTeXcharclass `r 201
+\XeTeXcharclass `s 201 \XeTeXcharclass `t 201 \XeTeXcharclass `u 201
+\XeTeXcharclass `v 201 \XeTeXcharclass `w 201 \XeTeXcharclass `x 201
+\XeTeXcharclass `y 201 \XeTeXcharclass `z 201
+\XeTeXcharclass `A 201 \XeTeXcharclass `B 201 \XeTeXcharclass `C 201
+\XeTeXcharclass `D 201 \XeTeXcharclass `E 201 \XeTeXcharclass `F 201
+\XeTeXcharclass `G 201 \XeTeXcharclass `H 201 \XeTeXcharclass `I 201
+\XeTeXcharclass `J 201 \XeTeXcharclass `K 201 \XeTeXcharclass `L 201
+\XeTeXcharclass `M 201 \XeTeXcharclass `N 201 \XeTeXcharclass `O 201
+\XeTeXcharclass `P 201 \XeTeXcharclass `Q 201 \XeTeXcharclass `R 201
+\XeTeXcharclass `S 201 \XeTeXcharclass `T 201 \XeTeXcharclass `U 201
+\XeTeXcharclass `V 201 \XeTeXcharclass `W 201 \XeTeXcharclass `X 201
+\XeTeXcharclass `Y 201 \XeTeXcharclass `Z 201
+\XeTeXcharclass `\é 201 \XeTeXcharclass `\è 201 \XeTeXcharclass `\ê 201
+\XeTeXcharclass `\ë 201 \XeTeXcharclass `\É 201 \XeTeXcharclass `\È 201
+\XeTeXcharclass `\Ê 201 \XeTeXcharclass `\Ë 201 \XeTeXcharclass `\à 201
+\XeTeXcharclass `\â 201 \XeTeXcharclass `\ä 201 \XeTeXcharclass `\À 201
+\XeTeXcharclass `\Â 201 \XeTeXcharclass `\Ä 201 \XeTeXcharclass `\ô 201
+\XeTeXcharclass `\ö 201 \XeTeXcharclass `\Ô 201 \XeTeXcharclass `\Ö 201
+\XeTeXcharclass `\î 201 \XeTeXcharclass `\ï 201 \XeTeXcharclass `\Î 201
+\XeTeXcharclass `\Ï 201 \XeTeXcharclass `\ù 201 \XeTeXcharclass `\û 201
+\XeTeXcharclass `\ü 201 \XeTeXcharclass `\Ù 201 \XeTeXcharclass `\Û 201
+\XeTeXcharclass `\Ü 201 \XeTeXcharclass `\ç 201 \XeTeXcharclass `\Ç 201
+\XeTeXcharclass `\œ 201 \XeTeXcharclass `\Œ 201 \XeTeXcharclass `\æ 201
+\XeTeXcharclass `\Æ 201
+\let\cursive@orig\cursive
+\renewcommand{\cursive}{%
+  \cursive@orig
+  \XeTeXinterchartoks 201 201 = {\kern0pt }%
+}
+\fi
+\makeatother
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,shapes.misc}
+\tikzset{ptcross/.style={cross out,draw,thick,minimum size=3pt,inner sep=0pt}}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fontawesome5}
+\usepackage{qrcode}
+% Rendre un \qrcode* cliquable : boîte vide de la taille du QR, superposée
+% via \href (même astuce que dans le Cours).
+\newcommand{\ClickableQR}[2]{\makebox[0pt][l]{\href{#2}{\makebox[#1][c]{\rule{0pt}{#1}}}}}
+\definecolor{calcblue}{HTML}{1C7ED6}
+\definecolor{diffgreen}{HTML}{40C057}
+\definecolor{diffblue}{HTML}{228BE6}
+\definecolor{diffred}{HTML}{FA5252}
+\definecolor{skyblue}{HTML}{339AF0}
+\definecolor{objorange}{HTML}{F76707}
+\newcommand{\starfull}[1]{{\color{#1}\ding{72}}}
+\newcommand{\starempty}{{\color{gray!45}\ding{73}}}
+\newcommand{\Vj}[1]{\overrightarrow{\text{#1}}}
+\newcommand{\VBlank}{\rule[0.15ex]{0.55cm}{0.35pt}}
+\newcommand{\Pt}[1]{\textsf{\footnotesize #1}}
+\renewcommand{\familydefault}{\sfdefault}
+\DeclareSymbolFont{sfnumbers}{OT1}{cmss}{m}{n}
+\SetSymbolFont{sfnumbers}{bold}{OT1}{cmss}{bx}{n}
+\DeclareMathSymbol{0}{\mathalpha}{sfnumbers}{`0}
+\DeclareMathSymbol{1}{\mathalpha}{sfnumbers}{`1}
+\DeclareMathSymbol{2}{\mathalpha}{sfnumbers}{`2}
+\DeclareMathSymbol{3}{\mathalpha}{sfnumbers}{`3}
+\DeclareMathSymbol{4}{\mathalpha}{sfnumbers}{`4}
+\DeclareMathSymbol{5}{\mathalpha}{sfnumbers}{`5}
+\DeclareMathSymbol{6}{\mathalpha}{sfnumbers}{`6}
+\DeclareMathSymbol{7}{\mathalpha}{sfnumbers}{`7}
+\DeclareMathSymbol{8}{\mathalpha}{sfnumbers}{`8}
+\DeclareMathSymbol{9}{\mathalpha}{sfnumbers}{`9}
+\setlength{\parindent}{0pt}
+\graphicspath{{./}}
+\newcommand*{\textcircledd}[1]{\begin{tikzpicture}[baseline=(letter.base)]\node[draw,circle,inner sep=1pt] (letter) {#1};\end{tikzpicture}}
+\newcommand{\numeroCerne}[1]{\protect\textcircledd{\bfseries\scriptsize #1}}
+\setlist[enumerate,1]{label=\numeroCerne{\arabic*}, leftmargin=*, labelsep=6pt, itemsep=3pt, topsep=2pt, partopsep=0pt, parsep=0pt}
+
+\NewDocumentEnvironment{Exo}{O{breakable} m m m}{%
+  \begin{tcolorbox}[
+    enhanced,
+    #1,
+    colback=white,
+    colframe=white,
+    boxrule=0pt,
+    arc=4pt, outer arc=4pt, sharp corners=south,
+    left=8pt, right=8pt, top=5pt, bottom=3pt,
+    before skip=4pt, after skip=4pt,
+  ]
+  \noindent\tcbox[on line, colback=skyblue, colframe=skyblue, boxsep=1pt, left=4pt, right=4pt, top=1pt, bottom=1pt, arc=2pt]{\textcolor{white}{\bfseries Exercice~#2}}~#3\hfill\mbox{\color{skyblue}\normalsize\cursive\hyphenchar\font=-1 #4}\par\vspace{3pt}%
+}{%
+  \end{tcolorbox}
+}
+
+\NewDocumentEnvironment{ExoCont}{O{unbreakable}}{%
+  \begin{tcolorbox}[
+    enhanced,
+    #1,
+    colback=white,
+    colframe=white,
+    boxrule=0pt,
+    arc=4pt, outer arc=4pt, sharp corners=south,
+    left=8pt, right=8pt, top=5pt, bottom=3pt,
+    before skip=4pt, after skip=4pt,
+  ]
+}{%
+  \end{tcolorbox}
+}
+
+\newcommand{\Objectif}[2]{%
+\vspace{4pt}
+\noindent{\large\color{objorange}\bfseries Objectif #1~:}\\{\large\color{objorange}#2}\par
+\vspace{2pt}
+}
+
+\NewDocumentCommand{\FeuilletTitre}{m}{%
+  \begin{center}
+  \begin{tcolorbox}[
+    enhanced,
+    width=0.58\linewidth,
+    colback=white,
+    colframe=black,
+    boxrule=0.8pt,
+    arc=8pt,
+    sharp corners=downhill,
+    left=10pt, right=10pt, top=8pt, bottom=6pt,
+    halign=center,
+    overlay={
+      \node[fill=white, anchor=west, font=\normalsize, inner xsep=4pt]
+        at ([xshift=14pt]frame.north west) {Feuille d'exercices n\textdegree{}3\,\textsuperscript{3/4}};
+    },
+  ]
+  {\huge #1}
+  \end{tcolorbox}
+  \end{center}
+}
+
+% Trous "texte à trous" : vecteur dont le nom est à compléter, fraction à
+% compléter, réel à compléter.
+\newcommand{\Vd}{\overrightarrow{\ \dots\dots\ }}
+% Variante avec un espace (strut invisible) entre les pointillés et la
+% flèche, pour pouvoir écrire le nom du vecteur sous la flèche.
+\newcommand{\VdE}{\overrightarrow{\rule{0pt}{2.6ex}\ \dots\dots\ }}
+\newcommand{\VdEl}[1]{\overrightarrow{\rule{0pt}{2.6ex}\ \dots\,\text{#1}\ }}
+\newcommand{\Fd}{\dfrac{\ \dots\ }{\ \dots\ }}
+\newcommand{\Nd}{\dots\,}
+% Ligne pointillée pour rédiger une justification.
+\newcommand{\LigneJ}{\noindent\phantom{.}\dotfill\par\vspace{13pt}}
+\setlength{\abovedisplayskip}{3pt}\setlength{\belowdisplayskip}{3pt}\setlength{\abovedisplayshortskip}{3pt}\setlength{\belowdisplayshortskip}{3pt}
+
+\pagestyle{empty}
+\begin{document}
+
+\FeuilletTitre{Vecteurs et d\'emonstrations}
+
+\Objectif{5}{Produit d'un vecteur par un nombre r\'eel et colin\'earit\'e de deux vecteurs}
+
+% ---------------------------------------------------------------------
+% Ex 1 : démonstration d'alignement, guidée (ancienne Feuille 6 - Ex 2)
+% ---------------------------------------------------------------------
+\begin{Exo}[breakable]{1}{\starfull{diffblue}\starfull{diffblue}\starempty}{Raisonner}
+\noindent\begin{minipage}[t]{0.62\linewidth}\vspace{0pt}
+Soit $ABC$ un triangle. On d\'efinit les points $M$ et $N$ par les \'egalit\'es vectorielles suivantes~: \quad $\Vj{BM}=2\,\Vj{AC}$ \quad et \quad $\Vj{AN}=\dfrac12\,\Vj{BC}$.\\[6pt]
+\numeroCerne{1}~Placer les points $M$ et $N$ sur la figure ci-contre.\\[6pt]
+\textbf{Observation}~: \dotfill\\[4pt]
+\numeroCerne{2}~On va chercher \`a montrer que les points $C$, $M$ et $N$ sont align\'es. Pour cela, on exprime les vecteurs $\Vj{CM}$ et $\Vj{CN}$ en fonction des vecteurs $\Vj{AC}$ et $\Vj{CB}$.
+\end{minipage}\hfill
+\begin{minipage}[t]{0.36\linewidth}\vspace{0pt}
+\centering
+\begin{tikzpicture}[scale=0.55]
+\draw[thin,gray!35] (-2,-1) grid (6,5);
+\coordinate (A) at (0,0); \coordinate (B) at (3,0); \coordinate (C) at (1,2);
+\draw[thick] (A)--(B)--(C)--cycle;
+\node[ptcross] at (A) {}; \node[below left] at (A) {\Pt{A}};
+\node[ptcross] at (B) {}; \node[below right] at (B) {\Pt{B}};
+\node[ptcross] at (C) {}; \node[above] at (C) {\Pt{C}};
+\end{tikzpicture}
+\end{minipage}
+
+\medskip
+
+\noindent\begin{minipage}[t]{0.5\linewidth}\vspace{0pt}
+\textbf{D'une part,}
+\[\begin{aligned}
+\Vj{CM} &= \VdEl{B} + \VdE \quad\text{(relation de \dots\dots\dots\dots)}\\
+        &= \Vj{CB} + 2\,\Vj{AC}
+\end{aligned}\]
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\linewidth}\vspace{0pt}
+\textbf{D'autre part,}
+\[\begin{aligned}
+\Vj{CN} &= \VdEl{A} + \VdE \quad\text{(relation de \dots\dots\dots\dots)}\\
+        &= -\VdE + \dfrac12\,\VdE \\
+        &= -\dfrac12\,\VdE - \VdE
+\end{aligned}\]
+\end{minipage}
+
+\medskip
+
+\numeroCerne{3}~On remarque que~: \fbox{\rule[-1.2ex]{0pt}{4ex}$\Vj{CM} = \Nd\Nd\ \Vj{CN}$}\quad
+donc les vecteurs $\VdE$ et $\VdE$ sont \dotfill
+
+\medskip
+
+\fbox{\rule[-0.9ex]{0pt}{3.2ex}\textbf{Ainsi}~: les points \Nd\Nd, \Nd\Nd\ et \Nd\Nd\ sont \dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\ .}
+\end{Exo}
+
+% ---------------------------------------------------------------------
+% Ex 2 : démonstration de parallélisme, guidée (ancienne Feuille 6 - Ex 1)
+% NB : avec AM = 1/4 AB et BN = 3/4 BC, on obtient MN = 3/4 AC, donc c'est
+% (MN) // (AC) que l'on démontre (l'ancienne feuille annonçait (BC) par
+% erreur, mais le calcul à trous menait bien à AC).
+% ---------------------------------------------------------------------
+\begin{Exo}[breakable]{2}{\starfull{diffblue}\starfull{diffblue}\starempty}{Raisonner}
+\noindent\begin{minipage}[t]{0.62\linewidth}\vspace{0pt}
+Soit $ABC$ un triangle. On d\'efinit les points $M$ et $N$ par les \'egalit\'es vectorielles suivantes~: \quad $\Vj{AM}=\dfrac14\,\Vj{AB}$ \quad et \quad $\Vj{BN}=\dfrac34\,\Vj{BC}$.\\[6pt]
+\numeroCerne{1}~Placer les points $M$ et $N$ sur la figure ci-contre.\\[6pt]
+\textbf{Observation}~: \dotfill\\[4pt]
+\numeroCerne{2}~On va chercher \`a montrer que les droites $(MN)$ et $(AC)$ sont parall\`eles. Pour cela, on va montrer que les vecteurs $\Vj{MN}$ et $\Vj{AC}$ sont colin\'eaires, c'est-\`a-dire chercher un r\'eel $k$ tel que $\Vj{MN}=k\,\Vj{AC}$.
+\end{minipage}\hfill
+\begin{minipage}[t]{0.36\linewidth}\vspace{0pt}
+\centering
+\begin{tikzpicture}[scale=0.55]
+\draw[thin,gray!35] (-1,-1) grid (7,5);
+\coordinate (A) at (0,0); \coordinate (B) at (4,0); \coordinate (C) at (6,4);
+\draw[thick] (A)--(B)--(C)--cycle;
+\node[ptcross] at (A) {}; \node[below left] at (A) {\Pt{A}};
+\node[ptcross] at (B) {}; \node[below right] at (B) {\Pt{B}};
+\node[ptcross] at (C) {}; \node[above] at (C) {\Pt{C}};
+\end{tikzpicture}
+\end{minipage}
+
+\medskip
+
+\noindent\begin{minipage}[t]{0.5\linewidth}\vspace{0pt}
+\textbf{Tout d'abord}, exprimons $\Vj{MB}$ en fonction de $\Vj{AB}$~:
+\[\begin{aligned}
+\Vj{MB} &= \overrightarrow{\rule{0pt}{2.6ex}\ \text{M}\,\dots\ } + \Vj{AB} \\
+        &= \Fd\,\Vj{AB} + \Vj{AB} \\
+        &= \Fd\,\Vj{AB}
+\end{aligned}\]
+\end{minipage}\hfill
+\begin{minipage}[t]{0.46\linewidth}\vspace{0pt}
+\textbf{Justifications}~:\\[6pt]
+\LigneJ
+\LigneJ
+\end{minipage}
+
+\medskip
+
+\noindent\begin{minipage}[t]{0.5\linewidth}\vspace{0pt}
+\textbf{Ensuite},
+\[\begin{aligned}
+\Vj{MN} &= \Vj{MB} + \VdE \\
+        &= \Nd\,\Vj{AB} + \Fd\,\VdE \\
+        &= \Fd\left(\VdE + \VdE\right) \\
+        &= \Fd\,\VdE
+\end{aligned}\]
+\end{minipage}\hfill
+\begin{minipage}[t]{0.46\linewidth}\vspace{0pt}
+\textbf{Justifications}~:\\[6pt]
+\LigneJ
+\LigneJ
+\LigneJ
+\end{minipage}
+
+\medskip
+
+\textbf{Conclusion}~: les vecteurs $\VdE$ et $\VdE$ sont \dotfill
+
+\medskip
+
+\fbox{\rule[-0.9ex]{0pt}{3.2ex}\textbf{Ainsi}~: les droites $(\Nd\Nd)$ et $(\Nd\Nd)$ sont \dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\dots\ .}
+\end{Exo}
+
+\newpage
+
+% ---------------------------------------------------------------------
+% Page 2 : démonstrations à rédiger entièrement.
+% ---------------------------------------------------------------------
+\begin{tcolorbox}[enhanced, colback=objorange!6, colframe=objorange, boxrule=0.8pt, arc=4pt,
+  left=8pt, right=8pt, top=5pt, bottom=5pt, before skip=4pt, after skip=8pt,
+  title={\bfseries M\'ethode -- d\'emontrer avec des vecteurs}, fonttitle=\bfseries, coltitle=white, colbacktitle=objorange]
+\begin{itemize}[label=$\star$, leftmargin=*, itemsep=2pt]
+\item Les droites $(AB)$ et $(CD)$ sont \textbf{parall\`eles} $\Longleftrightarrow$ les vecteurs $\Vj{AB}$ et $\Vj{CD}$ sont colin\'eaires.
+\item Les points $A$, $B$ et $C$ sont \textbf{align\'es} $\Longleftrightarrow$ les vecteurs $\Vj{AB}$ et $\Vj{AC}$ sont colin\'eaires.
+\item $I$ est le \textbf{milieu} de $[AB]$ $\Longleftrightarrow$ $\Vj{AI}=\Vj{IB}$ $\Longleftrightarrow$ $\Vj{IA}+\Vj{IB}=\vec0$ $\Longleftrightarrow$ $\Vj{AI}=\dfrac12\,\Vj{AB}$.
+\end{itemize}
+Dans chaque cas, on exprime les vecteurs concern\'es en fonction de \textbf{deux m\^emes vecteurs} (relation de Chasles, \'egalit\'es de l'\'enonc\'e), puis on cherche le r\'eel $k$ qui les relie.
+\end{tcolorbox}
+
+\begin{Exo}[unbreakable]{3}{\starfull{diffblue}\starfull{diffblue}\starempty}{Raisonner}
+\noindent\begin{minipage}[t]{0.6\linewidth}\vspace{0pt}
+Soit $ABC$ un triangle. On d\'efinit les points $M$ et $N$ par~:
+\[\Vj{AM}=-\dfrac12\,\Vj{AB}\qquad\text{et}\qquad\Vj{AN}=-\dfrac12\,\Vj{AC}.\]
+\begin{enumerate}
+\item Compl\'eter la figure ci-contre.
+\item Exprimer le vecteur $\Vj{MN}$ en fonction du vecteur $\Vj{BC}$.
+\item En d\'eduire que les droites $(MN)$ et $(BC)$ sont parall\`eles.
+\end{enumerate}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.38\linewidth}\vspace{0pt}
+\centering
+\begin{tikzpicture}[scale=0.55]
+\draw[thin,gray!35] (0,0) grid (9,5);
+\coordinate (A) at (4,2); \coordinate (B) at (8,4); \coordinate (C) at (2,4);
+\draw[thick] (A)--(B)--(C)--cycle;
+\node[ptcross] at (A) {}; \node[below left] at (A) {\Pt{A}};
+\node[ptcross] at (B) {}; \node[below right] at (B) {\Pt{B}};
+\node[ptcross] at (C) {}; \node[above left] at (C) {\Pt{C}};
+\end{tikzpicture}
+\end{minipage}
+\end{Exo}
+
+\begin{Exo}[unbreakable]{4}{\starfull{diffred}\starfull{diffred}\starfull{diffred}}{Raisonner}
+\noindent\begin{minipage}[t]{0.78\linewidth}\vspace{0pt}
+Soit $ABCD$ un parall\'elogramme. On d\'efinit les points $E$ et $F$ par~:
+\[\Vj{BE}=\dfrac12\,\Vj{BC}\qquad\text{et}\qquad\Vj{DF}=2\,\Vj{DC}.\]
+\begin{enumerate}
+\item R\'ealiser la figure sur GeoGebra~: \faLaptop~\textbf{Code Capytale}~: \href{https://capytale2.ac-paris.fr/web/c/414a-11688973/edn}{{\ttfamily\bfseries 414a-11688973}}\\[2pt]
+Que peut-on conjecturer pour les points $A$, $E$ et $F$~?
+\item Exprimer le vecteur $\Vj{AE}$ en fonction des vecteurs $\Vj{AB}$ et $\Vj{AD}$.
+\item Exprimer le vecteur $\Vj{AF}$ en fonction des vecteurs $\Vj{AB}$ et $\Vj{AD}$.
+\item D\'emontrer que les points $A$, $E$ et $F$ sont align\'es.
+\end{enumerate}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.2\linewidth}\vspace{0pt}
+\centering
+\ClickableQR{2cm}{https://capytale2.ac-paris.fr/web/c/414a-11688973/edn}\textcolor{black}{\qrcode*[height=2cm, level=M]{https://capytale2.ac-paris.fr/web/c/414a-11688973/edn}}
+\end{minipage}
+\end{Exo}
+
+\Objectif{7}{Caract\'erisation vectorielle du milieu d'un segment}
+
+\begin{Exo}[unbreakable]{5}{\starfull{diffred}\starfull{diffred}\starfull{diffred}}{Raisonner}
+Soit $ABCD$ un parall\'elogramme. On note $E$ le sym\'etrique de $A$ par rapport \`a $B$, et $F$ le sym\'etrique de $A$ par rapport \`a $D$.
+\begin{enumerate}
+\item Faire une figure.
+\item Exprimer le vecteur $\Vj{CE}$ en fonction des vecteurs $\Vj{AB}$ et $\Vj{AD}$.
+\item Exprimer le vecteur $\Vj{CF}$ en fonction des vecteurs $\Vj{AB}$ et $\Vj{AD}$.
+\item En d\'eduire que $C$ est le milieu du segment $[EF]$.
+\end{enumerate}
+\end{Exo}
+
+\end{document}

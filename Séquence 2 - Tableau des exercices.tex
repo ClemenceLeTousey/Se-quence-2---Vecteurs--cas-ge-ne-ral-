@@ -49,16 +49,25 @@
 \maketitle
 \vspace{6pt}
 
-% Tableau Objectifs x difficult\'e, crois\'e avec les exercices manuel
-% (banque) et ceux de "S\'equence 2 - Feuille d'exercices - Vecteurs.tex"
-% (Feuille 2), sur le mod\`ele du tableau de la S\'equence 1.
+% Tableau Objectifs x difficult\'e, align\'e sur les tableaux "Objectif /
+% exercices" de "S\'equence 2 - Cours - Vecteurs.tex" (Manuel, Feuille 2,
+% Feuille 3) ; seuls ajouts par rapport au cours : les exercices de
+% "S\'equence 2 - Feuille d'exercices 3 3/4 - Vecteurs et d\'emonstrations".
 \definecolor{diffgreen}{HTML}{40C057}
 \definecolor{diffblue}{HTML}{228BE6}
 \definecolor{diffred}{HTML}{FA5252}
 \newcommand{\starfull}[1]{{\color{#1}\ding{72}}}
 \newcommand{\starempty}{{\color{gray!45}\ding{73}}}
-\newcommand{\cellA}[1]{\parbox[c][1.7cm][c]{4.3cm}{\raggedright #1}}
-\newcommand{\cellB}[1]{\parbox[c][1.7cm][c]{4.3cm}{\raggedright\footnotesize #1}}
+\newcommand{\cellA}[1]{\parbox[c][1.9cm][c]{4.3cm}{\raggedright #1}}
+\newcommand{\cellB}[1]{\parbox[c][1.9cm][c]{4.3cm}{\raggedright\footnotesize #1}}
+% Pictogrammes "Manuel" / "Feuille 2" / "Feuille 3" / "Feuille 3 3/4" : lettre(s)
+% entour\'ee(s), comme dans les tableaux "Objectif / exercices" du cours.
+\newcommand{\IconManuel}{\textcircledd{\bfseries\scriptsize M}}
+\newcommand{\IconFeuilleDeux}{\textcircledd{\bfseries\scriptsize F2}}
+\newcommand{\IconFeuilleTrois}{\textcircledd{\bfseries\scriptsize F3}}
+% Feuille 3 3/4 : F3 entour\'e comme les autres, puis "3/4" lin\'eaire en exposant
+% (m\^eme \'ecriture que le titre de la feuille).
+\newcommand{\IconFeuilleTroisQ}{\textcircledd{\bfseries\scriptsize F3}\textsuperscript{\bfseries 3/4}}
 \newcommand{\headcell}[1]{\parbox[c][0.75cm][c]{4.3cm}{\centering \scalebox{1.6}{#1}}}
 \begin{center}
 {\footnotesize
@@ -67,39 +76,39 @@
 \multicolumn{1}{c|}{} & \headcell{\starfull{diffgreen}\starempty\starempty} & \headcell{\starempty\starfull{diffblue}\starempty} & \headcell{\starempty\starempty\starfull{diffred}} \\
 \hline
 \cellA{\textbf{Objectif 1}\\{\small Vecteur $\Vj{MM'}$ d'une translation --- direction, sens et norme}} &
-\cellB{Manuel - Ex~28, 30 p.\,185\\Feuille 2 - Ex~1, 2, 9} &
-\cellB{Manuel - Ex~32 p.\,185} &
-\cellB{} \\
+\cellB{\IconManuel\ Ex~15 p.\,183\\\IconFeuilleDeux\ Ex~1, 2} &
+\cellB{\IconManuel\ Ex~28 p.\,184\\\IconManuel\ Ex~30 p.\,185\\\IconFeuilleDeux\ Ex~3} &
+\cellB{\IconFeuilleDeux\ Ex~4} \\
 \hline
 \cellA{\textbf{Objectif 2}\\{\small \'Egalit\'e de deux vecteurs, vecteur nul}} &
-\cellB{Manuel - Ex~23, 27 p.\,185} &
-\cellB{Manuel - Ex~18 p.\,183\\Feuille 2 - Ex~3, 4, 5,\\6, 7} &
-\cellB{} \\
+\cellB{\IconManuel\ Ex~18 p.\,183\\\IconManuel\ Ex~23, 27 p.\,184\\\IconFeuilleDeux\ Ex~5, 6} &
+\cellB{\IconManuel\ Ex~31 p.\,185\\\IconFeuilleDeux\ Ex~7} &
+\cellB{\IconManuel\ Ex~35 p.\,185\\\IconManuel\ Ex~37, 38 p.\,186\\\IconFeuilleDeux\ Ex~8, 9} \\
 \hline
 \cellA{\textbf{Objectif 3}\\{\small Repr\'esentants d'un vecteur}} &
-\cellB{} &
-\cellB{Manuel - Ex~31 p.\,185} &
+\cellB{\IconFeuilleDeux\ Ex~10, 11} &
+\cellB{\IconFeuilleDeux\ Ex~12} &
 \cellB{} \\
 \hline
 \cellA{\textbf{Objectif 4}\\{\small Somme de deux vecteurs et relation de Chasles}} &
-\cellB{Manuel - Ex~39 p.186,\\42 p.187\\Feuille 2 - Ex~11} &
-\cellB{Manuel - Ex~33, 35,\\38 p.185-186, 43,\\45 p.187, 72 p.192\\Feuille 2 - Ex~10, 12} &
-\cellB{} \\
+\cellB{\IconManuel\ Ex~39 p.\,186\\\IconManuel\ Ex~42, 43, 45, 46 p.\,187\\\IconFeuilleDeux\ Ex~13, 14} &
+\cellB{\IconManuel\ Ex~41 p.\,186\\\IconFeuilleDeux\ Ex~15, 16} &
+\cellB{\IconManuel\ Ex~71 p.\,192\\\IconManuel\ \faLaptop\ Ex~72, 73 p.\,192} \\
 \hline
 \cellA{\textbf{Objectif 5}\\{\small Produit d'un vecteur par un nombre r\'eel et colin\'earit\'e de deux vecteurs}} &
-\cellB{Manuel - Ex~19 p.207,\\42, 44 p.208-210,\\61 p.210} &
-\cellB{Manuel - Ex~41 p.208-210,\\74 p.212\\Feuille 2 - Ex~13, 14, 15} &
-\cellB{Manuel - Ex~45 p.208-210,\\75 p.212} \\
+\cellB{\IconManuel\ Ex~18, 19 p.\,207\\\IconManuel\ Ex~41, 42 p.\,208\\\IconFeuilleTrois\ Ex~1, 2} &
+\cellB{\IconManuel\ Ex~43, 44 p.\,209\\\IconFeuilleTrois\ Ex~3\\\IconFeuilleTroisQ\ Ex~1, 2, 3} &
+\cellB{\IconFeuilleTroisQ\ Ex~4} \\
 \hline
 \cellA{\textbf{Objectif 6}\\{\small D\'ecomposition d'un vecteur en fonction de deux vecteurs non colin\'eaires}} &
-\cellB{} &
-\cellB{} &
-\cellB{Feuille 2 - Ex~16} \\
+\cellB{\IconFeuilleTrois\ Ex~4, 5} &
+\cellB{\IconManuel\ Ex~45 p.\,209\\\IconManuel\ Ex~74 p.\,212\\\IconFeuilleTrois\ Ex~6, 7} &
+\cellB{\IconManuel\ Ex~75, 78 p.\,212\\\IconFeuilleTrois\ Ex~8} \\
 \hline
 \cellA{\textbf{Objectif 7}\\{\small Caract\'erisation vectorielle du milieu d'un segment}} &
 \cellB{} &
 \cellB{} &
-\cellB{Feuille 2 - Ex~8} \\
+\cellB{\IconFeuilleTroisQ\ Ex~5} \\
 \hline
 \end{tabular}
 }

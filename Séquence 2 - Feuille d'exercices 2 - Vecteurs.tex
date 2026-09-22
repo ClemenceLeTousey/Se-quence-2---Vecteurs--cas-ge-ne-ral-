@@ -1,0 +1,809 @@
+
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage[left=0.6cm,right=0.6cm,top=1cm,bottom=1cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage{pifont}
+\usepackage{frcursive}
+% Correctif du bug de crénage de frcursive sous XeLaTeX (repris de CLT2627.sty) :
+% sans lui, certaines paires de lettres consécutives dans \cursive explosent
+% (une lettre projetée loin à droite), ce qui coupe des mots comme "Représenter".
+\makeatletter
+\ifdefined\XeTeXcharclass
+\XeTeXcharclass `a 201 \XeTeXcharclass `b 201 \XeTeXcharclass `c 201
+\XeTeXcharclass `d 201 \XeTeXcharclass `e 201 \XeTeXcharclass `f 201
+\XeTeXcharclass `g 201 \XeTeXcharclass `h 201 \XeTeXcharclass `i 201
+\XeTeXcharclass `j 201 \XeTeXcharclass `k 201 \XeTeXcharclass `l 201
+\XeTeXcharclass `m 201 \XeTeXcharclass `n 201 \XeTeXcharclass `o 201
+\XeTeXcharclass `p 201 \XeTeXcharclass `q 201 \XeTeXcharclass `r 201
+\XeTeXcharclass `s 201 \XeTeXcharclass `t 201 \XeTeXcharclass `u 201
+\XeTeXcharclass `v 201 \XeTeXcharclass `w 201 \XeTeXcharclass `x 201
+\XeTeXcharclass `y 201 \XeTeXcharclass `z 201
+\XeTeXcharclass `A 201 \XeTeXcharclass `B 201 \XeTeXcharclass `C 201
+\XeTeXcharclass `D 201 \XeTeXcharclass `E 201 \XeTeXcharclass `F 201
+\XeTeXcharclass `G 201 \XeTeXcharclass `H 201 \XeTeXcharclass `I 201
+\XeTeXcharclass `J 201 \XeTeXcharclass `K 201 \XeTeXcharclass `L 201
+\XeTeXcharclass `M 201 \XeTeXcharclass `N 201 \XeTeXcharclass `O 201
+\XeTeXcharclass `P 201 \XeTeXcharclass `Q 201 \XeTeXcharclass `R 201
+\XeTeXcharclass `S 201 \XeTeXcharclass `T 201 \XeTeXcharclass `U 201
+\XeTeXcharclass `V 201 \XeTeXcharclass `W 201 \XeTeXcharclass `X 201
+\XeTeXcharclass `Y 201 \XeTeXcharclass `Z 201
+\XeTeXcharclass `\é 201 \XeTeXcharclass `\è 201 \XeTeXcharclass `\ê 201
+\XeTeXcharclass `\ë 201 \XeTeXcharclass `\É 201 \XeTeXcharclass `\È 201
+\XeTeXcharclass `\Ê 201 \XeTeXcharclass `\Ë 201 \XeTeXcharclass `\à 201
+\XeTeXcharclass `\â 201 \XeTeXcharclass `\ä 201 \XeTeXcharclass `\À 201
+\XeTeXcharclass `\Â 201 \XeTeXcharclass `\Ä 201 \XeTeXcharclass `\ô 201
+\XeTeXcharclass `\ö 201 \XeTeXcharclass `\Ô 201 \XeTeXcharclass `\Ö 201
+\XeTeXcharclass `\î 201 \XeTeXcharclass `\ï 201 \XeTeXcharclass `\Î 201
+\XeTeXcharclass `\Ï 201 \XeTeXcharclass `\ù 201 \XeTeXcharclass `\û 201
+\XeTeXcharclass `\ü 201 \XeTeXcharclass `\Ù 201 \XeTeXcharclass `\Û 201
+\XeTeXcharclass `\Ü 201 \XeTeXcharclass `\ç 201 \XeTeXcharclass `\Ç 201
+\XeTeXcharclass `\œ 201 \XeTeXcharclass `\Œ 201 \XeTeXcharclass `\æ 201
+\XeTeXcharclass `\Æ 201
+\let\cursive@orig\cursive
+\renewcommand{\cursive}{%
+  \cursive@orig
+  \XeTeXinterchartoks 201 201 = {\kern0pt }%
+}
+\fi
+\makeatother
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,shapes.misc}
+\tikzset{ptcross/.style={cross out,draw,thick,minimum size=3pt,inner sep=0pt}}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fontawesome5}
+\definecolor{calcblue}{HTML}{1C7ED6}
+\definecolor{diffgreen}{HTML}{40C057}
+\definecolor{diffblue}{HTML}{228BE6}
+\definecolor{diffred}{HTML}{FA5252}
+\definecolor{skyblue}{HTML}{339AF0}
+\definecolor{objorange}{HTML}{F76707}
+\newcommand{\starfull}[1]{{\color{#1}\ding{72}}}
+\newcommand{\starempty}{{\color{gray!45}\ding{73}}}
+\newcommand{\Vj}[1]{\overrightarrow{\text{#1}}}
+\newcommand{\VBlank}{\rule[0.15ex]{0.55cm}{0.35pt}}
+\newcommand{\Pt}[1]{\textsf{\footnotesize #1}}
+\renewcommand{\familydefault}{\sfdefault}
+\DeclareSymbolFont{sfnumbers}{OT1}{cmss}{m}{n}
+\SetSymbolFont{sfnumbers}{bold}{OT1}{cmss}{bx}{n}
+\DeclareMathSymbol{0}{\mathalpha}{sfnumbers}{`0}
+\DeclareMathSymbol{1}{\mathalpha}{sfnumbers}{`1}
+\DeclareMathSymbol{2}{\mathalpha}{sfnumbers}{`2}
+\DeclareMathSymbol{3}{\mathalpha}{sfnumbers}{`3}
+\DeclareMathSymbol{4}{\mathalpha}{sfnumbers}{`4}
+\DeclareMathSymbol{5}{\mathalpha}{sfnumbers}{`5}
+\DeclareMathSymbol{6}{\mathalpha}{sfnumbers}{`6}
+\DeclareMathSymbol{7}{\mathalpha}{sfnumbers}{`7}
+\DeclareMathSymbol{8}{\mathalpha}{sfnumbers}{`8}
+\DeclareMathSymbol{9}{\mathalpha}{sfnumbers}{`9}
+\setlength{\parindent}{0pt}
+\graphicspath{{./}}
+\newcommand*{\textcircledd}[1]{\begin{tikzpicture}[baseline=(letter.base)]\node[draw,circle,inner sep=1pt] (letter) {#1};\end{tikzpicture}}
+\newcommand{\numeroCerne}[1]{\protect\textcircledd{\bfseries\scriptsize #1}}
+\setlist[enumerate,1]{label=\numeroCerne{\arabic*}, leftmargin=*, labelsep=6pt, itemsep=3pt, topsep=2pt, partopsep=0pt, parsep=0pt}
+
+\NewDocumentEnvironment{Exo}{O{breakable} m m m}{%
+  \begin{tcolorbox}[
+    enhanced,
+    #1,
+    colback=white,
+    colframe=white,
+    boxrule=0pt,
+    arc=4pt, outer arc=4pt, sharp corners=south,
+    left=8pt, right=8pt, top=5pt, bottom=3pt,
+    before skip=4pt, after skip=4pt,
+  ]
+  \noindent\tcbox[on line, colback=skyblue, colframe=skyblue, boxsep=1pt, left=4pt, right=4pt, top=1pt, bottom=1pt, arc=2pt]{\textcolor{white}{\bfseries Exercice~#2}}~#3\hfill\mbox{\color{skyblue}\normalsize\cursive\hyphenchar\font=-1 #4}\par\vspace{3pt}%
+}{%
+  \end{tcolorbox}
+}
+
+\NewDocumentEnvironment{ExoCont}{O{unbreakable}}{%
+  \begin{tcolorbox}[
+    enhanced,
+    #1,
+    colback=white,
+    colframe=white,
+    boxrule=0pt,
+    arc=4pt, outer arc=4pt, sharp corners=south,
+    left=8pt, right=8pt, top=5pt, bottom=3pt,
+    before skip=4pt, after skip=4pt,
+  ]
+}{%
+  \end{tcolorbox}
+}
+
+\newcommand{\Objectif}[2]{%
+\vspace{4pt}
+\noindent{\large\color{objorange}\bfseries Objectif #1~:}\\{\large\color{objorange}#2}\par
+\vspace{2pt}
+}
+
+\NewDocumentCommand{\FeuilletTitre}{m}{%
+  \begin{center}
+  \begin{tcolorbox}[
+    enhanced,
+    width=0.58\linewidth,
+    colback=white,
+    colframe=black,
+    boxrule=0.8pt,
+    arc=8pt,
+    sharp corners=downhill,
+    left=10pt, right=10pt, top=8pt, bottom=6pt,
+    halign=center,
+    overlay={
+      \node[fill=white, anchor=west, font=\normalsize, inner xsep=4pt]
+        at ([xshift=14pt]frame.north west) {Feuille d'exercices n\textdegree{}2};
+    },
+  ]
+  {\huge #1}
+  \end{tcolorbox}
+  \end{center}
+}
+
+\pagestyle{empty}
+\begin{document}
+
+\FeuilletTitre{Vecteurs du plan}
+
+\begin{multicols}{2}
+
+\Objectif{1}{Vecteur $\Vj{MM'}$ associ\'e \`a la translation qui transforme $M$ en $M'$ --- direction, sens et norme}
+
+\begin{Exo}{1}{\starfull{diffgreen}\starempty\starempty}{Repr\'esenter}
+\`A partir de la figure ci-dessous,
+\begin{enumerate}
+\item donner les images des points $C$, $D$, $E$ dans la translation de vecteur $\Vj{AB}$~;
+\item en d\'eduire trois vecteurs \'egaux au vecteur $\Vj{AB}$.
+\end{enumerate}
+\begin{center}
+\begin{tikzpicture}[scale=0.38]
+\draw[thin,gray!35] (0,-1) grid (8,6);
+\coordinate (A) at (1,4); \coordinate (B) at (4,5);
+\coordinate (C) at (2,2); \coordinate (D) at (4,1); \coordinate (E) at (1,0);
+\coordinate (Y) at (5,3); \coordinate (Z) at (7,2); \coordinate (X) at (6,1);
+\draw[-{Stealth},thick] (A) -- (B);
+\node[left] at (A) {\Pt{A}}; \node[above] at (B) {\Pt{B}};
+\foreach \p in {C,D,E,Y,Z,X} \node[ptcross] at (\p) {};
+\node[left] at (C) {\Pt{C}}; \node[left] at (D) {\Pt{D}}; \node[above] at (E) {\Pt{E}};
+\node[right] at (Y) {\Pt{Y}}; \node[left] at (Z) {\Pt{Z}}; \node[right] at (X) {\Pt{X}};
+\end{tikzpicture}
+\end{center}
+\end{Exo}
+
+\begin{Exo}{2}{\starfull{diffgreen}\starempty\starempty}{Repr\'esenter}
+Sans justifier, donner l'image de chaque point par la translation de vecteur indiqu\'ee.
+\begin{center}
+\begin{tikzpicture}[scale=0.32]
+\draw[thin,gray!35] (-1,-1) grid (11,5);
+\coordinate (A) at (0,4); \coordinate (B) at (2,4); \coordinate (C) at (4,4); \coordinate (D) at (6,4); \coordinate (E) at (8,4); \coordinate (F) at (10,4);
+\coordinate (G) at (0,2); \coordinate (H) at (2,2); \coordinate (I) at (4,2); \coordinate (J) at (6,2); \coordinate (K) at (8,2); \coordinate (L) at (10,2);
+\coordinate (M) at (0,0); \coordinate (N) at (2,0); \coordinate (O) at (4,0); \coordinate (P) at (6,0); \coordinate (R) at (8,0); \coordinate (S) at (10,0);
+\foreach \p in {A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,R,S} \node[ptcross] at (\p) {};
+\node[above] at (A) {\Pt{A}}; \node[above] at (B) {\Pt{B}}; \node[above] at (C) {\Pt{C}}; \node[above] at (D) {\Pt{D}}; \node[above] at (E) {\Pt{E}}; \node[above] at (F) {\Pt{F}};
+\node[above] at (G) {\Pt{G}}; \node[above] at (H) {\Pt{H}}; \node[above] at (I) {\Pt{I}}; \node[above] at (J) {\Pt{J}}; \node[above] at (K) {\Pt{K}}; \node[above] at (L) {\Pt{L}};
+\node[above] at (M) {\Pt{M}}; \node[above] at (N) {\Pt{N}}; \node[above] at (O) {\Pt{O}}; \node[above] at (P) {\Pt{P}}; \node[above] at (R) {\Pt{R}}; \node[above] at (S) {\Pt{S}};
+\end{tikzpicture}
+\end{center}
+\begin{enumerate}
+\item Image du point $I$ par la translation de vecteur $\Vj{AD}$.
+\item Image du point $J$ par la translation de vecteur $\Vj{LR}$.
+\item Image du point $R$ par la translation de vecteur $\Vj{NC}$.
+\end{enumerate}
+\end{Exo}
+
+\begin{Exo}{3}{\starfull{diffblue}\starfull{diffblue}\starempty}{Repr\'esenter}
+La figure ci-dessous repr\'esente sept hexagones r\'eguliers et num\'erot\'es.
+\begin{center}
+\begin{tikzpicture}[scale=0.22]
+\draw (2,0)-- (4,0)-- (5,1.73)-- (4,3.46)-- (2,3.46)-- (1,1.73)-- cycle;
+\draw (3,1.73) node[draw,circle]{1};
+\draw (4,3.46)-- (5,5.2)-- (4,6.93)-- (2,6.93)-- (1,5.2)-- (2,3.46);
+\draw (3,5.2) node[draw,circle]{2};
+\draw (5,1.73) --(7,1.73)-- (8,3.46)-- (7,5.2)-- (5,5.2);
+\draw (6,3.46) node[draw,circle]{3};
+\draw (4,0)-- (5,-1.73)-- (7,-1.73)-- (8,0)--(7,1.73);
+\draw (6,0) node[draw,circle]{4};
+\draw (8,0)-- (10,0)-- (11,1.73)-- (10,3.46)-- (8,3.46);
+\draw (9,1.73) node[draw,circle]{5};
+\draw (10,3.46)-- (11,5.2)-- (10,6.93)-- (8,6.93)-- (7,5.2);
+\draw (9,5.2) node[draw,circle]{6};
+\draw (8,6.93)-- (7,8.66)-- (5,8.66)-- (4,6.93);
+\draw (6,6.93) node[draw,circle]{7};
+\coordinate (A) at (2,3.46); \coordinate (B) at (5,8.66); \coordinate (C) at (8,6.93); \coordinate (D) at (11,5.2); \coordinate (E) at (11,1.73);
+\foreach \p in {A,B,C,D,E} \node[ptcross] at (\p) {};
+\node[left] at (A) {\Pt{A}};
+\node[left] at (B) {\Pt{B}};
+\node[above right] at (C) {\Pt{C}};
+\node[right] at (D) {\Pt{D}};
+\node[right] at (E) {\Pt{E}};
+\end{tikzpicture}
+\end{center}
+Compl\`ete les phrases suivantes~:
+\begin{enumerate}
+\item L'hexagone \dots{} est l'image de l'hexagone 1 dans la translation de vecteur $\Vj{AC}$.
+\item L'hexagone 6 est l'image de l'hexagone \dots{} dans la translation de vecteur $\Vj{AB}$.
+\item L'hexagone 3 est l'image de l'hexagone \dots{} dans la translation de vecteur $\Vj{DE}$.
+\end{enumerate}
+\end{Exo}
+
+\columnbreak 
+
+\begin{Exo}{4}{\starfull{diffred}\starfull{diffred}\starfull{diffred}}{Raisonner}
+Soit $\vec u$ un vecteur non nul, et $A$ un point. On note $A'$ l'image de $A$ par la translation de vecteur $\vec u$.
+\begin{enumerate}
+\item On consid\`ere un point $B$ tel que $\Vj{AB}$ ait la m\^eme direction et le m\^eme sens que $\vec u$, mais une norme diff\'erente de celle de $\vec u$. Le point $B$ peut-il \^etre \'egal \`a $A'$~? Justifier.
+\item M\^eme question si $\Vj{AB}$ a la m\^eme direction que $\vec u$ mais le sens contraire.
+\item \'Enoncer, \`a l'aide des trois caract\'eristiques d'un vecteur, une condition n\'ecessaire et suffisante pour que $B=A'$.
+\end{enumerate}
+\end{Exo}
+
+\Objectif{2}{\'Egalit\'e de deux vecteurs, vecteur nul}
+
+\begin{Exo}{5}{\starfull{diffgreen}\starempty\starempty}{Raisonner}
+Sur la figure suivante, expliquer, en utilisant les termes direction, sens ou norme, pourquoi le vecteur $\Vj{AB}$ n'est \'egal \`a aucun des autres vecteurs repr\'esent\'es.
+\begin{center}
+\begin{tikzpicture}[scale=0.4]
+%\foreach \x in {0,...,7} \foreach \y in {0,...,4} \fill[gray!55] (\x,\y) circle(0.6pt);
+\draw[-{Stealth},thick] (0,2) -- (1,3); \node[below] at (0,2) {\Pt{A}}; \node[above] at (1,3) {\Pt{B}};
+\draw[-{Stealth},thick] (1,0) -- (3,0); \node[below] at (1,0) {\Pt{C}}; \node[below] at (3,0) {\Pt{D}};
+\draw[-{Stealth},thick] (3,2) -- (5,4); \node[below] at (3,2) {\Pt{G}}; \node[above] at (5,4) {\Pt{H}};
+\draw[-{Stealth},thick] (7,2) -- (6,1); \node[below] at (6,1) {\Pt{E}}; \node[above] at (7,2) {\Pt{F}};
+\end{tikzpicture}
+\end{center}
+\end{Exo}
+
+\begin{Exo}{6}{\starfull{diffgreen}\starempty\starempty}{Repr\'esenter}
+\`A partir de la figure ci-dessous, citer un vecteur~: 
+\begin{itemize}[label=$\star$]
+\item opposé \`a $\Vj{CD}$
+\item m\^eme direction et sens que $\Vj{AC}$
+\item m\^eme direction que $\Vj{BC}$ mais sens contraire~
+\item  \'egal au vecteur $\Vj{BA}$.
+\end{itemize}
+\begin{center}
+\begin{tikzpicture}[scale=0.32]
+\draw[thin,gray!35] (-0.5,-0.5) grid (9.5,8.5);
+\coordinate (A) at (3,4); \coordinate (B) at (1,1); \coordinate (C) at (3,1); \coordinate (D) at (4,2);
+\foreach \p in {A,B,C,D} \node[ptcross] at (\p) {};
+\node[left] at (A) {\Pt{A}}; \node[below] at (B) {\Pt{B}}; \node[below] at (C) {\Pt{C}}; \node[below] at (D) {\Pt{D}};
+\draw[-{Stealth},thick] (0,3) -- (1,3) node[midway,above]{$\vec u$};
+\draw[-{Stealth},thick] (1,5) -- (3,8) node[midway,above left]{$\vec v$};
+\draw[-{Stealth},thick] (4,5) -- (4,7) node[midway,left]{$\vec w$};
+\draw[-{Stealth},thick] (5,6) -- (6,7) node[midway,above]{$\vec r$};
+\draw[-{Stealth},thick] (8,8) -- (6,3) node[midway,above]{$\vec s$};
+\draw[-{Stealth},thick] (8,8) -- (7,8) node[midway,above]{$\vec t$};
+\draw[-{Stealth},thick] (9,2) -- (8,1) node[midway,above]{$\vec p$};
+\draw[-{Stealth},thick] (9,5) -- (9,4) node[midway,left]{$\vec m$};
+\end{tikzpicture}
+\end{center}
+\end{Exo}
+
+\begin{Exo}{7}{\starfull{diffblue}\starfull{diffblue}\starempty}{Raisonner}
+Soient $A$, $B$, $C$ et $D$ quatre points du plan tels que $\Vj{AB}=\Vj{CD}$.
+D\'emontrer que $\Vj{AC}=\Vj{BD}$.
+\end{Exo}
+
+\begin{Exo}{8}{\starfull{diffred}\starfull{diffred}\starfull{diffred}}{Raisonner}
+Soient $ABCD$ et $ABEF$ deux parall\'elogrammes.
+%\begin{center}
+%\begin{tikzpicture}[scale=0.5]
+%\coordinate (A) at (0,0); \coordinate (B) at (2.2,0); \coordinate (D) at (0.6,1.5); \coordinate (C) at (2.8,1.5);
+%\coordinate (F) at (0.9,2.2); \coordinate (E) at (3.1,2.2);
+%\draw[green!45!black] (A)--(B)--(C)--(D)--cycle;
+%\draw[teal] (A)--(B)--(E)--(F)--cycle;
+%\node[below] at (A) {\Pt{A}}; \node[below] at (B) {\Pt{B}}; \node[left] at (D) {\Pt{D}}; \node[right] at (C) {\Pt{C}};
+%\node[left] at (F) {\Pt{F}}; \node[right] at (E) {\Pt{E}};
+%\end{tikzpicture}
+%\end{center}
+\begin{enumerate}
+\item Réaliser une figure à main levée.
+\item Donner deux vecteurs \'egaux au vecteur $\Vj{AB}$.
+\item En d\'eduire la nature du quadrilat\`ere $EFDC$.
+\end{enumerate}
+\end{Exo}
+
+\begin{Exo}{9}{\starfull{diffred}\starfull{diffred}\starfull{diffred}}{Raisonner}
+Sur la figure ci-contre, $ABCD$ est un rectangle, et $AEBC$ et $ACDF$ sont des parall\'elogrammes.
+\begin{center}
+\begin{tikzpicture}[scale=0.5]
+\coordinate (D) at (0,2); \coordinate (C) at (3,2); \coordinate (A) at (0,0); \coordinate (B) at (3,0);
+\coordinate (F) at (-3,0); \coordinate (E) at (0,-2);
+\draw[blue] (D)--(C)--(B)--(A)--cycle;
+\draw[green!50!black] (F)--(A)--(C)--(D)--cycle;
+\draw[red] (F)--(A)--(E)--(B);
+\node[above] at (D) {\Pt{D}}; \node[above] at (C) {\Pt{C}}; \node[below left] at (A) {\Pt{A}}; \node[below] at (B) {\Pt{B}};
+\node[left] at (F) {\Pt{F}}; \node[below] at (E) {\Pt{E}};
+\end{tikzpicture}
+\end{center}
+\begin{enumerate}
+\item Montrer que $\Vj{EB}=\Vj{FD}$.
+\item Montrer que le quadrilat\`ere $EBDF$ est un parall\'elogramme de centre $A$.
+\end{enumerate}
+\end{Exo}
+
+\Objectif{3}{Repr\'esentants d'un vecteur}
+
+\begin{Exo}{10}{\starfull{diffgreen}\starempty\starempty}{Repr\'esenter}
+Sur la figure ci-dessous,
+\begin{enumerate}
+\item citer deux repr\'esentants du vecteur $\Vj{AB}$, autres que lui-m\^eme~;
+\item indiquer si le vecteur $\Vj{EF}$ est aussi un repr\'esentant du vecteur $\Vj{AB}$, en justifiant.
+\end{enumerate}
+\begin{center}
+\begin{tikzpicture}[scale=0.42]
+\draw[thin,gray!35] (-0.5,-0.5) grid (7.5,6.5);
+\coordinate (A) at (0,1); \coordinate (B) at (2,2);
+\coordinate (C) at (3,4); \coordinate (D) at (5,5);
+\coordinate (G) at (5,0); \coordinate (H) at (7,1);
+\coordinate (E) at (1,4); \coordinate (F) at (2,6);
+\draw[-{Stealth},thick,blue] (A) -- (B); \draw[-{Stealth},thick,blue] (C) -- (D); \draw[-{Stealth},thick,blue] (G) -- (H);
+\draw[-{Stealth},thick,red] (E) -- (F);
+\node[below] at (A) {\Pt{A}}; \node[right] at (B) {\Pt{B}};
+\node[left] at (C) {\Pt{C}}; \node[right] at (D) {\Pt{D}};
+\node[below] at (G) {\Pt{G}}; \node[right] at (H) {\Pt{H}};
+\node[left] at (E) {\Pt{E}}; \node[above] at (F) {\Pt{F}};
+\end{tikzpicture}
+\end{center}
+\end{Exo}
+
+\begin{Exo}{11}{\starfull{diffgreen}\starempty\starempty}{Calculer}
+$EFGH$ est un parall\'elogramme de centre $I$.
+\begin{enumerate}
+\item Donner un vecteur \'egal \`a~:
+\vspace*{-0.8em}
+\begin{multicols}{4}
+\begin{enumerate}[label=(\alph*)]
+\item $\Vj{EF}$
+\item $\Vj{GH}$
+\item $\Vj{EH}$
+\item $\Vj{GF}$
+\end{enumerate}
+\end{multicols}
+%\vspace{1pt}
+\item Donner un vecteur oppos\'e au vecteur $\Vj{EF}$.
+\item Compl\'eter par le point qui convient~:
+\vspace*{-0.8em}
+\begin{multicols}{3}
+\begin{enumerate}[label=(\alph*)]
+\item $\Vj{EI}=\Vj{I\dots}$
+\item $\Vj{HI}=\Vj{I\dots}$
+\item $\Vj{FI}=\Vj{I\dots}$
+\end{enumerate}
+\end{multicols}
+%\vspace{1pt}
+\item Compl\'eter~: $\Vj{EH}=-\Vj{\vphantom{H}\dots}$
+\item Quel est le repr\'esentant d'origine $F$~:
+\vspace*{-0.8em}
+\begin{multicols}{2}
+\begin{enumerate}[label=(\alph*)]
+\item du vecteur $\Vj{EH}$~?
+\item du vecteur $\Vj{IH}$~?
+\end{enumerate}
+\end{multicols}
+\end{enumerate}
+\end{Exo}
+
+\begin{Exo}{12}{\starfull{diffblue}\starfull{diffblue}\starempty}{Repr\'esenter}
+On utilisera la figure suivante : 
+\begin{center}
+\begin{tikzpicture}[scale=0.42]
+\draw[thin,gray!35] (-0.5,-0.5) grid (7.5,7.5);
+\draw[-{Stealth},thick,blue] (4,6) -- (6,7) node[midway,above]{$\vec u$};
+\draw[-{Stealth},thick,teal] (2,7) -- (4,5) node[midway,above]{$\vec v$};
+\coordinate (A) at (1,0); \coordinate (K) at (3,1);
+\coordinate (C) at (5,3); \coordinate (D) at (7,4);
+\coordinate (M) at (0,4); \coordinate (F) at (2,5);
+\coordinate (G) at (4,0); \coordinate (J) at (0,1);
+\coordinate (N) at (6,2); \coordinate (R) at (1,3);
+\coordinate (T) at (4,4);
+\coordinate (P) at (2,7); \coordinate (Q) at (4,5);
+\coordinate (S) at (4,7); \coordinate (H) at (6,5);
+\coordinate (U) at (4,3); \coordinate (W) at (6,1);
+\foreach \p in {A,K,C,D,M,F,G,J,N,R,T,P,Q,S,H,U,W} \node[ptcross] at (\p) {};
+\node[below] at (A) {\Pt{A}}; \node[above] at (K) {\Pt{K}};
+\node[right] at (C) {\Pt{C}}; \node[above] at (D) {\Pt{D}};
+\node[left] at (M) {\Pt{M}}; \node[above] at (F) {\Pt{F}};
+\node[below] at (G) {\Pt{G}}; \node[left] at (J) {\Pt{J}};
+\node[right] at (N) {\Pt{N}}; \node[left] at (R) {\Pt{R}};
+\node[left] at (T) {\Pt{T}};
+\node[above] at (P) {\Pt{P}}; \node[right] at (Q) {\Pt{Q}};
+\node[above] at (S) {\Pt{S}}; \node[below] at (H) {\Pt{H}};
+\node[below] at (U) {\Pt{U}}; \node[below] at (W) {\Pt{W}};
+\end{tikzpicture}
+\end{center}
+
+\begin{enumerate}
+\item Citer le repr\'esentant du vecteur $\vec u$ :
+\vspace*{-0.8em}
+\begin{multicols}{2}
+\begin{enumerate}[label=(\alph*)]
+\item d'origine $A$
+\item d'origine $C$
+\end{enumerate}
+\end{multicols}
+\vspace*{-0.8em}
+\item Citer le repr\'esentant du vecteur $\vec u$ :
+\vspace*{-0.8em}
+\begin{multicols}{2}
+\begin{enumerate}[label=(\alph*)]
+\item d'extr\'emit\'e $D$
+\item d'extr\'emit\'e $F$
+\end{enumerate}
+\end{multicols}
+\vspace*{-0.8em}
+\item Citer le repr\'esentant du vecteur $\vec v$ :
+\vspace*{-0.8em}
+\begin{multicols}{2}
+\begin{enumerate}[label=(\alph*)]
+\item d'origine $P$
+\item d'origine $S$
+\end{enumerate}
+\end{multicols}
+\vspace*{-0.8em}
+\item Citer le repr\'esentant du vecteur $\vec v$ :
+\vspace*{-0.8em}
+\begin{multicols}{2}
+\begin{enumerate}[label=(\alph*)]
+\item d'extr\'emit\'e $H$
+\item d'extr\'emit\'e $W$
+\end{enumerate}
+\end{multicols}
+\vspace*{-0.8em}
+\end{enumerate}
+
+\end{Exo}
+
+\Objectif{4}{Somme de deux vecteurs et relation de Chasles}
+
+\begin{Exo}{13}{\starfull{diffgreen}\starempty\starempty}{Repr\'esenter}
+Construire~:
+\begin{enumerate}[label=(\alph*)]
+\item le point $P$ tel que $\Vj{BP}=\vec u+\vec v$~;
+\item le point $G$ tel que $\Vj{VG}=\vec v+\vec w$~;
+\item le point $K$ tel que $\Vj{IK}=\vec w+\vec u$.
+\end{enumerate}
+\begin{center}
+\begin{tikzpicture}[scale=0.5]
+\draw[thin,gray!35] (0,0) grid (12,6);
+\draw[-{Stealth},thick,blue] (2,5) -- (2,3) node[midway,right]{$\vec u$};
+\draw[-{Stealth},thick,red] (6,5) -- (8,4) node[midway,above]{$\vec v$};
+\draw[-{Stealth},thick,teal] (4,1) -- (6,2) node[midway,below]{$\vec w$};
+\coordinate (B) at (1,4); \node[ptcross] at (B) {}; \node[left] at (B) {\Pt{B}};
+\coordinate (V) at (4,4); \node[ptcross] at (V) {}; \node[below] at (V) {\Pt{V}};
+\coordinate (I) at (1,1); \node[ptcross] at (I) {}; \node[below] at (I) {\Pt{I}};
+\end{tikzpicture}
+\end{center}
+\end{Exo}
+
+\begin{Exo}{14}{\starfull{diffgreen}\starempty\starempty}{Calculer}
+\'Ecrire chacune des sommes suivantes \`a l'aide d'un seul vecteur, en utilisant la relation de Chasles.
+\begin{enumerate}[label=(\alph*)]
+\item $\Vj{TR}+\Vj{UT}+\Vj{RU}$
+\item $\Vj{ST}-\Vj{VU}+\Vj{TU}$
+\end{enumerate}
+\end{Exo}
+
+\begin{Exo}{15}{\starfull{diffblue}\starfull{diffblue}\starempty}{Repr\'esenter}
+$ABCDEF$ est un hexagone r\'egulier de centre $O$.
+\begin{center}
+\begin{tikzpicture}[scale=0.55]
+\foreach \i/\lab/\pos in {0/A/below right,60/B/above right,120/C/above,180/D/above left,240/E/below left,300/F/below}
+\coordinate (\lab) at (\i:1.4);
+\draw (A)--(B)--(C)--(D)--(E)--(F)--cycle;
+\draw (A)--(D); \draw (B)--(E); \draw (C)--(F);
+\node[below right] at (A) {\Pt{A}}; \node[above right] at (B) {\Pt{B}}; \node[above] at (C) {\Pt{C}};
+\node[above left] at (D) {\Pt{D}}; \node[below left] at (E) {\Pt{E}}; \node[below] at (F) {\Pt{F}};
+\node[anchor=north] at (0,0) {\Pt{O}};
+\end{tikzpicture}
+\end{center}
+Compl\'eter les \'egalit\'es suivantes en n'utilisant que des noms de points de la figure.
+\begin{multicols}{2}
+\begin{enumerate}
+\item $\Vj{AB}+\Vj{CD}=\dots$
+\item $\Vj{OB}+\Vj{OE}=\dots$
+\item $\Vj{FO}+\Vj{DO}=\dots$
+\item $\Vj{CA}-\Vj{DC}=\dots$
+\item $\Vj{AF}+\Vj{CD}=\dots$
+\item $\Vj{AB}-\Vj{OA}+\Vj{AF}=\dots$
+\end{enumerate}
+\end{multicols}
+\vspace{1pt}
+\end{Exo}
+
+\begin{Exo}{16}{\starfull{diffblue}\starfull{diffblue}\starempty}{Raisonner}
+Soit $ABC$ un triangle et $I$ le milieu de $[BC]$.
+\begin{enumerate}
+\item Justifier que $\Vj{IB}+\Vj{IC}=\vec 0$.
+\item En utilisant la relation de Chasles, d\'emontrer que : \\ $\Vj{AB}+\Vj{AC}=2\Vj{AI}$.
+\end{enumerate}
+%\begin{center}
+%\begin{tikzpicture}[scale=0.55]
+%\coordinate (A) at (1,3); \coordinate (B) at (0,0); \coordinate (C) at (4,0); \coordinate (I) at (2,0);
+%\draw (A)--(B)--(C)--cycle; \draw[dashed] (A)--(I);
+%\foreach \p in {A,B,C,I} \node[ptcross] at (\p) {};
+%\node[above] at (A) {\Pt{A}}; \node[below] at (B) {\Pt{B}}; \node[below] at (C) {\Pt{C}}; \node[below] at (I) {\Pt{I}};
+%\end{tikzpicture}
+%\end{center}
+\end{Exo}
+
+%\begin{Exo}{17}{\starfull{diffred}\starfull{diffred}\starfull{diffred}}{Raisonner}
+%Soit $\vec u$ un vecteur non nul et $A$ un point.\\
+%On construit les points $B$, $C$ et $D$ tels que $\Vj{AB}=\Vj{BC}=\Vj{CD}=\vec u$.
+%\begin{enumerate}
+%\item En te servant de la relation de Chasles, compl\`ete~:\\ $\Vj{AC}=\Vj{A\dots}+\Vj{\dots C}$ et $\Vj{AD}=\Vj{A\dots}+\Vj{BC}+\Vj{\dots}$.
+%\item Exprimer $\Vj{AC}$ et $\Vj{AD}$ en fonction de $\vec u$.
+%\item Les vecteurs $\Vj{AC}$ et $\Vj{AD}$ sont-ils des repr\'esentants de $\vec u$~? Justifier.
+%\end{enumerate}
+%\end{Exo}
+
+\end{multicols}
+\end{document}
+
+\Objectif{5}{Produit d'un vecteur par un nombre r\'eel et colin\'earit\'e de deux vecteurs}
+
+\begin{Exo}[breakable]{18}{\starfull{diffblue}\starfull{diffblue}\starempty}{Calculer}
+\renewcommand{\Pt}[1]{\textsf{#1}}
+Exprimer le vecteur $\Vj{AC}$ en fonction du vecteur $\Vj{AB}$ dans chacun des cas suivant~:
+
+\begin{minipage}{\linewidth}
+\noindent\numeroCerne{1}\par
+{\centering
+\begin{tikzpicture}[x=1.88cm,y=0.5cm]
+\draw (-2,0) -- (3,0);
+\foreach \x in {-1,-0.5,0.5,1,1.5,2.5} \draw (\x,-0.08) -- (\x,0.08);
+\node[ptcross] at (0,0) {}; \node[above] at (0,0) {\Pt{A}}; \node[ptcross] at (2,0) {}; \node[above] at (2,0) {\Pt{B}}; \node[ptcross] at (-1.5,0) {}; \node[above] at (-1.5,0) {\Pt{C}};
+\end{tikzpicture}\par}
+Les vecteurs $\Vj{AC}$ et $\Vj{AB}$ ont m\^eme direction.\\[4pt]
+Les vecteurs $\Vj{AC}$ et $\Vj{AB}$ ont~: $\square$~m\^eme sens \quad $\square$~sens oppos\'e.\\[4pt]
+On a~: $AC=\dots$ et $AB=\dots$.\\[4pt]
+Donc la longueur $AC$ vaut $\dfrac{\dots}{\dots}$ celle de $AB$.\\[4pt]
+On a donc~: $\Vj{AC}=\dots\,\dfrac{\dots}{\dots}\,\Vj{AB}$
+\end{minipage}
+
+\medskip
+
+\begin{minipage}{\linewidth}
+\noindent\numeroCerne{2}\par
+\begin{center}
+\begin{tikzpicture}[x=2.69cm,y=0.5cm]
+\draw (-1,0) -- (2.5,0);
+\foreach \x in {-0.5,1,1.5} \draw (\x,-0.08) -- (\x,0.08);
+\node[ptcross] at (0,0) {}; \node[below] at (0,0) {\Pt{A}}; \node[ptcross] at (0.51,0) {}; \node[above] at (0.51,0) {\Pt{B}}; \node[ptcross] at (2,0) {}; \node[above] at (2,0) {\Pt{C}};
+\end{tikzpicture}
+\end{center}
+Les vecteurs $\Vj{AC}$ et $\Vj{AB}$ ont m\^eme direction.\\[4pt]
+Les vecteurs $\Vj{AC}$ et $\Vj{AB}$ ont~: $\square$~m\^eme sens \quad $\square$~sens oppos\'e.\\[4pt]
+On a~: $AC=\dots$ et $AB=\dots$.\\[4pt]
+Donc la longueur $AC$ vaut $\dfrac{\dots}{\dots}$ celle de $AB$.\\[4pt]
+On a donc~: $\Vj{AC}=\dots\,\dfrac{\dots}{\dots}\,\Vj{AB}$
+\end{minipage}
+
+\smallskip
+
+\begin{minipage}{\linewidth}
+\noindent\numeroCerne{3}\par
+\begin{center}
+\begin{tikzpicture}[x=2.94cm,y=0.5cm]
+\draw (-2,0) -- (1.2,0);
+\foreach \x in {-1,-0.5,1} \draw (\x,-0.08) -- (\x,0.08);
+\node[ptcross] at (0,0) {}; \node[below] at (0,0) {\Pt{A}}; \node[ptcross] at (0.51,0) {}; \node[above] at (0.51,0) {\Pt{B}}; \node[ptcross] at (-1.5,0) {}; \node[above] at (-1.5,0) {\Pt{C}};
+\end{tikzpicture}
+\end{center}
+\end{minipage}
+
+\smallskip
+
+\begin{minipage}{\linewidth}
+\noindent\numeroCerne{4}\par
+\begin{center}
+\begin{tikzpicture}[x=3.13cm,y=0.5cm]
+\draw (-1,0) -- (2,0);
+\foreach \x in {0.5,1.5} \draw (\x,-0.08) -- (\x,0.08);
+\node[ptcross] at (0,0) {}; \node[above] at (0,0) {\Pt{A}}; \node[ptcross] at (1,0) {}; \node[above] at (1,0) {\Pt{B}}; \node[ptcross] at (-0.5,0) {}; \node[below] at (-0.5,0) {\Pt{C}};
+\end{tikzpicture}
+\end{center}
+\end{minipage}
+
+\smallskip
+
+\begin{minipage}{\linewidth}
+\noindent\numeroCerne{5}\par
+\begin{center}
+\begin{tikzpicture}[x=1.71cm,y=0.5cm]
+\draw (-1,0) -- (4.5,0);
+\foreach \x in {-0.5,0.5,1.5,2,2.5,3,4} \draw (\x,-0.08) -- (\x,0.08);
+\node[ptcross] at (0,0) {}; \node[above] at (0,0) {\Pt{A}}; \node[ptcross] at (3.5,0) {}; \node[above] at (3.5,0) {\Pt{B}}; \node[ptcross] at (1,0) {}; \node[above] at (1,0) {\Pt{C}};
+\end{tikzpicture}
+\end{center}
+\end{minipage}
+
+\smallskip
+
+\begin{minipage}{\linewidth}
+\noindent\numeroCerne{6}\par
+\begin{center}
+\begin{tikzpicture}[x=1.88cm,y=0.5cm]
+\draw (-1,0) -- (4,0);
+\foreach \x in {-0.5,1,1.5,2,2.5,3.5} \draw (\x,-0.08) -- (\x,0.08);
+\node[ptcross] at (0,0) {}; \node[above] at (0,0) {\Pt{A}}; \node[ptcross] at (3,0) {}; \node[above] at (3,0) {\Pt{B}}; \node[ptcross] at (0.5,0) {}; \node[below] at (0.5,0) {\Pt{C}};
+\end{tikzpicture}
+\end{center}
+\end{minipage}
+\end{Exo}
+
+\begin{Exo}{19}{\starfull{diffblue}\starfull{diffblue}\starempty}{Repr\'esenter}
+\renewcommand{\Pt}[1]{\textsf{#1}}
+Dans chacun des cas suivant, repr\'esenter le vecteur $\Vj{AC}$ tel que~:
+
+\begin{minipage}{\linewidth}
+\noindent\numeroCerne{1}~$\Vj{AC}=-\dfrac32\Vj{AB}$\par
+\begin{center}
+\begin{tikzpicture}[x=1.88cm,y=0.5cm]
+\draw (-2,0) -- (3,0);
+\foreach \x in {-1.5,-1,-0.5,0.5,1.5,2,2.5} \draw (\x,-0.08) -- (\x,0.08);
+\node[ptcross] at (0,0) {}; \node[above] at (0,0) {\Pt{A}}; \node[ptcross] at (1,0) {}; \node[above] at (1,0) {\Pt{B}};
+\end{tikzpicture}
+\end{center}
+\end{minipage}
+
+\smallskip
+
+\begin{minipage}{\linewidth}
+\noindent\numeroCerne{2}~$\Vj{AC}=\dfrac78\Vj{AB}$\par
+\begin{center}
+\begin{tikzpicture}[x=1.57cm,y=0.5cm]
+\draw (-1.5,0) -- (4.5,0);
+\foreach \x in {-1,0,0.5,1,1.5,2,2.5,3,4} \draw (\x,-0.08) -- (\x,0.08);
+\node[ptcross] at (-0.5,0) {}; \node[above] at (-0.5,0) {\Pt{A}}; \node[ptcross] at (3.5,0) {}; \node[above] at (3.5,0) {\Pt{B}};
+\end{tikzpicture}
+\end{center}
+\end{minipage}
+
+\smallskip
+
+\begin{minipage}{\linewidth}
+\noindent\numeroCerne{3}~$\Vj{AC}=\dfrac14\Vj{AB}$\par
+\begin{center}
+\begin{tikzpicture}[x=2.35cm,y=0.5cm]
+\draw (-1,0) -- (3,0);
+\foreach \x in {-0.5,0.5,1,1.5,2.5} \draw (\x,-0.08) -- (\x,0.08);
+\node[ptcross] at (0,0) {}; \node[above] at (0,0) {\Pt{A}}; \node[ptcross] at (2,0) {}; \node[above] at (2,0) {\Pt{B}};
+\end{tikzpicture}
+\end{center}
+\end{minipage}
+\end{Exo}
+
+\begin{ExoCont}
+\renewcommand{\Pt}[1]{\textsf{#1}}
+\begin{minipage}{\linewidth}
+\noindent\numeroCerne{4}~$\Vj{AC}=-\dfrac12\Vj{AB}$\par
+\begin{center}
+\begin{tikzpicture}[x=1.57cm,y=0.5cm]
+\draw (-2,0) -- (4,0);
+\foreach \x in {-1.5,-1,-0.5,0.5,1,1.5,2,2.5,3,3.5} \draw (\x,-0.08) -- (\x,0.08);
+\node[ptcross] at (0,0) {}; \node[above] at (0,0) {\Pt{A}}; \node[ptcross] at (3,0) {}; \node[above] at (3,0) {\Pt{B}};
+\end{tikzpicture}
+\end{center}
+\end{minipage}
+
+\smallskip
+
+\begin{minipage}{\linewidth}
+\noindent\numeroCerne{5}~$\Vj{AC}=\dfrac23\Vj{AB}$\par
+\begin{center}
+\begin{tikzpicture}[x=2.69cm,y=0.5cm]
+\draw (-1,0) -- (2.5,0);
+\foreach \x in {-0.5,0.5,1,2} \draw (\x,-0.08) -- (\x,0.08);
+\node[ptcross] at (0,0) {}; \node[above] at (0,0) {\Pt{A}}; \node[ptcross] at (1.5,0) {}; \node[above] at (1.5,0) {\Pt{B}};
+\end{tikzpicture}
+\end{center}
+\end{minipage}
+
+\smallskip
+
+\begin{minipage}{\linewidth}
+\noindent\numeroCerne{6}~$\Vj{AC}=-\dfrac43\Vj{AB}$\par
+\begin{center}
+\begin{tikzpicture}[x=1.18cm,y=0.5cm]
+\draw (-2,0) -- (6,0);
+\foreach \x in {-1.5,-1,-0.5,0,0.5,1,1.5,2.5,3,3.5,4,4.5,5.5} \draw (\x,-0.08) -- (\x,0.08);
+\node[ptcross] at (2,0) {}; \node[above] at (2,0) {\Pt{A}}; \node[ptcross] at (5,0) {}; \node[above] at (5,0) {\Pt{B}};
+\end{tikzpicture}
+\end{center}
+\end{minipage}
+\end{ExoCont}
+
+\begin{Exo}{20}{\starfull{diffblue}\starfull{diffblue}\starempty}{Calculer}
+Soient deux points $A$ et $B$. D\'eterminer la valeur des r\'eels $m$, $n$, $p$ et $q$ tels que~:
+\begin{multicols}{2}
+\begin{enumerate}[label=(\alph*)]
+\item $3\Vj{AB}+\dfrac12\Vj{AB}=m\Vj{AB}$
+\item $2(3\Vj{BA})=n\Vj{AB}$
+\item $2\Vj{AB}-\Vj{BA}=p\Vj{AB}$
+\item $3\Vj{BA}-4\Vj{AB}=q\Vj{AB}$
+\end{enumerate}
+\end{multicols}
+\vspace{1pt}
+\end{Exo}
+
+\Objectif{6}{D\'ecomposition d'un vecteur en fonction de deux vecteurs non colin\'eaires}
+
+\begin{Exo}{21}{\starfull{diffgreen}\starempty\starempty}{Repr\'esenter}
+Sur la figure ci-dessous, exprimer les vecteurs $\vec{w_1}$, $\vec{w_2}$ et $\vec{w_3}$ en fonction de $\vec u$ et $\vec v$.
+\begin{center}
+\begin{tikzpicture}[scale=0.5]
+\draw[thin,gray!35] (-1.5,-1.5) grid (3.5,3.5);
+\draw[-{Stealth},thick] (0,0) -- (1,0) node[midway,below]{$\vec u$};
+\draw[-{Stealth},thick] (0,0) -- (0,1) node[midway,left]{$\vec v$};
+\draw[-{Stealth},thick,blue] (0,0) -- (3,2) node[midway,above]{$\vec{w_1}$};
+\draw[-{Stealth},thick,red] (0,0) -- (-1,3) node[midway,above]{$\vec{w_2}$};
+\draw[-{Stealth},thick,teal] (0,0) -- (2,-1) node[midway,below right]{$\vec{w_3}$};
+\end{tikzpicture}
+\end{center}
+\end{Exo}
+
+\begin{Exo}{22}{\starfull{diffblue}\starfull{diffblue}\starempty}{Calculer}
+$ABCD$ est un parall\'elogramme et $I$ est le milieu de $[CD]$. On pose $\vec u=\Vj{AB}$ et $\vec v=\Vj{AD}$.
+Exprimer le vecteur $\Vj{AI}$ en fonction de $\vec u$ et $\vec v$.
+\begin{center}
+\begin{tikzpicture}[scale=0.6]
+\coordinate (A) at (0,0); \coordinate (B) at (3,0); \coordinate (D) at (0.8,2); \coordinate (C) at (3.8,2);
+\coordinate (I) at ($(D)!0.5!(C)$);
+\draw (A)--(B)--(C)--(D)--cycle; \draw[dashed] (A)--(I);
+\node[below] at (A) {\Pt{A}}; \node[below] at (B) {\Pt{B}}; \node[above] at (D) {\Pt{D}}; \node[above] at (C) {\Pt{C}};
+\node[above] at (I) {\Pt{I}};
+\end{tikzpicture}
+\end{center}
+\end{Exo}
+
+\begin{Exo}{23}{\starfull{diffred}\starfull{diffred}\starfull{diffred}}{Calculer}
+On consid\`ere de nouveau l'hexagone $ABCDEF$ (r\'egulier, centre $O$) de l'exercice 15. On note $\vec u=\Vj{OA}$ et $\vec v=\Vj{OB}$. Exprimer les vecteurs suivants \`a l'aide des vecteurs $\vec u$ et $\vec v$ uniquement~: $\Vj{CD}$~; $\Vj{CB}$~; $\Vj{DB}$~; $\Vj{AB}$~; $\Vj{DF}$.
+\end{Exo}
+
+\Objectif{7}{Caract\'erisation vectorielle du milieu d'un segment}
+
+\begin{Exo}{24}{\starfull{diffgreen}\starempty\starempty}{Raisonner}
+Soient $A$ et $B$ deux points distincts et $I$ le milieu de $[AB]$.
+\begin{enumerate}
+\item Que peut-on dire des vecteurs $\Vj{AI}$ et $\Vj{IB}$ (direction, sens, norme)~?
+\item En d\'eduire que $\Vj{AI}=\Vj{IB}$.
+\end{enumerate}
+\begin{center}
+\begin{tikzpicture}[scale=0.7]
+\coordinate (A) at (0,0); \coordinate (I) at (2,0); \coordinate (B) at (4,0);
+\draw[-{Stealth},thick] (A)--(I); \draw[-{Stealth},thick] (I)--(B);
+\foreach \p in {A,I,B} \node[ptcross] at (\p) {};
+\node[below] at (A) {\Pt{A}}; \node[below] at (I) {\Pt{I}}; \node[below] at (B) {\Pt{B}};
+\end{tikzpicture}
+\end{center}
+\end{Exo}
+
+\begin{Exo}{25}{\starfull{diffblue}\starfull{diffblue}\starempty}{Raisonner}
+Soient $A$ et $B$ deux points, $I$ le milieu de $[AB]$, et $M$ un point quelconque du plan.
+En utilisant la relation de Chasles et le fait que $\Vj{IA}+\Vj{IB}=\vec 0$, d\'emontrer que~:
+$$\Vj{MA}+\Vj{MB}=2\Vj{MI}.$$
+\end{Exo}
+
+\begin{Exo}{26}{\starfull{diffred}\starfull{diffred}\starfull{diffred}}{Raisonner}
+On consid\`ere trois points $A$, $B$ et $C$. On nomme $A'$ le sym\'etrique de $A$ par rapport \`a $C$ et $B'$ le sym\'etrique de $B$ par rapport \`a $C$.
+\begin{enumerate}
+\item Montrer que $BAB'A'$ est un parall\'elogramme.
+\item a. Que peut-on dire de $A'B'$ et $AB$~? \quad b. Quelle propri\'et\'e de la sym\'etrie centrale a-t-on d\'emontr\'ee~?
+\end{enumerate}
+\end{Exo}
+
+\end{multicols}
+
+\end{document}

@@ -1,0 +1,301 @@
+% !TEX program = lualatex
+\documentclass[10pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage[left=1cm,right=1cm,top=1.3cm,bottom=1.3cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{multicol}
+\raggedcolumns
+\usepackage{pifont}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,shapes.misc}
+\tikzset{ptcross/.style={cross out,draw,thick,minimum size=3pt,inner sep=0pt}}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins}
+\usepackage[hidelinks]{hyperref}
+\definecolor{calcblue}{HTML}{1C7ED6}
+\definecolor{skyblue}{HTML}{339AF0}
+\definecolor{objorange}{HTML}{F76707}
+\definecolor{repred}{HTML}{E03131}
+\newcommand{\Vj}[1]{\overrightarrow{\text{#1}}}
+\newcommand{\Pt}[1]{\textsf{\footnotesize #1}}
+\renewcommand{\familydefault}{\sfdefault}
+\DeclareSymbolFont{sfnumbers}{OT1}{cmss}{m}{n}
+\SetSymbolFont{sfnumbers}{bold}{OT1}{cmss}{bx}{n}
+\DeclareMathSymbol{0}{\mathalpha}{sfnumbers}{`0}
+\DeclareMathSymbol{1}{\mathalpha}{sfnumbers}{`1}
+\DeclareMathSymbol{2}{\mathalpha}{sfnumbers}{`2}
+\DeclareMathSymbol{3}{\mathalpha}{sfnumbers}{`3}
+\DeclareMathSymbol{4}{\mathalpha}{sfnumbers}{`4}
+\DeclareMathSymbol{5}{\mathalpha}{sfnumbers}{`5}
+\DeclareMathSymbol{6}{\mathalpha}{sfnumbers}{`6}
+\DeclareMathSymbol{7}{\mathalpha}{sfnumbers}{`7}
+\DeclareMathSymbol{8}{\mathalpha}{sfnumbers}{`8}
+\DeclareMathSymbol{9}{\mathalpha}{sfnumbers}{`9}
+\setlength{\parindent}{0pt}
+\setlength{\columnsep}{18pt}
+\graphicspath{{./}}
+\newcommand*{\textcircledd}[1]{\begin{tikzpicture}[baseline=(letter.base)]\node[draw,circle,inner sep=1pt] (letter) {#1};\end{tikzpicture}}
+\newcommand{\numeroCerne}[1]{\protect\textcircledd{\bfseries\scriptsize #1}}
+\setlist[enumerate,1]{label=\numeroCerne{\arabic*}, leftmargin=*, labelsep=5pt, itemsep=2pt, topsep=1pt, partopsep=0pt, parsep=0pt, beginpenalty=10000}
+\setlist[itemize,1]{beginpenalty=10000}
+\setlist[enumerate,2]{label=(\alph*), leftmargin=*, labelsep=4pt, itemsep=1pt, topsep=1pt, partopsep=0pt, parsep=0pt}
+\setlength{\abovedisplayskip}{3pt}\setlength{\belowdisplayskip}{3pt}\setlength{\abovedisplayshortskip}{3pt}\setlength{\belowdisplayshortskip}{3pt}
+
+% Ligne de corrig\'e : num\'ero d'exercice en pastille bleu ciel (m\^eme
+% couleur que les cartes d'exercice de la feuille), suivi de la r\'eponse.
+\newcommand{\Corr}[2]{%
+\par\vspace{6pt}
+\noindent\tcbox[on line, colback=skyblue, colframe=skyblue, boxsep=1pt, left=4pt, right=4pt, top=1pt, bottom=1pt, arc=2pt]{\textcolor{white}{\bfseries Exercice~#1}}\par\nobreak\vspace{3pt}\nobreak
+\noindent\ignorespaces #2
+\par
+}
+
+% Bandeau d'objectif, comme sur la feuille d'exercices.
+\newcommand{\Objectif}[2]{%
+\par\vspace{8pt}
+\noindent\begin{minipage}{\linewidth}
+{\large\color{objorange}\bfseries Objectif #1~:}\\{\large\color{objorange}#2}
+\end{minipage}\par\nobreak
+\vspace{2pt}\nobreak
+}
+
+% \'El\'ements construits (points plac\'es, vecteurs trac\'es) : en rouge.
+\newcommand{\Rep}[1]{{\color{repred}#1}}
+
+\author{2nde --- Lyc\'ee Lebrun Coutances}
+\date{}
+\title{\textbf{S\'equence 2 --- Feuille d'exercices n\textdegree{}2 : Vecteurs du plan}\\[4pt]\large Corrig\'e}
+\begin{document}
+\maketitle
+\vspace{-18pt}
+
+\begin{multicols}{2}
+
+\Objectif{1}{Vecteur $\Vj{MM'}$ associ\'e \`a la translation qui transforme $M$ en $M'$}
+
+\Corr{1}{
+Pour aller de $A$ \`a $B$, on avance de 3 carreaux vers la droite et de 1 carreau vers le haut. On applique le m\^eme d\'eplacement \`a chaque point.
+\begin{enumerate}
+\item L'image de $C$ est $Y$, l'image de $D$ est $Z$ et l'image de $E$ est $D$.
+\item $\Vj{CY}=\Vj{DZ}=\Vj{ED}=\Vj{AB}$.
+\end{enumerate}
+\begin{center}
+\begin{tikzpicture}[scale=0.38]
+\draw[thin,gray!35] (0,-1) grid (8,6);
+\coordinate (A) at (1,4); \coordinate (B) at (4,5);
+\coordinate (C) at (2,2); \coordinate (D) at (4,1); \coordinate (E) at (1,0);
+\coordinate (Y) at (5,3); \coordinate (Z) at (7,2); \coordinate (X) at (6,1);
+\draw[-{Stealth},thick] (A) -- (B);
+\draw[-{Stealth},thick,repred] (C) -- (Y);
+\draw[-{Stealth},thick,repred] (D) -- (Z);
+\draw[-{Stealth},thick,repred] (E) -- (D);
+\node[left] at (A) {\Pt{A}}; \node[above] at (B) {\Pt{B}};
+\foreach \p in {C,D,E,Y,Z,X} \node[ptcross] at (\p) {};
+\node[left] at (C) {\Pt{C}}; \node[left] at (D) {\Pt{D}}; \node[above] at (E) {\Pt{E}};
+\node[right] at (Y) {\Pt{Y}}; \node[right] at (Z) {\Pt{Z}}; \node[right] at (X) {\Pt{X}};
+\end{tikzpicture}
+\end{center}
+}
+
+\Corr{2}{
+\begin{enumerate}
+\item $\Vj{AD}$ : on avance de 3 points vers la droite. L'image de $I$ est $L$.
+\item $\Vj{LR}$ : on recule d'un point vers la gauche et on descend d'une ligne. L'image de $J$ est $O$.
+\item $\Vj{NC}$ : on avance d'un point vers la droite et on monte de deux lignes. L'image de $R$ est $F$.
+\end{enumerate}
+}
+
+\Corr{3}{
+\begin{enumerate}
+\item L'hexagone \Rep{6} est l'image de l'hexagone 1 dans la translation de vecteur $\Vj{AC}$.
+\item L'hexagone 6 est l'image de l'hexagone \Rep{4} dans la translation de vecteur $\Vj{AB}$.
+\item L'hexagone 3 est l'image de l'hexagone \Rep{7} dans la translation de vecteur $\Vj{DE}$.
+\end{enumerate}
+}
+
+\Corr{4}{
+Par d\'efinition, $\Vj{AA'}=\vec u$.
+\begin{enumerate}
+\item Non. Si on avait $B=A'$, on aurait $\Vj{AB}=\Vj{AA'}=\vec u$, donc $\Vj{AB}$ aurait la m\^eme norme que $\vec u$~: c'est contraire \`a l'hypoth\`ese. Donc $B\neq A'$.
+\item Non, pour la m\^eme raison~: si $B=A'$, alors $\Vj{AB}=\vec u$ et $\Vj{AB}$ aurait le m\^eme sens que $\vec u$.
+\item $B=A'$ si et seulement si $\Vj{AB}=\vec u$, c'est-\`a-dire si et seulement si $\Vj{AB}$ a \textbf{la m\^eme direction}, \textbf{le m\^eme sens} et \textbf{la m\^eme norme} que $\vec u$. Il faut les trois conditions \`a la fois.
+\end{enumerate}
+}
+
+\Objectif{2}{\'Egalit\'e de deux vecteurs, vecteur nul}
+
+\Corr{5}{
+\begin{itemize}[label=$\star$, leftmargin=*, itemsep=1pt]
+\item $\Vj{CD}$ est horizontal alors que $\Vj{AB}$ est oblique~: ils n'ont pas la \textbf{m\^eme direction}.
+\item $\Vj{GH}$ a la m\^eme direction et le m\^eme sens que $\Vj{AB}$, mais sa \textbf{norme} est deux fois plus grande.
+\item Le vecteur trac\'e d'origine $F$ et d'extr\'emit\'e $E$ est $\Vj{FE}$~: il a la m\^eme direction et la m\^eme norme que $\Vj{AB}$, mais il est de \textbf{sens contraire}.
+\end{itemize}
+}
+
+\Corr{6}{
+\begin{itemize}[label=$\star$, leftmargin=*, itemsep=1pt]
+\item oppos\'e \`a $\Vj{CD}$~: $\vec p$
+\item m\^eme direction et sens que $\Vj{AC}$~: $\vec m$
+\item m\^eme direction que $\Vj{BC}$ mais sens contraire~: $\vec t$
+\item \'egal au vecteur $\Vj{BA}$~: $\vec v$.
+\end{itemize}
+}
+
+\Corr{7}{
+\begin{minipage}{0.6\linewidth}
+On sait que $\Vj{AB}=\Vj{CD}$. D'apr\`es la caract\'erisation par un parall\'elogramme, $ABDC$ est un parall\'elogramme (\'eventuellement aplati).\\[2pt]
+Dans le parall\'elogramme $ABDC$, les c\^ot\'es $[AC]$ et $[BD]$ sont parall\`eles, de m\^eme longueur et \og parcourus dans le m\^eme sens \fg{}, c'est-\`a-dire $\Vj{AC}=\Vj{BD}$.
+\end{minipage}\hfill
+\begin{minipage}{0.38\linewidth}
+\centering
+\begin{tikzpicture}[scale=0.55]
+\coordinate (A) at (0,0); \coordinate (B) at (2.6,0.4); \coordinate (C) at (0.8,2); \coordinate (D) at (3.4,2.4);
+\draw (A)--(B)--(D)--(C)--cycle;
+\draw[-{Stealth},thick] (A)--(B); \draw[-{Stealth},thick] (C)--(D);
+\draw[-{Stealth},thick,repred] (A)--(C); \draw[-{Stealth},thick,repred] (B)--(D);
+\node[below] at (A) {\Pt{A}}; \node[below] at (B) {\Pt{B}}; \node[above] at (C) {\Pt{C}}; \node[above] at (D) {\Pt{D}};
+\end{tikzpicture}
+\end{minipage}
+}
+
+\Corr{8}{
+\begin{enumerate}
+\item Figure \`a main lev\'ee~:
+\begin{center}
+\begin{tikzpicture}[scale=0.5]
+\coordinate (A) at (0,0); \coordinate (B) at (3,0); \coordinate (D) at (1.2,1.6); \coordinate (C) at (4.2,1.6);
+\coordinate (F) at (-1,2.6); \coordinate (E) at (2,2.6);
+\draw (A)--(B)--(C)--(D)--cycle;
+\draw (A)--(B)--(E)--(F)--cycle;
+\draw[repred,dashed] (E)--(C); \draw[repred,dashed] (F)--(D);
+\node[below] at (A) {\Pt{A}}; \node[below] at (B) {\Pt{B}}; \node[right] at (C) {\Pt{C}}; \node[below right] at (D) {\Pt{D}};
+\node[above] at (F) {\Pt{F}}; \node[above] at (E) {\Pt{E}};
+\end{tikzpicture}
+\end{center}
+\item $ABCD$ est un parall\'elogramme, donc $\Vj{AB}=\Vj{DC}$.\\
+$ABEF$ est un parall\'elogramme, donc $\Vj{AB}=\Vj{FE}$.
+\item On en d\'eduit $\Vj{DC}=\Vj{FE}$. D'apr\`es la caract\'erisation par un parall\'elogramme, $DCEF$ est un parall\'elogramme~: le quadrilat\`ere $EFDC$ est donc un parall\'elogramme.
+\end{enumerate}
+}
+
+\Corr{9}{
+\begin{enumerate}
+\item $AEBC$ est un parall\'elogramme, donc $\Vj{EB}=\Vj{AC}$.\\
+$ACDF$ est un parall\'elogramme, donc $\Vj{AC}=\Vj{FD}$.\\
+Ainsi $\Vj{EB}=\Vj{AC}=\Vj{FD}$, d'o\`u $\Vj{EB}=\Vj{FD}$.
+\item Comme $\Vj{EB}=\Vj{FD}$, le quadrilat\`ere $EBDF$ est un parall\'elogramme (caract\'erisation par un parall\'elogramme).\\[2pt]
+Son centre est le milieu de sa diagonale $[ED]$. Or $AEBC$ est un parall\'elogramme, donc $\Vj{AE}=\Vj{CB}$~; et $ABCD$ est un rectangle, donc $\Vj{CB}=\Vj{DA}$. Ainsi $\Vj{AE}=\Vj{DA}$, ce qui signifie que $A$ est le milieu de $[DE]$.\\
+Le parall\'elogramme $EBDF$ a donc pour centre $A$.
+\end{enumerate}
+}
+
+\Objectif{3}{Repr\'esentants d'un vecteur}
+
+\Corr{10}{
+\begin{enumerate}
+\item $\Vj{CD}$ et $\Vj{GH}$ sont deux repr\'esentants de $\Vj{AB}$~: m\^eme direction, m\^eme sens et m\^eme norme (2 carreaux vers la droite, 1 carreau vers le haut).
+\item Non~: $\Vj{EF}$ correspond \`a 1 carreau vers la droite et 2 carreaux vers le haut. Il n'a pas la m\^eme direction que $\Vj{AB}$ (les droites $(AB)$ et $(EF)$ ne sont pas parall\`eles), donc ce n'est pas un repr\'esentant de $\Vj{AB}$.
+\end{enumerate}
+}
+
+\Corr{11}{
+\begin{minipage}{0.64\linewidth}
+\begin{enumerate}
+\item (a) $\Vj{EF}=\Vj{HG}$ \quad (b) $\Vj{GH}=\Vj{FE}$\\
+(c) $\Vj{EH}=\Vj{FG}$ \quad (d) $\Vj{GF}=\Vj{HE}$
+\item $\Vj{FE}$ (ou $\Vj{GH}$).
+\item (a) $\Vj{EI}=\Vj{IG}$ \quad (b) $\Vj{HI}=\Vj{IF}$\\
+(c) $\Vj{FI}=\Vj{IH}$
+\item $\Vj{EH}=-\Vj{HE}$ (ou $-\Vj{GF}$).
+\item (a) $\Vj{FG}$ \qquad (b) $\Vj{FI}$ (car $\Vj{IH}=\Vj{FI}$).
+\end{enumerate}
+\end{minipage}\hfill
+\begin{minipage}{0.34\linewidth}
+\centering
+\begin{tikzpicture}[scale=0.55]
+\coordinate (E) at (0,0); \coordinate (F) at (3,0); \coordinate (G) at (3.8,2); \coordinate (H) at (0.8,2);
+\coordinate (I) at ($(E)!0.5!(G)$);
+\draw (E)--(F)--(G)--(H)--cycle; \draw[gray!60] (E)--(G); \draw[gray!60] (F)--(H);
+\node[below] at (E) {\Pt{E}}; \node[below] at (F) {\Pt{F}}; \node[above] at (G) {\Pt{G}}; \node[above] at (H) {\Pt{H}};
+\node[ptcross] at (I) {}; \node[above,inner sep=2pt] at (I) {\Pt{I}};
+\end{tikzpicture}
+\end{minipage}
+}
+
+\Corr{12}{
+\begin{enumerate}
+\item (a) $\Vj{AK}$ \qquad (b) $\Vj{CD}$
+\item (a) $\Vj{CD}$ \qquad (b) $\Vj{MF}$
+\item (a) $\Vj{PQ}$ \qquad (b) $\Vj{SH}$
+\item (a) $\Vj{SH}$ \qquad (b) $\Vj{UW}$
+\end{enumerate}
+}
+
+\Objectif{4}{Somme de deux vecteurs et relation de Chasles}
+
+\Corr{13}{
+\begin{minipage}{\linewidth}
+On met les vecteurs bout \`a bout \`a partir du point de d\'epart (en pointill\'es), puis on trace le vecteur somme.
+\begin{center}
+\begin{tikzpicture}[scale=0.5]
+\draw[thin,gray!35] (0,0) grid (12,6);
+\draw[-{Stealth},thick,blue] (2,5) -- (2,3) node[midway,right]{$\vec u$};
+\draw[-{Stealth},thick,red] (6,5) -- (8,4) node[midway,above]{$\vec v$};
+\draw[-{Stealth},thick,teal] (4,1) -- (6,2) node[midway,below]{$\vec w$};
+\coordinate (B) at (1,4); \node[ptcross] at (B) {}; \node[left] at (B) {\Pt{B}};
+\coordinate (V) at (7.5,1); \node[ptcross] at (V) {}; \node[below] at (V) {\Pt{V}};
+\coordinate (I) at (1,1); \node[ptcross] at (I) {}; \node[below] at (I) {\Pt{I}};
+% P = B + u + v
+\draw[-{Stealth},blue,dashed] (B) -- (1,2); \draw[-{Stealth},red,dashed] (1,2) -- (3,1);
+\draw[-{Stealth},thick,repred] (B) -- (3,1);
+\node[ptcross,repred] at (3,1) {}; \node[above right,repred,inner sep=1pt] at (3,1) {\Pt{P}};
+% G = V + v + w
+\draw[-{Stealth},red,dashed] (V) -- (9.5,0); \draw[-{Stealth},teal,dashed] (9.5,0) -- (11.5,1);
+\draw[-{Stealth},thick,repred] (V) -- (11.5,1);
+\node[ptcross,repred] at (11.5,1) {}; \node[above,repred] at (11.5,1) {\Pt{G}};
+% K = I + w + u
+\draw[-{Stealth},teal,dashed] (I) -- (3,2); \draw[-{Stealth},blue,dashed] (3,2) -- (3,0);
+\draw[-{Stealth},thick,repred] (I) -- (3,0);
+\node[ptcross,repred] at (3,0) {}; \node[below,repred] at (3,0) {\Pt{K}};
+\end{tikzpicture}
+\end{center}
+\end{minipage}
+}
+
+\Corr{14}{
+\begin{enumerate}[label=(\alph*)]
+\item $\Vj{TR}+\Vj{UT}+\Vj{RU}=\Vj{UT}+\Vj{TR}+\Vj{RU}=\Vj{UR}+\Vj{RU}=\Vj{UU}=\vec 0$.
+\item $\Vj{ST}-\Vj{VU}+\Vj{TU}=\Vj{ST}+\Vj{TU}+\Vj{UV}=\Vj{SU}+\Vj{UV}=\Vj{SV}$.
+\end{enumerate}
+}
+
+\Corr{15}{
+Dans l'hexagone r\'egulier, on utilise les \'egalit\'es de vecteurs entre c\^ot\'es et rayons, par exemple $\Vj{AB}=\Vj{OC}$, $\Vj{CD}=\Vj{BO}$, $\Vj{AF}=\Vj{BO}=\Vj{OE}$, $\Vj{DO}=\Vj{OA}$.
+\begin{enumerate}
+\item $\Vj{AB}+\Vj{CD}=\Vj{AB}+\Vj{BO}=\Vj{AO}$ \quad (ou $\Vj{OD}$, ou $\Vj{BC}$).
+\item $\Vj{OE}=\Vj{BO}$, donc $\Vj{OB}+\Vj{OE}=\Vj{OB}+\Vj{BO}=\Vj{OO}=\vec 0$.
+\item $\Vj{DO}=\Vj{OA}$, donc $\Vj{FO}+\Vj{DO}=\Vj{FO}+\Vj{OA}=\Vj{FA}$ \quad (ou $\Vj{OB}$).
+\item $-\Vj{DC}=\Vj{CD}=\Vj{AF}$, donc $\Vj{CA}-\Vj{DC}=\Vj{CA}+\Vj{AF}=\Vj{CF}$.
+\item $\Vj{AF}=\Vj{BO}$ et $\Vj{CD}=\Vj{OE}$, donc $\Vj{AF}+\Vj{CD}=\Vj{BO}+\Vj{OE}=\Vj{BE}$.
+\item $\Vj{AB}-\Vj{OA}+\Vj{AF}=\Vj{AB}+\Vj{AO}+\Vj{AF}$. Or $\Vj{AF}=\Vj{BO}$, donc $\Vj{AB}+\Vj{AF}=\Vj{AB}+\Vj{BO}=\Vj{AO}$.\\
+Ainsi la somme vaut $\Vj{AO}+\Vj{AO}=\Vj{AO}+\Vj{OD}=\Vj{AD}$.
+\end{enumerate}
+}
+
+\Corr{16}{
+\begin{enumerate}
+\item $I$ est le milieu de $[BC]$, donc $I$ est entre $B$ et $C$ avec $IB=IC$. Les vecteurs $\Vj{IB}$ et $\Vj{IC}$ ont donc la m\^eme direction, la m\^eme norme et des sens contraires~: $\Vj{IC}=-\Vj{IB}$, d'o\`u $\Vj{IB}+\Vj{IC}=\vec 0$.
+\item D'apr\`es la relation de Chasles~:
+\[\Vj{AB}+\Vj{AC}=\big(\Vj{AI}+\Vj{IB}\big)+\big(\Vj{AI}+\Vj{IC}\big)=2\Vj{AI}+\underbrace{\Vj{IB}+\Vj{IC}}_{=\vec 0}=2\Vj{AI}.\]
+\end{enumerate}
+}
+
+\end{multicols}
+\end{document}

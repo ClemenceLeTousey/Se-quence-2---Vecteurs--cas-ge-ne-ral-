@@ -1,0 +1,1014 @@
+% !TEX program = xelatex
+% Version grands caractères (paysage, 22pt) du cours de la Séquence 2
+% (Vecteurs), pour une élève déficiente visuelle. Document autonome
+% (n'utilise PAS CLT2627.sty), sur le même principe que "Séquence 1 -
+% Cours - Calculs Numériques - Grands Caractères.tex" : une seule colonne
+% pleine largeur, texte non justifié, interligne large, gras plutôt
+% qu'italique pour les emphases.
+%
+% Contrairement à la version Séquence 1 : ce chapitre étant très
+% géométrique, TOUT le contenu du cours original est conservé, y compris
+% les schémas (TikZ, redessinés à plus grande échelle pour rester lisibles
+% en 22pt) et les cartes vidéos Yvan Monka (icône + titre cliquable + QR
+% code, agrandis). Seuls les tableaux "Objectif / exercices" (renvois vers
+% le manuel et la feuille d'exercices, hors sujet pour une version cours)
+% sont retirés, comme dans la version Séquence 1.
+%
+% VERSION COMPLÉTÉE : reprend exactement la mise en page de "Séquence 2 -
+% Cours - Vecteurs - Grands Caractères.tex" (version élève), mais avec
+% toutes les réponses révélées (couleur \surligneReponse, ex-J1 du poly),
+% en s'appuyant sur le contenu de "Séquence 2 - Cours - Vecteurs - Version
+% complétée.tex" (mise en page classique). Les cases à cocher et espaces à
+% compléter de la version élève sont donc soit remplacés par le texte de
+% la réponse, soit cochés (\CaseOui), soit révélés dans les figures TikZ
+% (vecteurs auparavant tracés en blanc/opacity=0).
+\documentclass[a4paper,landscape]{article}
+
+\usepackage{fontspec}
+\usepackage[french]{babel}
+\usepackage{geometry}
+\geometry{a4paper,landscape,top=1.4cm,bottom=2cm,left=1.8cm,right=1.8cm,footskip=1.2cm}
+
+\setmainfont{Helvetica Neue} % police sans-serif, lisible en grands caractères
+
+\usepackage{amsmath,amssymb}
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox}
+\usepackage{enumitem}
+\usepackage{ragged2e}
+\usepackage{fancyhdr}
+\usepackage[hidelinks]{hyperref}
+\usepackage{lastpage}
+\usepackage{tikz}
+\usepackage{multicol}
+\usepackage{fontawesome}
+\usepackage{qrcode}
+\usepackage{titlesec}
+\usepackage{frcursive}
+\usetikzlibrary{arrows.meta,shapes.misc,shapes.geometric}
+
+% Croix de placement des points (identique au cours version normale, cf.
+% "Séquence 2 - Cours - Vecteurs.tex"), simplement agrandie pour le format
+% grands caractères.
+\tikzset{ptcross/.style={cross out,draw,very thick,minimum size=3mm,inner sep=0pt}}
+
+% ============================================================ %
+% Correctif du bug de crénage de frcursive sous XeLaTeX (repris de
+% CLT2627.sty) : sans lui, certaines paires de lettres consécutives dans
+% \cursive explosent (une lettre projetée loin à droite, hors de la
+% page), notamment "lettre + s".
+% ============================================================ %
+\makeatletter
+\ifdefined\XeTeXcharclass
+\XeTeXcharclass `a 201 \XeTeXcharclass `b 201 \XeTeXcharclass `c 201
+\XeTeXcharclass `d 201 \XeTeXcharclass `e 201 \XeTeXcharclass `f 201
+\XeTeXcharclass `g 201 \XeTeXcharclass `h 201 \XeTeXcharclass `i 201
+\XeTeXcharclass `j 201 \XeTeXcharclass `k 201 \XeTeXcharclass `l 201
+\XeTeXcharclass `m 201 \XeTeXcharclass `n 201 \XeTeXcharclass `o 201
+\XeTeXcharclass `p 201 \XeTeXcharclass `q 201 \XeTeXcharclass `r 201
+\XeTeXcharclass `s 201 \XeTeXcharclass `t 201 \XeTeXcharclass `u 201
+\XeTeXcharclass `v 201 \XeTeXcharclass `w 201 \XeTeXcharclass `x 201
+\XeTeXcharclass `y 201 \XeTeXcharclass `z 201
+\XeTeXcharclass `A 201 \XeTeXcharclass `B 201 \XeTeXcharclass `C 201
+\XeTeXcharclass `D 201 \XeTeXcharclass `E 201 \XeTeXcharclass `F 201
+\XeTeXcharclass `G 201 \XeTeXcharclass `H 201 \XeTeXcharclass `I 201
+\XeTeXcharclass `J 201 \XeTeXcharclass `K 201 \XeTeXcharclass `L 201
+\XeTeXcharclass `M 201 \XeTeXcharclass `N 201 \XeTeXcharclass `O 201
+\XeTeXcharclass `P 201 \XeTeXcharclass `Q 201 \XeTeXcharclass `R 201
+\XeTeXcharclass `S 201 \XeTeXcharclass `T 201 \XeTeXcharclass `U 201
+\XeTeXcharclass `V 201 \XeTeXcharclass `W 201 \XeTeXcharclass `X 201
+\XeTeXcharclass `Y 201 \XeTeXcharclass `Z 201
+\XeTeXcharclass `\é 201 \XeTeXcharclass `\è 201 \XeTeXcharclass `\ê 201
+\XeTeXcharclass `\ë 201 \XeTeXcharclass `\É 201 \XeTeXcharclass `\È 201
+\XeTeXcharclass `\Ê 201 \XeTeXcharclass `\Ë 201 \XeTeXcharclass `\à 201
+\XeTeXcharclass `\â 201 \XeTeXcharclass `\ä 201 \XeTeXcharclass `\À 201
+\XeTeXcharclass `\Â 201 \XeTeXcharclass `\Ä 201 \XeTeXcharclass `\ô 201
+\XeTeXcharclass `\ö 201 \XeTeXcharclass `\Ô 201 \XeTeXcharclass `\Ö 201
+\XeTeXcharclass `\î 201 \XeTeXcharclass `\ï 201 \XeTeXcharclass `\Î 201
+\XeTeXcharclass `\Ï 201 \XeTeXcharclass `\ù 201 \XeTeXcharclass `\û 201
+\XeTeXcharclass `\ü 201 \XeTeXcharclass `\Ù 201 \XeTeXcharclass `\Û 201
+\XeTeXcharclass `\Ü 201 \XeTeXcharclass `\ç 201 \XeTeXcharclass `\Ç 201
+\XeTeXcharclass `\œ 201 \XeTeXcharclass `\Œ 201 \XeTeXcharclass `\æ 201
+\XeTeXcharclass `\Æ 201
+\let\cursive@orig\cursive
+\renewcommand{\cursive}{%
+  \cursive@orig
+  \XeTeXinterchartoks 201 201 = {\kern0pt }%
+}
+\fi
+\makeatother
+
+% ============================================================ %
+% Taille de police : 22pt pour le texte courant, tailles voisines
+% redéfinies en proportion (utilisées par \section, \tcbtitle, etc.)
+% ============================================================ %
+\renewcommand{\normalsize}{\fontsize{22}{29}\selectfont}
+\renewcommand{\small}{\fontsize{19}{25}\selectfont}
+\renewcommand{\large}{\fontsize{25}{31}\selectfont}
+\renewcommand{\Large}{\fontsize{29}{35}\selectfont}
+\renewcommand{\LARGE}{\fontsize{33}{40}\selectfont}
+\renewcommand{\huge}{\fontsize{37}{44}\selectfont}
+\renewcommand{\Huge}{\fontsize{41}{48}\selectfont}
+\normalsize
+\linespread{1.15}
+\setlength{\parskip}{10pt}
+\setlength{\parindent}{0pt}
+\RaggedRight % texte non justifié (ragged2e) dans tout le document
+
+\setlist{leftmargin=1.4em, itemsep=6pt, topsep=4pt}
+
+% Notation vecteur, reprise de CLT2627.sty (\Vj{AB} = vecteur AB).
+\newcommand{\Vj}[1]{\overrightarrow{\text{#1}}}
+
+% ============================================================ %
+% Titre de séquence (repris tel quel de "Séquence 2 - Cours -
+% Vecteurs.tex", macro autonome, indépendante de CLT2627.sty) : coins
+% arrondis, étiquette posée via overlay qui entaille le cadre en haut à
+% gauche, grand titre centré en dessous. #1 = largeur (fraction de
+% \linewidth), #2 = étiquette, #3 = titre.
+% ============================================================ %
+\newcommand{\SequenceTitre}[3]{%
+  \begin{center}
+  \begin{tcolorbox}[
+    enhanced,
+    width=#1\linewidth,
+    colback=white,
+    colframe=black,
+    boxrule=1pt,
+    arc=10pt,
+    sharp corners=downhill,
+    left=14pt, right=14pt, top=12pt, bottom=10pt,
+    halign=center,
+    overlay={
+      \node[fill=white, anchor=west, font=\Large, inner xsep=6pt]
+        at ([xshift=16pt]frame.north west) {#2};
+    },
+  ]
+  {\Huge #3}
+  \end{tcolorbox}
+  \end{center}
+}
+
+% ============================================================ %
+% Style des sections / sous-sections : repris de CLT2627.sty (même
+% présentation que la version classique) — pastille grise numérotée +
+% titre en écriture \cursive pour les sections, pastille magenta lettrée
+% + titre \cursive magenta pour les sous-sections — simplement agrandi en
+% proportion du reste du document (badges et polices redimensionnés pour
+% le format 22pt).
+% ============================================================ %
+\def\thesection{\arabic{section}}
+\titlespacing*{\section}{0pt}{4.5ex plus 1ex minus .2ex}{3ex plus .2ex}
+\titleformat{\section}[hang]
+    {\cursive\Large\color{black}\hyphenchar\font=-1}
+    {\begin{tikzpicture}[baseline=(nodetext.base)]
+        \node[
+            draw=black,
+            fill=gray,
+            text=white,
+            rounded rectangle,
+            inner sep=9pt,
+            font=\cursive\Large
+        ] (nodetext) {\hspace*{0.3em}\thesection\hspace*{0.3em}};
+     \end{tikzpicture}}
+    {14pt}
+    {}
+
+\def\thesubsection{\alph{subsection}}
+\titlespacing*{\subsection}{2.6cm}{0.5cm}{0.2cm}
+\titleformat{\subsection}[hang]
+    {\cursive\large\color{magenta}\hyphenchar\font=-1}
+    {\begin{tikzpicture}[baseline=(nodetext.base)]
+        \node[
+        draw=black,
+        fill=magenta!30,
+        text=white,
+        rounded corners=4pt,
+        inner sep=5pt,
+        font=\bfseries\normalsize] (nodetext) {\thesubsection};
+     \end{tikzpicture}}
+    {14pt}
+    {}
+
+% ============================================================ %
+% Couleurs (reprises de CLT2627.sty pour garder le même code couleur
+% Définition/Propriété/Théorème/Exemple/À noter/Attention que le poly)
+% ============================================================ %
+\definecolor{vertDefinition}{RGB}{46,160,67}
+\definecolor{bleuPropriete}{RGB}{41,121,204}
+\definecolor{bordeauxTheoreme}{RGB}{196,30,58}
+\definecolor{grisExemple}{RGB}{85,85,95}
+\definecolor{ambreNoter}{RGB}{214,144,20}
+\definecolor{rougeAttention}{RGB}{201,42,42}
+\definecolor{surligneReponse}{RGB}{192,42,42} % couleur des réponses (ex-J1)
+
+% ============================================================ %
+% Boîtes pleine largeur, "breakable" (peuvent se couper sur une page
+% suivante sans risque, puisqu'on n'est plus dans une minipage étroite).
+% ============================================================ %
+\newcounter{definition}
+\newcounter{propriete}
+\newcounter{theoreme}
+\newcounter{exemple}
+
+\newtcolorbox{BoiteDfn}[1][]{
+  enhanced, breakable,
+  colback=vertDefinition!6, colframe=vertDefinition,
+  boxrule=0pt, borderline west={3pt}{0pt}{vertDefinition},
+  arc=0pt, outer arc=0pt,
+  left=14pt, right=14pt, top=10pt, bottom=10pt,
+  before skip=12pt, after skip=12pt,
+}
+\newcommand{\Dfn}[2][]{%
+  \begin{BoiteDfn}
+    \refstepcounter{definition}%
+    \textbf{\color{vertDefinition}Définition~\arabic{definition}}%
+    \ifx\\#1\\\else\ --~\textbf{#1}\fi
+    \par\smallskip #2
+  \end{BoiteDfn}%
+}
+
+\newtcolorbox{BoitePrp}[1][]{
+  enhanced, breakable,
+  colback=bleuPropriete!6, colframe=bleuPropriete,
+  boxrule=0pt, borderline west={3pt}{0pt}{bleuPropriete},
+  arc=0pt, outer arc=0pt,
+  left=14pt, right=14pt, top=10pt, bottom=10pt,
+  before skip=12pt, after skip=12pt,
+}
+\newcommand{\Prp}[2][]{%
+  \begin{BoitePrp}
+    \refstepcounter{propriete}%
+    \textbf{\color{bleuPropriete}Propriété~\arabic{propriete}}%
+    \ifx\\#1\\\else\ --~\textbf{#1}\fi
+    \par\smallskip #2
+  \end{BoitePrp}%
+}
+
+\newtcolorbox{BoiteThm}[1][]{
+  enhanced, breakable,
+  colback=bordeauxTheoreme!6, colframe=bordeauxTheoreme,
+  boxrule=0pt, borderline west={3pt}{0pt}{bordeauxTheoreme},
+  arc=0pt, outer arc=0pt,
+  left=14pt, right=14pt, top=10pt, bottom=10pt,
+  before skip=12pt, after skip=12pt,
+}
+\newcommand{\Thm}[2][]{%
+  \begin{BoiteThm}
+    \refstepcounter{theoreme}%
+    \textbf{\color{bordeauxTheoreme}Théorème~\arabic{theoreme}}%
+    \ifx\\#1\\\else\ --~\textbf{#1}\fi
+    \par\smallskip #2
+  \end{BoiteThm}%
+}
+
+\newtcolorbox{BoiteExemple}[1][]{
+  enhanced, breakable,
+  colback=grisExemple!6, colframe=grisExemple,
+  boxrule=0pt, borderline west={3pt}{0pt}{grisExemple},
+  arc=0pt, outer arc=0pt,
+  left=14pt, right=14pt, top=10pt, bottom=10pt,
+  before skip=12pt, after skip=12pt,
+}
+\newcommand{\Exemple}[2][]{%
+  \begin{BoiteExemple}
+    \refstepcounter{exemple}%
+    \textbf{\color{grisExemple}Exemple~\arabic{exemple}}%
+    \ifx\\#1\\\else\ --~\textbf{#1}\fi
+    \par\smallskip #2
+  \end{BoiteExemple}%
+}
+
+\newtcolorbox{BoiteANoter}[1][]{
+  enhanced, breakable,
+  colback=ambreNoter!8, colframe=ambreNoter,
+  boxrule=0pt, borderline west={3pt}{0pt}{ambreNoter},
+  arc=0pt, outer arc=0pt,
+  left=14pt, right=14pt, top=10pt, bottom=10pt,
+  before skip=12pt, after skip=12pt,
+}
+\newcommand{\ANoter}[2][]{%
+  \begin{BoiteANoter}
+    \textbf{\color{ambreNoter}À noter}%
+    \ifx\\#1\\\else\ --~\textbf{#1}\fi
+    \par\smallskip #2
+  \end{BoiteANoter}%
+}
+
+\newtcolorbox{BoiteAttention}[1][]{
+  enhanced, breakable,
+  colback=rougeAttention!7, colframe=rougeAttention,
+  boxrule=0pt, borderline west={3pt}{0pt}{rougeAttention},
+  arc=0pt, outer arc=0pt,
+  left=14pt, right=14pt, top=10pt, bottom=10pt,
+  before skip=12pt, after skip=12pt,
+}
+\newcommand{\Attention}[2][]{%
+  \begin{BoiteAttention}
+    \textbf{\color{rougeAttention}Attention}%
+    \ifx\\#1\\\else\ --~\textbf{#1}\fi
+    \par\smallskip #2
+  \end{BoiteAttention}%
+}
+
+% ============================================================ %
+% Cartes vidéos Yvan Monka : icône lecture (grande), titre cliquable,
+% QR code cliquable (agrandi, 2.6cm de côté, pour rester scannable même
+% imprimé en grand format). Une vidéo par ligne pleine largeur.
+% ============================================================ %
+\newcommand{\ClickableQR}[2]{\makebox[0pt][l]{\href{#2}{\makebox[#1][c]{\rule{0pt}{#1}}}}}
+\newcommand{\VideoYvanLigne}[2]{%
+  \noindent
+  \makebox[0.1\linewidth]{$\vcenter{\hbox{\Large\faPlayCircle}}$}%
+  \makebox[0.6\linewidth][l]{$\vcenter{\hbox{\parbox{0.58\linewidth}{\raggedright\large\href{#2}{#1}}}}$}%
+  \makebox[0.3\linewidth]{$\vcenter{\hbox{\ClickableQR{2.2cm}{#2}\qrcode*[height=2.2cm, level=M]{#2}}}$}%
+}
+\newcommand{\VideosYvanMonka}[4]{{%
+  \centering
+  \textbf{Vidéos Yvan Monka}\par\smallskip
+  \VideoYvanLigne{#1}{#2}
+
+  \medskip
+
+  \VideoYvanLigne{#3}{#4}
+\par}}
+\newcommand{\VideoYvanSolo}[2]{{%
+  \centering
+  \textbf{Vidéo Yvan Monka}\par\smallskip
+  \VideoYvanLigne{#1}{#2}
+\par}}
+
+% Case à cocher (remplace \Square de bbding, non chargé ici).
+\newcommand{\Case}{\raisebox{0pt}{\framebox(18,18){}}}
+% Case cochée (réponse) : même gabarit que \Case, coche colorée dedans.
+\newcommand{\CaseOui}{\raisebox{0pt}{\framebox(18,18){\textcolor{surligneReponse}{\scriptsize$\checkmark$}}}}
+
+% Numéro cerclé simple (remplace \numeroCerne de CLT2627.sty).
+\newcommand{\NumCercle}[1]{\textbf{(#1)}}
+
+% Espace à compléter par l'élève : trait bas gris clair, largeur généreuse.
+\newcommand{\Trou}[1][6cm]{\makebox[#1][l]{\textcolor{gray!55}{\rule[-3pt]{#1}{0.7pt}}}}
+
+% ============================================================ %
+% En-tête / pied de page
+% ============================================================ %
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyfoot[C]{\small Séquence 2 — Vecteurs — \thepage/\pageref{LastPage}}
+
+\title{\vspace{-2cm}}
+\date{}
+
+\begin{document}
+
+% ============================================================ %
+% Titre — seul sur la page 1, saut de page avant la section 1 (comme
+% dans la version classique, dont le titre n'est jamais mêlé au cours).
+% ============================================================ %
+\vspace*{3cm}
+\SequenceTitre{0.7}{Géométrie - Séquence 2}{Vecteurs du plan}
+
+\begin{center}
+\textit{\Large\color{gray}Version complétée}
+\end{center}
+
+\clearpage
+
+% ============================================================ %
+% Section 1 — Définition d'un vecteur
+% ============================================================ %
+\section{Définition d'un vecteur}
+\subsection{Translations et vecteurs}
+
+\Dfn[Vecteur \texorpdfstring{$\Vj{AB}$}{AB}]{
+Soient A et B deux points distincts du plan.\\
+Le \textbf{vecteur} $\Vj{AB}$ est l'objet mathématique caractérisé par :
+\begin{itemize}
+\item sa \textbf{direction} : la droite (AB) ;
+\item son \textbf{sens} : de A vers B ;
+\item sa longueur, ou \textbf{norme}, notée $||\Vj{AB}||$ : la distance AB.
+\end{itemize}
+L'\textbf{origine} du vecteur $\Vj{AB}$ est A et son \textbf{extrémité} est B.
+
+\begin{center}
+\begin{tikzpicture}[x=1.6cm,y=1.6cm,>=Stealth,line width=1.4pt]
+\draw[-latex,thick,blue] (0,0) node[below left]{A} -- (3,1.5) node[above right]{B};
+\end{tikzpicture}
+\end{center}
+}
+
+\Attention{On fera attention à ne pas confondre le vecteur $\Vj{AB}$ et le vecteur $\Vj{BA}$ (ils n'ont pas le même sens).}
+
+\clearpage
+\Dfn[Translation de vecteur \texorpdfstring{$\Vj{u}$}{u}]{
+Soit $\Vj{u}$ un vecteur.\\
+La \textbf{translation de vecteur $\Vj{u}$} est la transformation qui, à tout point A du plan, associe l'unique point A' tel que \textcolor{surligneReponse}{$\Vj{AA'} = \Vj{u}$}.
+
+\begin{center}
+\begin{tikzpicture}[yscale=0.9, xscale=1.3, line width=1.4pt]
+    \node[left] at (1,0.7) {$\Vj{u}$};
+\draw[->, line width=1pt] (-0.5,0)--(2.5,1) ;
+\draw[-latex,thick,blue,dotted](1,-1) node[below left]{A}--(4,0) node[above right]{A'};
+\end{tikzpicture}
+\end{center}
+}
+
+En particulier, la translation de vecteur $\Vj{AB}$ transforme A en B (car $\Vj{AB}=\Vj{AB}$).
+
+\clearpage
+\Prp[Caractérisation par un parallélogramme]{
+Soient A, B, C, D quatre points du plan.\\
+Le point D est l'image de C par la translation de vecteur $\Vj{AB}$ \textbf{si et seulement si} \textcolor{surligneReponse}{ABDC est un parallélogramme}.
+
+\begin{center}
+\begin{tikzpicture}[yscale=0.9, xscale=1.3, line width=1.4pt]
+\draw[-latex,thick,blue](0,0) node[below left]{A}--(3,1) node[above right]{B};
+\draw[-latex,thick,blue](1,-1) node[below left]{C}--(4,0) node[above right]{D};
+\draw (0,0)--(4,0);
+\draw (1,-1)--(3,1);
+\draw[red,thick] (1,0) node[scale=0.9]{|};
+\draw[red,thick] (3,0) node[scale=0.9]{|};
+\draw[red,thick] (1.5,-0.5) node[rotate=45,scale=0.9]{||};
+\draw[red,thick] (2.5,0.5) node[rotate=45,scale=0.9]{||};
+\end{tikzpicture}\\
+{\small \textit{Le parallélogramme peut être aplati.}}
+\end{center}
+
+Cela équivaut aussi à dire que les segments [AD] et [BC] ont le \textcolor{surligneReponse}{même milieu}.
+}
+
+\clearpage
+\Exemple{
+Soit $ABCD$ un parallélogramme. Construire les points $E$, $F$, $G$ et $H$ tels que :
+\begin{enumerate}
+\item $E$ est l'image de $A$ par la translation de vecteur $\Vj{CB}$ ;
+\item $F$ est l'image de $C$ par la translation de vecteur $\Vj{AB}$ ;
+\item $G$ est l'image de $C$ par la translation de vecteur $\Vj{AD}$ ;
+\item $H$ est l'image de $A$ par la translation de vecteur $\Vj{CD}$.
+\end{enumerate}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.1,x=1cm, y=1cm, >=Stealth, line width=1.3pt]
+    \draw[thin, gray!50] (-3,-3) grid (6,5);
+    \coordinate (A) at (0,0);
+    \coordinate (B) at (2,1);
+    \coordinate (C) at (3,3);
+    \coordinate (D) at (1,2);
+    \draw[thick] (A) -- (B) -- (C) -- (D) -- cycle;
+    \fill (A) circle (3pt) node[below left] {$A$};
+    \fill (B) circle (3pt) node[below right] {$B$};
+    \fill (C) circle (3pt) node[above right] {$C$};
+    \fill (D) circle (3pt) node[above left] {$D$};
+\end{tikzpicture}
+\end{center}
+}
+
+\clearpage
+\subsection{Égalité de vecteurs}
+
+\Prp{Deux vecteurs sont \textbf{égaux} s'ils ont même direction, même sens et même norme.}
+
+\ANoter{Un vecteur n'est pas caractérisé par son origine et son extrémité : il admet une \textbf{infinité de représentants}. Autrement dit, l'origine et l'extrémité d'un vecteur ne sont pas fixes.}
+
+\Dfn{
+Si $\Vj{AB}=\Vj{CD}=\Vj{EF}$, on dit que $\Vj{AB}$, $\Vj{CD}$ et $\Vj{EF}$
+sont des \textbf{représentants} d'un même vecteur ($\Vj{u}$).
+
+\begin{center}
+\begin{tikzpicture}[scale=1.15, line width=1.3pt]
+\draw[-latex,thick,blue] (0.4,-0.6)--(1.4,-1.6) node[midway, above right=-1pt]{$\Vj u$};
+\draw[-latex,thick,blue] (0.2,1.6) node[above]{$A$}--(1.2,0.6) node[below right]{$B$};
+\draw[-latex,thick,blue] (4.4,1.1) node[above]{$C$}--(5.4,0.1) node[below right]{$D$};
+\draw[-latex,thick,blue] (2.6,-1.3) node[above]{$E$}--(3.6,-2.3) node[below right]{$F$};
+\end{tikzpicture}
+\end{center}
+}
+
+\clearpage
+\Exemple{
+Utiliser le quadrillage pour déterminer si les vecteurs suivants sont égaux : cocher, pour chaque paire, les critères vérifiés, puis conclure.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.8}
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+ & \shortstack{même\\direction} & \shortstack{même\\sens} & \shortstack{même\\norme} & Conclusion \\
+\hline
+\NumCercle{1}\ $\Vj{AB}$ et $\Vj{EF}$ & \CaseOui & \CaseOui & \CaseOui & \makebox[3.5cm][l]{\textcolor{surligneReponse}{Égaux}}\\
+\hline
+\NumCercle{2}\ $\Vj{DA}$ et $\Vj{DB}$ & \Case & \Case & \Case & \makebox[3.5cm][l]{\textcolor{surligneReponse}{Non égaux}}\\
+\hline
+\NumCercle{3}\ $\Vj{ED}$ et $\Vj{BD}$ & \CaseOui & \Case & \CaseOui & \makebox[3.5cm][l]{\textcolor{surligneReponse}{Non égaux}}\\
+\hline
+\NumCercle{4}\ $\Vj{AE}$ et $\Vj{BF}$ & \CaseOui & \CaseOui & \CaseOui & \makebox[3.5cm][l]{\textcolor{surligneReponse}{Égaux}}\\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tikzpicture}[x=0.8cm, y=0.8cm, line width=1.2pt]
+    \draw[gray, line width=0.4pt,step=1] (0,0) grid (10,8);
+    \path
+        (2,7) node[circle, fill, inner sep=2.5pt, label=above: A] (A) {}
+        (7,7) node[circle, fill, inner sep=2.5pt, label=above: B] (B) {}
+        (9,4) node[circle, fill, inner sep=2.5pt, label=right: C] (C) {}
+        (4,4) node[circle, fill, inner sep=2.5pt, label=left: D] (D) {}
+        (1,1) node[circle, fill, inner sep=2.5pt, label=below:E] (E) {}
+        (6,1) node[circle, fill, inner sep=2.5pt, label=below: F] (F) {};
+\end{tikzpicture}
+\end{center}
+}
+
+\clearpage
+\subsection{Vecteurs particuliers}
+
+\Dfn{
+\begin{itemize}
+\item la transformation qui laisse tous les points fixes est appelée translation de \textbf{vecteur nul} $\Vj{0}$.\\
+La norme du vecteur nul est 0 mais sa direction et son sens ne sont pas définis.
+\item on appelle \textbf{vecteur opposé} au vecteur $\Vj{AB}$ le vecteur noté $-\Vj{AB}$
+associé à la translation qui transforme $B$ en $A$. \\
+Autrement dit, $-\Vj{AB}=\Vj{BA}$.\\
+Le vecteur $-\Vj{AB}$ a donc la même direction et la même norme que $\Vj{AB}$ mais est de sens opposé.
+\end{itemize}
+}
+
+\Exemple{
+\begin{center}
+\begin{tikzpicture}[scale=1.5, line width=1.4pt]
+\draw[-latex,thick] (0,0) node[left]{$A$}-- (2,1) node[right]{$B$} node[midway,rotate=27,above=1pt]{$\Vj{AB}$};
+\draw[<-,thick] (2.7,0) -- (4.7,1)  node[midway,rotate=27,below=-1pt]{$-\Vj{AB}$};
+\end{tikzpicture}
+\end{center}
+}
+
+\clearpage
+\subsection{Interprétation géométrique}
+
+\Thm{
+$ABCD$ est un parallélogramme \textbf{si et seulement si} \textcolor{surligneReponse}{$\Vj{AB}$ = $\Vj{DC}$}.
+
+\medskip
+
+Le parallélogramme peut être éventuellement « plat ».
+
+\medskip
+
+\textbf{Notation : } \textcolor{surligneReponse}{on note aussi que cette égalité entraîne $\Vj{AD}=\Vj{BC}$.}
+
+\begin{center}
+\begin{tikzpicture}[yscale=0.85, xscale=1.3, line width=2pt]
+\draw[dashed] (1,1) -- (2,3);
+\draw[dashed] (4,4) -- (3,2);
+\draw[-{Stealth[length=6pt,width=5pt]}, line width=2pt] (2,3) -- (4,4);
+\draw[-{Stealth[length=6pt,width=5pt]}, line width=2pt] (1,1) -- (3,2);
+\node[anchor=east] at (1,1) {A};
+\node[anchor=north west] at (3,2) {B};
+\node[anchor=south east] at (2,3) {D};
+\node[anchor=south west] at (4,4) {C};
+\end{tikzpicture}
+\end{center}
+}
+
+\clearpage
+% ============================================================ %
+% Section 2 — Somme de deux vecteurs
+% ============================================================ %
+\section{Somme de deux vecteurs}
+\subsection{Définition et construction bout à bout}
+
+\Dfn{
+Soient $\Vj{u}$ et $\Vj{v}$ deux vecteurs. \\
+La \textbf{somme} de $\Vj{u}$ et $\Vj{v}$ est le vecteur $\Vj{w}=\Vj{u}+\Vj{v}$ associé
+à la translation résultant de l'enchaînement des translations de vecteurs $\Vj{u}$ et de vecteur $\Vj{v}$.
+}
+
+\clearpage
+\textbf{\Large Méthode de construction bout à bout d'une somme de vecteurs}
+
+\medskip
+
+{\raggedcolumns
+\begin{multicols}{3}
+\begin{enumerate}[itemsep=3pt]
+\item[] On veut construire la somme des vecteurs $\Vj{u}$ et $\Vj{v}$ :
+
+\begin{tikzpicture}[scale=0.8]
+\draw[thin, gray,opacity=0.7] (0,0) grid (6,6);
+\draw[-{Stealth},thick,blue] (0,0) node[left]{}--(2,1) node[above]{} node[midway,rotate=30,above]{{\large $\Vj u$}};
+\draw[-{Stealth},thick,blue] (2,5)--(4,2) node[right]{} node[midway,rotate=-60,above]{{\large $\Vj v$}};
+\end{tikzpicture}
+
+\columnbreak
+
+\item Si l'origine du vecteur somme n'est pas imposée, on choisit un point M quelconque.
+\item On construit N tel que $\Vj{MN}=\Vj{u}$.
+
+\begin{tikzpicture}[scale=0.8]
+\draw[thin, gray,opacity=0.7] (0,0) grid (6,6);
+\end{tikzpicture}
+
+\columnbreak
+
+\item On construit P tel que $\Vj{NP}=\Vj{v}$. Alors $\Vj{u}+\Vj{v}=\Vj{MP}$.
+\item On repère en \textcolor{red}{rouge} le vecteur somme et on n'oublie pas de le nommer.
+
+\begin{tikzpicture}[scale=0.8]
+\draw[thin, gray,opacity=0.7] (0,0) grid (6,6);
+\end{tikzpicture}
+
+\end{enumerate}
+\end{multicols}
+}
+
+\ANoter{L'ordre dans une somme de vecteurs n'a pas d'importance :\\ $\Vj{u}+\Vj{v}=\Vj{v}+\Vj{u}$.}
+
+\clearpage
+\Exemple{
+Construire le point $D$ tel que $\Vj{ED}=\Vj{BA}+\Vj{CA}$.
+
+\begin{center}
+\begin{tikzpicture}[scale=0.85]
+\draw[thin, gray,opacity=0.7] (-2,0) grid (5,6);
+\draw [ ] (0,2) node[above left]{A} -- ++(-4pt,-4pt) -- ++(8pt,8pt) ++(-8pt,0) -- ++(8pt,-8pt);
+\draw [ ] (3,3) node[above left]{B} -- ++(-4pt,-4pt) -- ++(8pt,8pt) ++(-8pt,0) -- ++(8pt,-8pt);
+\draw [ ] (1,1) node[above left]{C} -- ++(-4pt,-4pt) -- ++(8pt,8pt) ++(-8pt,0) -- ++(8pt,-8pt);
+\draw [ ] (3,5) node[below right]{E} -- ++(-4pt,-4pt) -- ++(8pt,8pt) ++(-8pt,0) -- ++(8pt,-8pt);
+\draw[->,thick,surligneReponse] (3,5)--(0,4) ;
+\draw[->,thick,surligneReponse] (0,4)--(-1,5) ;
+\draw [surligneReponse] (-1,5) node[above right]{D} -- ++(-4pt,-4pt) -- ++(8pt,8pt) ++(-8pt,0) -- ++(8pt,-8pt);
+\end{tikzpicture}
+\end{center}
+}
+
+\clearpage
+\begin{BoiteExemple}
+Construire le point $F$ tel que $\Vj{GF}=\Vj{AB}-\Vj{AC}$.
+
+\begin{center}
+\begin{tikzpicture}[scale=0.85]
+\draw[thin, gray,opacity=0.7] (-1,0) grid (5,5);
+\draw [ ] (0,2) node[above left]{A} -- ++(-4pt,-4pt) -- ++(8pt,8pt) ++(-8pt,0) -- ++(8pt,-8pt);
+\draw [ ] (3,3) node[above right]{B} -- ++(-4pt,-4pt) -- ++(8pt,8pt) ++(-8pt,0) -- ++(8pt,-8pt);
+\draw [ ] (1,1) node[above left]{C} -- ++(-4pt,-4pt) -- ++(8pt,8pt) ++(-8pt,0) -- ++(8pt,-8pt);
+\draw [ ] (1,0) node[above left]{G} -- ++(-4pt,-4pt) -- ++(8pt,8pt) ++(-8pt,0) -- ++(8pt,-8pt);
+\draw[->,thick,surligneReponse] (1,0)--(4,1) ;
+\draw[->,thick,surligneReponse] (4,1)--(3,2) ;
+\draw [surligneReponse] (3,2) node[above right]{F} -- ++(-4pt,-4pt) -- ++(8pt,8pt) ++(-8pt,0) -- ++(8pt,-8pt);
+\end{tikzpicture}
+\end{center}
+\end{BoiteExemple}
+
+\clearpage
+\subsection{Relation de Chasles}
+
+\Prp[Relation de Chasles]{
+Soient $A$ et $B$ deux points du plan. Pour tout point $M$, on a :
+\[
+\Vj{AB}=\Vj{AM}+\Vj{MB}.
+\]
+}
+
+\ANoter{Aller d'Annoville à Brainville, puis de Brainville à Coutances, c'est finalement aller d'Annoville à Coutances.}
+
+\clearpage
+\Exemple{
+Simplifier les expressions en utilisant la relation de Chasles :
+\begin{enumerate}
+\item $\Vj{TR}+\Vj{RP}$\\[4pt]
+$= \textcolor{surligneReponse}{\Vj{TP}}$
+\item $\Vj{GT}+\Vj{AG}$\\[4pt]
+$= \textcolor{surligneReponse}{\Vj{AG}+\Vj{GT} = \Vj{AT}}$
+\item $\Vj{AB}-\Vj{AC}-\Vj{CB}$\\[4pt]
+$= \textcolor{surligneReponse}{\Vj{AB}-(\Vj{AC}+\Vj{CB}) = \Vj{AB}-\Vj{AB} = \Vj{0}}$
+\item $\Vj{BC}-\Vj{BA}+\Vj{BD}-\Vj{BC}$\\[4pt]
+$= \textcolor{surligneReponse}{\Vj{BD}-\Vj{BA} = \Vj{AD}}$
+\end{enumerate}
+}
+
+\clearpage
+\subsection{Méthode du parallélogramme}
+
+\textbf{\Large Méthode de construction par parallélogramme d'une somme de vecteurs}
+
+\medskip
+
+{\raggedcolumns
+\begin{multicols}{3}
+\begin{enumerate}[itemsep=3pt]
+\item[] On veut construire la somme des vecteurs $\Vj{u}$ et $\Vj{v}$ ayant comme origine commune le point M.
+
+\begin{tikzpicture}[scale=0.8]
+\draw[thin, gray,opacity=0.7] (0,0) grid (6,6);
+\draw[-{Stealth},thick,blue] (1,1)--(3,2) node[midway,rotate=27,below]{{\large $\Vj u$}};
+\draw[-{Stealth},thick,blue] (1,1)--(2,4) node[midway,rotate=72,above]{{\large $\Vj v$}};
+\fill (1,1) circle (2.5pt);
+\node[anchor=north east] at (1,1) {M};
+\end{tikzpicture}
+
+\columnbreak
+
+\item On repère N et P tels que $\Vj{MN}=\Vj{u}$ et $\Vj{MP}=\Vj{v}$.
+
+\begin{tikzpicture}[scale=0.8]
+\draw[thin, gray,opacity=0.7] (0,0) grid (6,6);
+\draw[-{Stealth},thick,blue] (1,1)--(3,2) node[midway,rotate=27,below]{{\large $\Vj u$}};
+\draw[-{Stealth},thick,blue] (1,1)--(2,4) node[midway,rotate=72,above]{{\large $\Vj v$}};
+\node[anchor=north east] at (1,1) {M};
+\node[anchor=south west,surligneReponse] at (3,2) {N};
+\node[anchor=south east,surligneReponse] at (2,4) {P};
+\fill (1,1) circle (2.5pt);
+\fill[surligneReponse] (3,2) circle (2.5pt);
+\fill[surligneReponse] (2,4) circle (2.5pt);
+\end{tikzpicture}
+
+\columnbreak
+
+\item On construit Q tel que MNQP soit un parallélogramme. Alors $\Vj{u}+\Vj{v}=\Vj{MQ}$.
+
+\begin{tikzpicture}[scale=0.8]
+\draw[thin, gray,opacity=0.7] (0,0) grid (6,6);
+\draw[-{Stealth},thick,blue] (1,1)--(3,2) node[midway,rotate=27,below]{{\large $\Vj u$}};
+\draw[-{Stealth},thick,blue] (1,1)--(2,4) node[midway,rotate=72,above]{{\large $\Vj v$}};
+\node[anchor=north east] at (1,1) {M};
+\node[anchor=south west] at (3,2) {N};
+\node[anchor=south east] at (2,4) {P};
+\draw[dotted,surligneReponse] (3,2)--(4,5);
+\draw[dotted,surligneReponse] (2,4)--(4,5);
+\draw[-{Stealth},thick,surligneReponse] (1,1)--(4,5) node[midway,rotate=52,above]{{\large $\Vj u+\Vj v$}};
+\node[anchor=south west,surligneReponse] at (4,5) {Q};
+\fill (1,1) circle (2.5pt);
+\fill (3,2) circle (2.5pt);
+\fill (2,4) circle (2.5pt);
+\fill[surligneReponse] (4,5) circle (2.5pt);
+\end{tikzpicture}
+
+\end{enumerate}
+\end{multicols}
+}
+
+\clearpage
+% ============================================================ %
+% Section 3 — Multiplication par un scalaire
+% ============================================================ %
+\section{Multiplication par un scalaire}
+
+\Exemple[introductif]{
+\begin{enumerate}
+	\item $\Vj{u}$ est le vecteur
+			\begin{itemize}
+				\item de même direction que $\Vj{v}$ ;
+				\item de même sens que $\Vj{v}$ ;
+				\item de norme $3$ fois celle de $\Vj{v}$.
+			\end{itemize}
+			On écrit alors : $\textcolor{surligneReponse}{\Vj{u} = 3\Vj{v}}$
+	\item $\Vj{j}$ est le vecteur
+			\begin{itemize}
+				\item de même direction que $\Vj{i}$ ;
+				\item de sens opposé à $\Vj{i}$ ;
+				\item de norme deux fois celle de $\Vj{i}$.
+			\end{itemize}
+			On écrit alors : $\textcolor{surligneReponse}{\Vj{j} = -2\Vj{i}}$
+\end{enumerate}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.75]
+\draw[thin,gray,opacity=0.7] (0,0) grid  (12,12);
+\draw[->,ultra thick] (3,5)--(1,7) node[midway,rotate=-45,above]{$\Vj v$};
+\draw[->,ultra thick,surligneReponse] (7,5)--(1,11) node[midway,rotate=-45,above]{$\Vj u$};
+\draw[->,ultra thick] (7,9)--(9,11) node[midway,rotate=45,above]{$\Vj i$};
+\draw[->,ultra thick,surligneReponse] (11,5)--(7,1) node[midway,rotate=45,above]{$\Vj j$};
+\end{tikzpicture}
+\end{center}
+}
+
+\clearpage
+\Dfn[Produit d'un vecteur par un nombre réel]{
+Soit $\Vj{u}$ un vecteur non nul et soit $k$ un réel non nul.\\
+Alors le vecteur {\Large $\Vj{v}= \textcolor{red}{k}\Vj{u}$} est :
+
+\begin{center}
+\renewcommand{\arraystretch}{1.8}
+\begin{tabular}{|p{10.5cm}|p{10.5cm}|}
+\hline
+\centering si $\textcolor{red}{k}>0$ & \centering si $\textcolor{red}{k}<0$\tabularnewline
+\hline
+de même direction que $\Vj{u}$  & de même direction que $\Vj{u}$ \\
+de même sens que $\Vj{u}$ & de sens inverse de $\Vj{u}$\\
+de norme $k$ fois celle de $\Vj{u}$ & de norme $(-k)$ fois celle de $\Vj{u}$\\
+\hline
+\end{tabular}
+\end{center}
+}
+
+\clearpage
+\Exemple{
+\begin{enumerate}
+\item Exprimer le vecteur $\Vj{AC}$ en fonction du vecteur $\Vj{AB}$ dans chacun des cas suivants :
+
+\begin{center}
+\begin{tabular}{p{0.46\linewidth} p{0.46\linewidth}}
+\begin{tikzpicture}[x=2cm, y=1.3cm]
+    \draw (-0.5,0) -- (2.5,0);
+    \foreach \x in {-0.5,0,...,2.5} {
+        \draw (\x, 0.08) -- (\x, -0.08);
+    }
+    \node[ptcross] at (0,0) {};
+    \node[anchor=south,yshift=2pt] at (0,0) {$A$};
+    \node[ptcross] at (1,0) {};
+    \node[anchor=south,yshift=2pt] at (1,0) {$B$};
+    \node[ptcross] at (2,0) {};
+    \node[anchor=south,yshift=2pt] at (2,0) {$C$};
+\end{tikzpicture}
+&
+\begin{tikzpicture}[x=2cm, y=1.3cm]
+    \draw (-2,0) -- (2,0);
+    \foreach \x in {-2,-1.5,...,2} {
+        \draw (\x, 0.08) -- (\x, -0.08);
+    }
+    \node[ptcross] at (1,0) {};
+    \node[anchor=south,yshift=2pt] at (1,0) {$A$};
+    \node[ptcross] at (1.5,0) {};
+    \node[anchor=south,yshift=2pt] at (1.5,0) {$B$};
+    \node[ptcross] at (-1.5,0) {};
+    \node[anchor=south,yshift=2pt] at (-1.5,0) {$C$};
+\end{tikzpicture}\\[6pt]
+$\Vj{AC} = \textcolor{surligneReponse}{2\Vj{AB}}$ & $\Vj{AC} = \textcolor{surligneReponse}{-5\Vj{AB}}$
+\end{tabular}
+\end{center}
+\end{enumerate}
+}
+
+\clearpage
+\begin{BoiteExemple}
+\begin{enumerate}
+\setcounter{enumi}{1}
+\item Dans chacun des cas suivants, représenter le vecteur $\Vj{AC}$ tel que :
+
+\begin{center}
+\begin{tabular}{p{0.46\linewidth} p{0.46\linewidth}}
+$\Vj{AC} = -3\Vj{AB}$ & $\Vj{AC} = \dfrac{1}{3}\Vj{AB}$ \\[8pt]
+\begin{tikzpicture}[x=1.6cm, y=1.3cm]
+    \draw (-2,0) -- (2.5,0);
+    \foreach \x in {-2,-1.5,...,2.5} {
+        \draw (\x, 0.08) -- (\x, -0.08);
+    }
+    \node[ptcross] at (0,0) {};
+    \node[anchor=south,yshift=2pt] at (0,0) {$A$};
+    \node[ptcross] at (0.5,0) {};
+    \node[anchor=south,yshift=2pt] at (0.5,0) {$B$};
+    \node[ptcross,surligneReponse] at (-1.5,0) {};
+    \node[anchor=south,yshift=2pt,surligneReponse] at (-1.5,0) {$C$};
+\end{tikzpicture}
+&
+\begin{tikzpicture}[x=1.6cm, y=1.3cm]
+    \draw (-1.5,0) -- (2.5,0);
+    \foreach \x in {-1.5,-1,...,2.5} {
+        \draw (\x, 0.08) -- (\x, -0.08);
+    }
+    \node[ptcross] at (0,0) {};
+    \node[anchor=south,yshift=2pt] at (0,0) {$A$};
+    \node[ptcross] at (1.5,0) {};
+    \node[anchor=south,yshift=2pt] at (1.5,0) {$B$};
+    \node[ptcross,surligneReponse] at (0.5,0) {};
+    \node[anchor=south,yshift=2pt,surligneReponse] at (0.5,0) {$C$};
+\end{tikzpicture}
+\end{tabular}
+\end{center}
+\end{enumerate}
+\end{BoiteExemple}
+
+\clearpage
+\Exemple{
+\begin{enumerate}
+\item Placer les points H, I et J tels que :\\
+(a) $\Vj{AH}=\dfrac54\Vj{AB}$ \quad (b) $\Vj{BI}=\dfrac23\Vj{BC}$ \quad (c) $\Vj{DJ}=\dfrac59\Vj{DC}$
+
+\begin{center}
+\begin{tikzpicture}[scale=1]
+\draw[thin,gray,opacity=0.5] (0,0) grid (10,6);
+\draw[very thick,magenta] (3,5) -- (6,5) -- (9,2) -- (1,1) -- cycle;
+\node[ptcross] at (3,5) {}; \node[anchor=south] at (3,5) {A};
+\node[ptcross] at (4,5) {}; \node[anchor=south] at (4,5) {E};
+\node[ptcross] at (6,5) {}; \node[anchor=south] at (6,5) {B};
+\node[ptcross] at (9,2) {}; \node[anchor=west] at (9,2) {C};
+\node[ptcross] at (1,1) {}; \node[anchor=north east] at (1,1) {D};
+\node[ptcross] at (2,3) {}; \node[anchor=east] at (2,3) {F};
+\node[ptcross,surligneReponse] at (6.75,5) {}; \node[anchor=south,surligneReponse] at (6.75,5) {H};
+\node[ptcross,surligneReponse] at (8,3) {}; \node[anchor=west,surligneReponse] at (8,3) {I};
+\node[ptcross,surligneReponse] at (5.4,1.6) {}; \node[anchor=south,surligneReponse] at (5.4,1.6) {J};
+\end{tikzpicture}
+\end{center}
+\end{enumerate}
+}
+
+\clearpage
+\begin{BoiteExemple}
+\begin{enumerate}
+\setcounter{enumi}{1}
+\item Construire dans la figure ci-dessous des représentants des vecteurs $2\Vj{u}$, $-\Vj{u}$ et $\dfrac12\Vj{u}$ :
+
+\begin{center}
+\begin{tikzpicture}[scale=1.15, line width=1.3pt]
+\draw[thin,gray,opacity=0.7] (-3,-1) grid (6,3);
+\draw[->,thick,blue] (0,0) -- (3,1) node[midway,rotate=20,above]{$\Vj{u}$};
+\draw[->,thick,surligneReponse] (-2,-1) -- (4,1) node[midway,rotate=20,above]{$2\Vj{u}$};
+\draw[->,thick,surligneReponse] (2,3) -- (-1,2) node[midway,rotate=20,above]{$-\Vj{u}$};
+\draw[->,thick,surligneReponse] (-3,2) -- (-1.5,2.5) node[midway,rotate=20,above]{$\frac12\Vj{u}$};
+\end{tikzpicture}
+\end{center}
+\end{enumerate}
+\end{BoiteExemple}
+
+\clearpage
+% ============================================================ %
+% Section 4 — Vecteurs colinéaires
+% ============================================================ %
+\section{Vecteurs colinéaires}
+
+\Dfn[Vecteurs colinéaires]{
+Deux vecteurs $\Vj{u}$ et $\Vj{v}$ sont dits \textbf{colinéaires} s'il existe un réel $k$ tel que $\Vj{v}=k\Vj{u}$ ou $\Vj{u}=k\Vj{v}$.
+}
+
+\ANoter{
+\begin{itemize}
+\item deux vecteurs sont colinéaires si et seulement s'ils ont \textbf{même direction}.
+\item le vecteur nul est colinéaire à n'importe quel vecteur. En effet, $\Vj{0}=0\Vj{u}$.
+\end{itemize}
+}
+
+\clearpage
+\Exemple{
+\begin{center}
+\begin{tikzpicture}[scale=1.3, line width=1.3pt]
+\draw[thin,gray,opacity=0.5] (0,0) grid (6,4);
+\draw[->,thick,blue] (0.5,0.5) -- (1.5,1) node[midway,rotate=27,above]{$\Vj u$};
+\draw[->,thick,red] (5,3) -- (3,2) node[midway,rotate=27,above]{$\Vj v$};
+\end{tikzpicture}
+\end{center}
+$\Vj{v} = \textcolor{surligneReponse}{-2}\,\Vj{u}$
+}
+
+\ANoter[À retenir]{La notion de colinéarité est fortement liée à celle de parallélisme et d'alignement.}
+
+\clearpage
+\Prp[Colinéarité et parallélisme]{
+Soient A, B, C et D quatre points.
+
+\medskip
+
+Les vecteurs $\Vj{AB}$ et $\Vj{CD}$ sont colinéaires si et seulement si les droites (AB) et (CD) sont \textcolor{surligneReponse}{parallèles (ou confondues)}.
+
+\begin{center}
+\begin{tikzpicture}[scale=1.1, line width=1.6pt]
+\draw[thin,gray,opacity=0.5] (0,0) grid (8,5);
+\draw[|-{Stealth[length=10pt,inset=2pt]},very thick,blue] (1,2) node[below=2pt]{A} --(2,4) node[above=2pt]{B} node[midway,rotate=60,above=2pt]{$\Vj{AB}$};
+\draw[dotted,red, thick](0,0) -- (1,2);
+\draw[dotted,red, thick](2,4) --(2.5,5) ;
+\draw[|-{Stealth[length=10pt,inset=2pt]},very thick,blue] (6,5) node[below right]{C} --(4,1) node[below=2pt]{D} node[midway,rotate=60,above=2pt]{$\Vj{CD}$};
+\draw[dotted,red](3.5,0) -- (4,1);
+\end{tikzpicture}
+\end{center}
+
+\textbf{Rédaction : }
+
+\medskip
+
+Ici, on a : $\Vj{CD} = \textcolor{surligneReponse}{-2} \  \Vj{AB}$ donc $\Vj{AB}$ et $\Vj{CD}$ sont \textcolor{surligneReponse}{colinéaires}.
+
+\medskip
+
+Ainsi : les droites \textcolor{surligneReponse}{$(AB)$} et \textcolor{surligneReponse}{$(CD)$} sont \textcolor{surligneReponse}{parallèles}.
+}
+
+\clearpage
+\Prp[Colinéarité et alignement]{
+Soient A, B et C trois points distincts.
+
+\medskip
+
+Les points A, B et C sont alignés si et seulement si les vecteurs $\Vj{AB}$ et $\Vj{AC}$ sont \textcolor{surligneReponse}{colinéaires}.
+
+\begin{center}
+\begin{tikzpicture}[scale=1.1, line width=1.6pt]
+\draw[thin,gray,opacity=0.5] (0,1) grid (7,4);
+\draw[opacity=0.8](0,1.8) --(7,3.2) ;
+\draw[|->,very thick,red] (1,2) node[below=2pt]{A} --(6,3) node[below=2pt]{C} node[midway,rotate=10,below]{$\Vj{AC}$};
+\draw[->, thick,blue] (1,2) --(4,2.6) node[above=2pt]{B} node[midway,rotate=10,above]{$\Vj{AB}$};
+\end{tikzpicture}
+\end{center}
+
+\textbf{Notation : }
+
+\medskip
+
+Ici, on a : $\Vj{AB} = \dfrac35 \  \Vj{AC}$ donc \textcolor{surligneReponse}{$\Vj{AB}$} et \textcolor{surligneReponse}{$\Vj{AC}$} sont \textcolor{surligneReponse}{colinéaires}.
+
+\medskip
+
+Ainsi : \textcolor{surligneReponse}{les points A, B et C sont alignés.}
+}
+
+\end{document}

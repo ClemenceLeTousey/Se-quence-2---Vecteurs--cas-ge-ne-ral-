@@ -1,0 +1,633 @@
+<title>Relais du Palet</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap">
+<style>
+  :root{
+    --bg:#eef3f0;
+    --surface:#ffffff;
+    --panel:#e3ede7;
+    --ink:#0f1b16;
+    --ink-dim:#51665c;
+    --line:#c3d3cb;
+    --brand:#3f7d34;
+    --brand-contrast:#ffffff;
+    --brand-soft:#dcefd6;
+    --puck-accent:#c81e34;
+    --callout-bg:#fff6df;
+    --callout-border:#c9a227;
+    --shadow:0 10px 30px -12px rgba(15,27,22,.25);
+  }
+  /* Fond volontairement clair et fixe (visibilité en vidéoprojection) : pas de variante sombre. */
+
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Source Sans 3",system-ui,sans-serif;
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+    padding-inline:16px;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important; animation:none !important;}
+  }
+
+  .stage{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    max-width:1180px;
+    width:100%;
+    margin:0 auto;
+    padding-block:14px 10px;
+    gap:12px;
+    min-height:0;
+  }
+
+  .topbar{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    flex-wrap:wrap;
+  }
+  .progress{
+    font-family:"Source Sans 3";
+    font-variant-numeric:tabular-nums;
+    font-size:.85rem;
+    color:var(--ink-dim);
+    white-space:nowrap;
+    margin-left:auto;
+  }
+
+  .slide{
+    flex:1;
+    min-height:0;
+    display:grid;
+    gap:14px;
+    grid-template-rows:auto 1fr;
+    transition:grid-template-rows .35s ease;
+  }
+  .stage[data-mode="alone"] .slide,
+  .stage[data-mode="intro"] .slide{
+    grid-template-rows:1fr;
+  }
+  .stage[data-mode="alone"] .diagram-panel,
+  .stage[data-mode="intro"] .diagram-panel{
+    display:none;
+  }
+
+  .question-panel{
+    display:flex;
+    align-items:center;
+    min-height:0;
+  }
+  .question-panel p{
+    margin:0;
+    text-wrap:balance;
+  }
+  #questionText{
+    font-family:"Source Sans 3",sans-serif;
+    font-weight:500;
+    line-height:1.3;
+    color:var(--ink);
+    font-size:clamp(1.6rem,3.8vw,2.9rem);
+    transition:font-size .3s ease, opacity .3s ease;
+  }
+  .stage[data-mode="step"] #questionText{
+    font-size:clamp(.95rem,1.5vw,1.2rem);
+    color:var(--ink-dim);
+    font-weight:400;
+  }
+  .stage[data-mode="intro"] #questionText{
+    font-size:clamp(1.3rem,2.9vw,2.1rem);
+    font-weight:400;
+    color:var(--ink);
+    max-width:46ch;
+    line-height:1.4;
+  }
+
+  /* Notation vectorielle en prose, façon LaTeX \vec{} : une petite flèche en SVG
+     (dessinée au trait, pas un glyphe de police qu'on déforme) centrée au-dessus
+     d'une lettre italique non grasse. */
+  .vecvar{
+    position:relative;
+    display:inline-block;
+    font-style:italic;
+    font-weight:400;
+    padding-top:.6em;
+  }
+  .vecvar svg{
+    position:absolute;
+    top:.05em;
+    left:50%;
+    transform:translateX(-50%);
+    width:1.15em;
+    height:.55em;
+    overflow:visible;
+  }
+
+  .diagram-panel{
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    min-height:0;
+  }
+  .diagram-frame{
+    flex:1;
+    min-height:0;
+    background:var(--panel);
+    border-radius:18px;
+    box-shadow:var(--shadow);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:14px;
+    overflow:hidden;
+  }
+  .diagram-frame svg{
+    width:100%;
+    height:100%;
+    max-width:100%;
+    max-height:100%;
+  }
+  .gridline{stroke:var(--line); stroke-width:.028;}
+  .wallline{stroke:var(--ink); stroke-width:.09; stroke-linecap:round;}
+  .axis-label{
+    font-family:"Source Sans 3";
+    font-size:.34px;
+    fill:var(--ink-dim);
+  }
+  .puck-fill{fill:var(--surface); stroke:var(--ink); stroke-width:.055;}
+  .puck-cross{stroke:var(--ink); stroke-width:.045; stroke-linecap:round;}
+  .point-label{
+    font-family:"Source Sans 3";
+    font-weight:600;
+    font-size:.6px;
+    fill:var(--ink);
+  }
+  .point-sub{
+    font-family:"Source Sans 3";
+    font-weight:400;
+    font-size:.3px;
+    fill:var(--ink-dim);
+  }
+  .vector-label{
+    font-family:"Source Sans 3";
+    font-weight:400;
+    font-style:italic;
+    font-size:.44px;
+  }
+  .goal-highlight{
+    fill:none;
+  }
+
+  .callout{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:16px;
+    background:rgba(15,27,22,.12);
+    backdrop-filter:blur(1.5px);
+    opacity:1;
+    transition:opacity .3s ease, background-color .3s ease;
+  }
+  .callout.hidden{
+    opacity:0;
+    background:transparent;
+    pointer-events:none;
+  }
+  .nowrap{white-space:nowrap;}
+  .callout-card{
+    max-width:min(92%,46em);
+    background:var(--callout-bg);
+    border:1.5px solid var(--callout-border);
+    border-radius:14px;
+    padding:.85em 1.3em;
+    font-family:"Source Sans 3";
+    font-weight:600;
+    font-size:clamp(.95rem,2vw,1.3rem);
+    line-height:1.35;
+    color:var(--ink);
+    text-align:center;
+    box-shadow:0 22px 45px -16px rgba(15,27,22,.4);
+    transform:scale(.9) translateY(6px);
+    transition:transform .3s cubic-bezier(.2,.8,.3,1.2);
+  }
+  .callout.hidden .callout-card{
+    transform:scale(.9) translateY(6px);
+  }
+  .callout:not(.hidden) .callout-card{
+    transform:scale(1) translateY(0);
+  }
+
+  .controls{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding-block:6px 2px;
+    flex-wrap:wrap;
+  }
+  button{
+    font-family:"Source Sans 3";
+    font-weight:600;
+    font-size:.9rem;
+    border:1px solid var(--line);
+    background:var(--surface);
+    color:var(--ink);
+    border-radius:10px;
+    padding:.55em 1.1em;
+    cursor:pointer;
+  }
+  button:hover{border-color:var(--brand);}
+  button:focus-visible{outline:2px solid var(--brand); outline-offset:2px;}
+  button.primary{
+    background:var(--brand);
+    color:var(--brand-contrast);
+    border-color:var(--brand);
+  }
+  button.icon{
+    padding:.55em .7em;
+  }
+  .dots{
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+    margin-inline:auto;
+  }
+  .dot{
+    width:9px;height:9px;border-radius:50%;
+    background:var(--line);
+    border:none;
+    padding:0;
+    cursor:pointer;
+  }
+  .dot[data-current="true"]{background:var(--brand); transform:scale(1.3);}
+  .dot.is-start{width:9px;height:9px; background:var(--ink-dim); margin-left:6px;}
+  .dot.is-start[data-current="true"]{background:var(--brand);}
+  .spacer{flex:1;}
+  .hint{
+    font-size:.75rem;
+    color:var(--ink-dim);
+    white-space:nowrap;
+  }
+</style>
+
+<div class="stage" id="stage" data-mode="intro">
+  <div class="topbar">
+    <span class="progress" id="progressLabel"></span>
+  </div>
+
+  <div class="slide">
+    <div class="question-panel">
+      <p id="questionText"></p>
+    </div>
+    <div class="diagram-panel">
+      <div class="diagram-frame">
+        <svg id="diagramSvg" xmlns="http://www.w3.org/2000/svg"></svg>
+      </div>
+      <div class="callout hidden" id="calloutBox"><div class="callout-card" id="calloutCard"></div></div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button id="prevBtn" aria-label="Diapositive précédente">◀ Précédent</button>
+    <div class="dots" id="dots"></div>
+    <button id="nextBtn" class="primary" aria-label="Diapositive suivante">Suivant ▶</button>
+    <span class="spacer"></span>
+    <span class="hint">← → ou clic pour naviguer</span>
+    <button id="fullscreenBtn" class="icon" aria-label="Plein écran" title="Plein écran">⛶</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  // Notation vectorielle en prose HTML, façon LaTeX \vec{} : une lettre italique
+  // surmontée d'une petite flèche dessinée en SVG (voir .vecvar) — jamais un
+  // glyphe de police (le combinant U+20D7 manque à beaucoup de polices, et le
+  // caractère "→" déformé au CSS rendait un rendu grossier). Le diagramme SVG a
+  // sa propre version, plus bas (vectorLabel()).
+  var VEC_ARROW_SVG = '<svg viewBox="0 0 24 11" aria-hidden="true"><path d="M1 5.5 H19 M13 1 L20.5 5.5 L13 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  function vec(letter){ return '<span class="vecvar">'+letter+VEC_ARROW_SVG+'</span>'; }
+  function vecSum(a,b){ return '<span class="nowrap">'+vec(a)+' + '+vec(b)+'</span>'; }
+
+  // ---------- Colour palette (fixed across themes; categorical, not theme tokens) ----------
+  var COL = {
+    u:"#c8393e", w:"#d98a3d", n:"#8062c9", m:"#2e9c82", v:"#cf5389", p:"#4d78b3",
+    accent:"#c81e34",
+    s:"#3f7fe0", a2:"#37509c"
+    // bonus 't' reuses w, bonus 'r' reuses n (deliberate palette reuse)
+  };
+
+  // ---------- Geometry helpers ----------
+  var H = 8; // grid height in both diagrams, used to flip y (svg y grows downward)
+  function fx(x){ return x; }
+  function fy(y){ return H - y; }
+
+  function shortenTowards(x1,y1,x2,y2,amount){
+    var dx=x2-x1, dy=y2-y1, len=Math.sqrt(dx*dx+dy*dy);
+    if(len===0 || amount<=0) return {x:x2,y:y2};
+    var t = Math.max(0,(len-amount))/len;
+    return {x:x1+dx*t, y:y1+dy*t};
+  }
+
+  function arrowLine(x1,y1,x2,y2,colorKey,opts){
+    opts = opts||{};
+    var dashed = opts.dashed?('stroke-dasharray="0.16 0.13" ' ):'';
+    var width = opts.width||0.085;
+    var end = opts.shorten? shortenTowards(x1,y1,x2,y2,opts.shorten) : {x:x2,y:y2};
+    return '<line x1="'+fx(x1)+'" y1="'+fy(y1)+'" x2="'+fx(end.x)+'" y2="'+fy(end.y)+
+      '" stroke="'+COL[colorKey]+'" stroke-width="'+width+'" '+dashed+
+      'stroke-linecap="round" marker-end="url(#arrow-'+colorKey+')"/>';
+  }
+
+  function vectorLabel(mx,my,dx,dy,letter,colorKey,anchor){
+    anchor = anchor||'middle';
+    var tx = fx(mx)+dx, ty = fy(my)+dy;
+    var centerOffset = anchor==='end' ? -0.15 : (anchor==='start' ? 0.15 : 0);
+    var ax = tx+centerOffset, ay = ty-0.46, half=0.1;
+    var s = '<text class="vector-label" x="'+tx+'" y="'+ty+'" fill="'+COL[colorKey]+'" text-anchor="'+anchor+'">'+letter+'</text>';
+    s += '<line x1="'+(ax-half)+'" y1="'+ay+'" x2="'+(ax+half)+'" y2="'+ay+
+      '" stroke="'+COL[colorKey]+'" stroke-width="0.035" stroke-linecap="round"/>';
+    s += '<path d="M '+(ax+half-0.015)+' '+(ay-0.045)+' L '+(ax+half+0.07)+' '+ay+' L '+(ax+half-0.015)+' '+(ay+0.045)+' Z" fill="'+COL[colorKey]+'"/>';
+    return s;
+  }
+
+  function puck(x,y){
+    return '<g>'+
+      '<circle class="puck-fill" cx="'+fx(x)+'" cy="'+fy(y)+'" r="0.15"/>'+
+      '<line class="puck-cross" x1="'+(fx(x)-0.07)+'" y1="'+fy(y)+'" x2="'+(fx(x)+0.07)+'" y2="'+fy(y)+'"/>'+
+      '<line class="puck-cross" x1="'+fx(x)+'" y1="'+(fy(y)-0.07)+'" x2="'+fx(x)+'" y2="'+(fy(y)+0.07)+'"/>'+
+      '</g>';
+  }
+
+  function pointLabel(x,y,dx,dy,letter,sub){
+    var s = '<text class="point-label" x="'+(fx(x)+dx)+'" y="'+(fy(y)+dy)+'">'+letter+'</text>';
+    if(sub){
+      s += '<text class="point-sub" x="'+(fx(x)+dx)+'" y="'+(fy(y)+dy+0.34)+'">('+sub+')</text>';
+    }
+    return s;
+  }
+
+  function markerDefs(){
+    var keys = ["u","w","n","m","v","p","accent","s","a2"];
+    var out = '<defs>';
+    keys.forEach(function(k){
+      out += '<marker id="arrow-'+k+'" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4.5" markerHeight="4.5" orient="auto-start-reverse">'+
+        '<path d="M0,2 L10,5 L0,8 z" fill="'+COL[k]+'"/></marker>';
+    });
+    out += '</defs>';
+    return out;
+  }
+
+  function gridLines(w,h){
+    var out = '';
+    for(var x=0;x<=w;x++){
+      out += '<line class="gridline" x1="'+fx(x)+'" y1="'+fy(0)+'" x2="'+fx(x)+'" y2="'+fy(h)+'"/>';
+    }
+    for(var y=0;y<=h;y++){
+      out += '<line class="gridline" x1="'+fx(0)+'" y1="'+fy(y)+'" x2="'+fx(w)+'" y2="'+fy(y)+'"/>';
+    }
+    return out;
+  }
+
+  // ---------- Main diagram (Alfred -> Benoît -> Camille -> David -> Éric) ----------
+  var A = {x:2,y:3}, B = {x:4,y:5}, C = {x:6,y:4}, D = {x:5,y:6}, E = {x:6,y:3};
+  var MV = {
+    u:{x1:1,y1:5,x2:3,y2:7}, w:{x1:6,y1:7,x2:8,y2:6},
+    n:{x1:1,y1:1,x2:5,y2:2}, m:{x1:4,y1:4,x2:7,y2:3},
+    v:{x1:3,y1:6,x2:4,y2:3}, p:{x1:1,y1:3,x2:0,y2:5}
+  };
+
+  function buildMainSVG(reveal){
+    var has = function(k){ return reveal.indexOf(k)>=0; };
+    var s = '<svg viewBox="-0.8 -0.8 11.6 9.6" xmlns="http://www.w3.org/2000/svg">';
+    s += markerDefs();
+    s += gridLines(10,8);
+
+    // given vectors (always visible)
+    s += arrowLine(MV.u.x1,MV.u.y1,MV.u.x2,MV.u.y2,'u');
+    s += vectorLabel(2,6,-0.32,-0.1,'u','u','end');
+    s += arrowLine(MV.w.x1,MV.w.y1,MV.w.x2,MV.w.y2,'w');
+    s += vectorLabel(7,6.5,0,-0.28,'w','w','middle');
+    s += arrowLine(MV.n.x1,MV.n.y1,MV.n.x2,MV.n.y2,'n');
+    s += vectorLabel(3,1.5,0,0.55,'n','n','middle');
+    s += arrowLine(MV.m.x1,MV.m.y1,MV.m.x2,MV.m.y2,'m');
+    s += vectorLabel(5.5,3.5,0,-0.25,'m','m','middle');
+    s += arrowLine(MV.v.x1,MV.v.y1,MV.v.x2,MV.v.y2,'v');
+    s += vectorLabel(3.5,4.5,0.35,0.1,'v','v','start');
+    s += arrowLine(MV.p.x1,MV.p.y1,MV.p.x2,MV.p.y2,'p');
+    s += vectorLabel(0.5,4,-0.32,0.1,'p','p','end');
+
+    // n highlight (halo) when the answer to 1d is revealed
+    if(has('highlightN')){
+      s += '<line x1="'+fx(MV.n.x1)+'" y1="'+fy(MV.n.y1)+'" x2="'+fx(MV.n.x2)+'" y2="'+fy(MV.n.y2)+
+        '" stroke="'+COL.accent+'" stroke-width="0.22" stroke-linecap="round" opacity="0.35"/>';
+    }
+
+    // Alfred, always present
+    s += puck(A.x,A.y);
+    s += pointLabel(A.x,A.y,0.24,-0.24,'A','Alfred');
+
+    if(has('B')) s += puck(B.x,B.y);
+    if(has('arrowAB')) s += arrowLine(A.x,A.y,B.x,B.y,'u',{shorten:0.2});
+    if(has('B')) s += pointLabel(B.x,B.y,0.24,-0.22,'B','Benoît');
+
+    if(has('C')) s += puck(C.x,C.y);
+    if(has('arrowBC')) s += arrowLine(B.x,B.y,C.x,C.y,'w',{shorten:0.2});
+    if(has('C')) s += pointLabel(C.x,C.y,0.24,0.42,'C','Camille');
+
+    if(has('arrowAC')){
+      var solid = has('highlightN');
+      s += arrowLine(A.x,A.y,C.x,C.y,'accent',{dashed:!solid, width: solid?0.1:0.08, shorten:0.2});
+    }
+
+    if(has('D')) s += puck(D.x,D.y);
+    if(has('arrowCD')) s += arrowLine(C.x,C.y,D.x,D.y,'p',{shorten:0.2});
+    if(has('D')) s += pointLabel(D.x,D.y,-0.24,-0.24,'D','David');
+
+    if(has('E')) s += puck(E.x,E.y);
+    if(has('arrowDE')) s += arrowLine(D.x,D.y,E.x,E.y,'v',{shorten:0.2});
+    if(has('E')) s += pointLabel(E.x,E.y,0.26,0.1,'E','Éric');
+
+    if(has('arrowCE')) s += arrowLine(C.x,C.y,E.x,E.y,'accent',{dashed:true,shorten:0.2});
+
+    s += '</svg>';
+    return s;
+  }
+
+  // ---------- Slide content ----------
+  var introText1 = "On s’intéresse au mouvement subi par le palet au cours d’un jeu de hockey sur glace, la patinoire étant vue de dessus. <br> Tout part de la crosse d’Alfred (le point A) : le palet va maintenant voyager de joueur en joueur au fil de plusieurs passes, chaque passe correspondant à…";
+  var introText2 = introText1 + " une translation !";
+  var q1a = "Alfred fait une passe à Benoît en suivant la translation de vecteur " + vec('u') + " : placer le point B qui correspond à l’emplacement de Benoît.";
+  var q1b = "Sans perdre une seconde, Benoît relance vers Camille avec la translation de vecteur " + vec('w') + " : placer le point C.";
+  var q1c = "Deux passes, mais un seul déplacement final : le palet a subi le même déplacement qu’avec une seule et longue passe directe d’Alfred à Camille. <br> Tracer le vecteur qui correspond à cette passe unique.";
+  var q1d = "Il y a un autre représentant de ce vecteur dans ceux déjà tracés sur le schéma… <br> Lequel ?";
+  var q2a = "Le match continue : Camille relance vers David selon la translation de vecteur " + vec('p') + " <br> Sans perdre de temps, David envoie à Éric selon la translation de vecteur " + vec('v') + " <br> Placer le point E représentant la position d’Éric.";
+  var q2b = "Comme avant, représenter un vecteur qui correspond à ce double relais, c’est-à-dire à " + vecSum('p','v') + ".";
+
+  var calloutUW = "L’enchaînement de ces deux translations correspond à la translation de vecteur " + vecSum('u','w') + ".";
+  var answerN = "Le vecteur " + vecSum('u','w') + " est égal au vecteur " + vec('n') + " de la figure.";
+
+  // Chaque cumul ajoute un seul geste de construction à la fois, pour pouvoir
+  // avancer étape par étape : d'abord le vecteur tracé depuis son origine,
+  // puis le point d'arrivée nommé.
+  var R0          = [];
+  var R_ABv        = ['arrowAB'];
+  var R_AB         = R_ABv.concat(['B']);
+  var R_AB_BCv     = R_AB.concat(['arrowBC']);
+  var R_ABC        = R_AB_BCv.concat(['C']);
+  var R_ABC_AC     = R_ABC.concat(['arrowAC']);
+  var R_N          = R_ABC_AC.concat(['highlightN']);
+  var R_N_CDv      = R_N.concat(['arrowCD']);
+  var R_N_D        = R_N_CDv.concat(['D']);
+  var R_N_D_DEv    = R_N_D.concat(['arrowDE']);
+  var R_DE         = R_N_D_DEv.concat(['E']);
+  var R_CE         = R_DE.concat(['arrowCE']);
+
+  // À partir de David/Éric, on efface les vecteurs de construction devenus inutiles
+  // (les copies de u et w) pour désencombrer le schéma ; seul le vecteur somme
+  // (Alfred → Camille) reste, en pointillé.
+  var R_clean       = ['B','C','arrowAC'];
+  var R_clean_CDv   = R_clean.concat(['arrowCD']);
+  var R_clean_D     = R_clean_CDv.concat(['D']);
+  var R_clean_D_DEv = R_clean_D.concat(['arrowDE']);
+  var R_clean_DE    = R_clean_D_DEv.concat(['E']);
+  var R_clean_CE    = R_clean_DE.concat(['arrowCE']);
+
+
+  var SLIDES = [
+    {mode:'intro', badge:'', sub:'', text:introText1},
+    {mode:'intro', badge:'', sub:'', text:introText2},
+
+    // 1) a) Alfred -> Benoît
+    {mode:'alone', badge:'1', sub:'a', text:q1a},
+    {mode:'step',  badge:'1', sub:'a', text:q1a, diagram:'main', reveal:R0},
+    {mode:'step',  badge:'1', sub:'a', text:q1a, diagram:'main', reveal:R_ABv},
+    {mode:'step',  badge:'1', sub:'a', text:q1a, diagram:'main', reveal:R_AB},
+
+    // 1) b) Benoît -> Camille
+    {mode:'alone', badge:'1', sub:'b', text:q1b},
+    {mode:'step',  badge:'1', sub:'b', text:q1b, diagram:'main', reveal:R_AB},
+    {mode:'step',  badge:'1', sub:'b', text:q1b, diagram:'main', reveal:R_AB_BCv},
+    {mode:'step',  badge:'1', sub:'b', text:q1b, diagram:'main', reveal:R_ABC},
+
+    // 1) c) une seule passe équivalente
+    {mode:'alone', badge:'1', sub:'c', text:q1c},
+    {mode:'step',  badge:'1', sub:'c', text:q1c, diagram:'main', reveal:R_ABC},
+    {mode:'step',  badge:'1', sub:'c', text:q1c, diagram:'main', reveal:R_ABC_AC},
+    {mode:'step',  badge:'1', sub:'c', text:q1c, diagram:'main', reveal:R_ABC_AC, callout:calloutUW},
+
+    // 1) d) reconnaître le vecteur sur le schéma
+    {mode:'alone', badge:'1', sub:'d', text:q1d},
+    {mode:'step',  badge:'1', sub:'d', text:q1d, diagram:'main', reveal:R_ABC_AC},
+    {mode:'step',  badge:'1', sub:'d', text:q1d, diagram:'main', reveal:R_N},
+
+    // 2) a) Camille -> David -> Éric
+    {mode:'alone', badge:'2', sub:'a', text:q2a},
+    {mode:'step',  badge:'2', sub:'a', text:q2a, diagram:'main', reveal:R_clean},
+    {mode:'step',  badge:'2', sub:'a', text:q2a, diagram:'main', reveal:R_clean_CDv},
+    {mode:'step',  badge:'2', sub:'a', text:q2a, diagram:'main', reveal:R_clean_D},
+    {mode:'step',  badge:'2', sub:'a', text:q2a, diagram:'main', reveal:R_clean_D_DEv},
+    {mode:'step',  badge:'2', sub:'a', text:q2a, diagram:'main', reveal:R_clean_DE},
+
+    // 2) b) le double relais
+    {mode:'alone', badge:'2', sub:'b', text:q2b},
+    {mode:'step',  badge:'2', sub:'b', text:q2b, diagram:'main', reveal:R_clean_DE},
+    {mode:'step',  badge:'2', sub:'b', text:q2b, diagram:'main', reveal:R_clean_CE}
+
+  ];
+
+  // ---------- Rendering ----------
+  var stage = document.getElementById('stage');
+  var questionText = document.getElementById('questionText');
+  var diagramSvg = document.getElementById('diagramSvg');
+  var calloutBox = document.getElementById('calloutBox');
+  var calloutCard = document.getElementById('calloutCard');
+  var progressLabel = document.getElementById('progressLabel');
+  var dotsEl = document.getElementById('dots');
+
+  var current = 0;
+
+  function buildDots(){
+    dotsEl.innerHTML = '';
+    SLIDES.forEach(function(sl,i){
+      var b = document.createElement('button');
+      b.className = 'dot' + (sl.mode==='alone' ? ' is-start':'');
+      b.title = (sl.badge? (sl.badge+(sl.sub?(' '+sl.sub):'')) : 'Intro') + ' — ' + sl.mode;
+      b.addEventListener('click', function(){ goto(i); });
+      dotsEl.appendChild(b);
+    });
+  }
+
+  function render(){
+    var sl = SLIDES[current];
+    stage.setAttribute('data-mode', sl.mode);
+
+    questionText.innerHTML = sl.text;
+
+    if(sl.diagram){
+      diagramSvg.outerHTML = buildMainSVG(sl.reveal)
+        .replace('<svg ', '<svg id="diagramSvg" ');
+      diagramSvg = document.getElementById('diagramSvg');
+    }
+
+    if(sl.callout){
+      calloutCard.innerHTML = sl.callout;
+      calloutBox.classList.remove('hidden');
+    } else {
+      calloutBox.classList.add('hidden');
+    }
+
+    progressLabel.textContent = (current+1) + ' / ' + SLIDES.length;
+
+    Array.prototype.forEach.call(dotsEl.children, function(d,i){
+      d.dataset.current = (i===current) ? 'true' : 'false';
+    });
+
+    prevBtn.disabled = (current===0);
+    nextBtn.disabled = (current===SLIDES.length-1);
+  }
+
+  function goto(i){
+    current = Math.max(0, Math.min(SLIDES.length-1, i));
+    render();
+  }
+  function next(){ goto(current+1); }
+  function prev(){ goto(current-1); }
+
+  var prevBtn = document.getElementById('prevBtn');
+  var nextBtn = document.getElementById('nextBtn');
+  var fullscreenBtn = document.getElementById('fullscreenBtn');
+
+  prevBtn.addEventListener('click', prev);
+  nextBtn.addEventListener('click', next);
+  fullscreenBtn.addEventListener('click', function(){
+    try{
+      if(!document.fullscreenElement){ document.documentElement.requestFullscreen(); }
+      else { document.exitFullscreen(); }
+    }catch(e){ /* fullscreen unavailable in this context */ }
+  });
+
+  document.querySelector('.slide').addEventListener('click', function(e){
+    if(e.target.closest('button')) return;
+    next();
+  });
+
+  document.addEventListener('keydown', function(e){
+    if(['ArrowRight','ArrowDown','PageDown',' '].indexOf(e.key)>=0){ e.preventDefault(); next(); }
+    else if(['ArrowLeft','ArrowUp','PageUp'].indexOf(e.key)>=0){ e.preventDefault(); prev(); }
+    else if(e.key==='Home'){ e.preventDefault(); goto(0); }
+    else if(e.key==='End'){ e.preventDefault(); goto(SLIDES.length-1); }
+  });
+
+  buildDots();
+  render();
+})();
+</script>
