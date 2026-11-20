@@ -325,11 +325,12 @@ Cela équivaut aussi à dire que les segments [AD] et [BC] ont le \textcolor{J1}
     \node[ptcross] at (B) {}; \node[anchor=north west] at (B) {$B$};
     \node[ptcross] at (C) {}; \node[anchor=south west] at (C) {$C$};
     \node[ptcross] at (D) {}; \node[anchor=south east] at (D) {$D$};
-    % Complétion : E = A + CB, F = C + AB, G = C + AD, H = A + CD.
+    % Complétion : E = A + CB, F = C + AB, G = C + AD, H = A + CD
+    % (CB = (-1;-2), AB = (2;1), AD = (1;2), CD = (-2;-1)).
     \coordinate (E) at (-1,-2);
     \coordinate (F) at (5,4);
     \coordinate (G) at (4,5);
-    \coordinate (H) at (-2,-2);
+    \coordinate (H) at (-2,-1);
     \draw[-latex,thick,vertComplet,dotted] (A) -- (E);
     \draw[-latex,thick,vertComplet,dotted] (C) -- (F);
     \draw[-latex,thick,vertComplet,dotted] (C) -- (G);
@@ -788,10 +789,13 @@ Simplifier les expressions en utilisant la relation de Chasles :
 \Complet{$\Vj{GT}+\Vj{AG} = \Vj{AG}+\Vj{GT} = \Vj{AT}$.}
 \medskip
 \item$\Vj{AB}-\Vj{AC}-\Vj{CB}$\\
-\Complet{$\Vj{AB}-\Vj{AC}-\Vj{CB} = \Vj{AB}-(\Vj{AC}+\Vj{CB}) = \Vj{AB}-\Vj{AB} = \Vj{0}$.}
+% On remplace chaque différence par une somme avec le vecteur opposé
+% ($-\Vj{AC}=\Vj{CA}$, $-\Vj{CB}=\Vj{BC}$) avant d'appliquer Chasles.
+\Complet{$\Vj{AB}-\Vj{AC}-\Vj{CB} = \Vj{AB}+\Vj{CA}+\Vj{BC} = \Vj{AB}+\Vj{BC}+\Vj{CA} = \Vj{AC}+\Vj{CA} = \Vj{AA} = \Vj{0}$.}
 \medskip
 \item$\Vj{BC}-\Vj{BA}+\Vj{BD}-\Vj{BC}$\\
-\Complet{$\Vj{BC}-\Vj{BA}+\Vj{BD}-\Vj{BC} = \Vj{BD}-\Vj{BA} = \Vj{AD}$.}
+% Même principe : $-\Vj{BA}=\Vj{AB}$ et $-\Vj{BC}=\Vj{CB}$.
+\Complet{$\Vj{BC}-\Vj{BA}+\Vj{BD}-\Vj{BC} = \Vj{BC}+\Vj{AB}+\Vj{BD}+\Vj{CB} = \Vj{AB}+\Vj{BD}+\Vj{BC}+\Vj{CB} = \Vj{AD}+\Vj{BB} = \Vj{AD}$.}
 \end{enumerate}
 }
 
@@ -1086,7 +1090,7 @@ On place $C$ \`a $1$ graduation de $A$, du c\^ot\'e de $B$.
 \noindent
 \begin{minipage}[t]{9.2cm}
 \numeroCerne{1}\ Placer les points H, I et J tels que :\\
-(a) $\Vj{AH}=\dfrac54\Vj{AB}$\ \hfill (b) $\Vj{BI}=\dfrac23\Vj{BC}$\ \hfill  (c) $\Vj{DJ}=\dfrac59\Vj{DC}$
+(a) $\Vj{AH}=\dfrac53\Vj{AB}$\ \hfill (b) $\Vj{BI}=\dfrac23\Vj{BC}$\ \hfill  (c) $\Vj{DJ}=\dfrac58\Vj{DC}$
 
 \begin{center}
 \begin{tikzpicture}[scale=0.55]
@@ -1104,13 +1108,13 @@ On place $C$ \`a $1$ graduation de $A$, du c\^ot\'e de $B$.
 \node[anchor=north east] at (1,1) {\textsf{D}};
 \node[ptcross] at (2,3) {};
 \node[anchor=east] at (2,3) {\textsf{F}};
-% H = A + 5/4 AB ; I = B + 2/3 BC ; J = D + 5/9 DC = (1+40/9 ; 1+5/9).
-\node[ptcross,vertComplet] at (6.75,5) {};
-\node[anchor=south,vertComplet] at (6.75,5) {\textsf{H}};
+% H = A + 5/3 AB = (8 ; 5) ; I = B + 2/3 BC ; J = D + 5/8 DC = (1+5 ; 1+5/8).
+\node[ptcross,vertComplet] at (8,5) {};
+\node[anchor=south,vertComplet] at (8,5) {\textsf{H}};
 \node[ptcross,vertComplet] at (8,3) {};
 \node[anchor=west,vertComplet] at (8,3) {\textsf{I}};
-\node[ptcross,vertComplet] at (5.444,1.556) {};
-\node[anchor=south,vertComplet] at (5.444,1.556) {\textsf{J}};
+\node[ptcross,vertComplet] at (6,1.625) {};
+\node[anchor=south,vertComplet] at (6,1.625) {\textsf{J}};
 \end{tikzpicture}
 \end{center}
 \end{minipage}

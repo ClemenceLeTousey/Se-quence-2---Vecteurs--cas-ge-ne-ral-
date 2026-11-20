@@ -1,0 +1,27 @@
+
+\documentclass[border=4pt]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,shapes.misc}
+\renewcommand{\familydefault}{\sfdefault}
+\definecolor{vbleu}{HTML}{1C5FD6}
+\definecolor{orange}{HTML}{E8590C}
+\definecolor{vert}{HTML}{2F9E44}
+\definecolor{gris}{HTML}{495057}
+\definecolor{violet}{HTML}{7048E8}
+\tikzset{
+  vec/.style={->,very thick,>={Stealth[length=2.4mm]}},
+  ref/.style={orange,thick,dashed},
+  par/.style={vert,thick,dashed},
+  sec/.style={gris,thick,dashed},
+  ptcross/.style={cross out,draw,thick,minimum size=1.6mm,inner sep=0pt},
+}
+\usepackage{array}
+\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}
+\newcommand{\V}[1]{\overrightarrow{\mathrm{#1}}}
+\begin{document}
+
+\begin{minipage}{8.5cm}\large \colorbox{orange!8}{\begin{minipage}{8.2cm}\vspace{4pt}{\color{orange}\large Point méthode}\par Pour montrer que deux vecteurs \textit{ne sont pas} colinéaires, on montre qu'ils n'ont pas la même direction.\par Si les droites qui portent $\vec{u}$ et $\vec{d}$ sont sécantes, les vecteurs ne sont pas colinéaires.\par Si elles semblent presque parallèles, on trace la parallèle à la droite de $\vec{u}$ passant par l'origine de $\vec{d}$.\vspace{4pt}\end{minipage}}\end{minipage}
+\end{document}

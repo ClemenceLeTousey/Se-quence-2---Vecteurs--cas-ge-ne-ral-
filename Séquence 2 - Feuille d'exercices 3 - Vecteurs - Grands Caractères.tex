@@ -1,0 +1,514 @@
+% !TEX program = xelatex
+% Version grands caractères (paysage, ~20pt, une page par exercice) de
+% "Séquence 2 - Feuille d'exercices 3 - Vecteurs.tex" (Objectifs 5 et 6,
+% exercices 1 à 8), pour une élève déficiente visuelle. Même préambule et
+% mêmes macros que "Séquence 2 - Feuille d'exercices - Vecteurs - Grands
+% Caractères.tex" (Feuille 2) : paysage, sans-serif, texte non justifié,
+% énoncé à gauche et figure à droite (\GCexo), rappel d'objectif seulement
+% au premier exercice de chaque objectif.
+%
+% Exercices 1 et 2 : six cas chacun (droite graduée + phrases à compléter
+% pour les cas 1 et 2). Pour que l'exercice tienne sur UNE page, les six
+% cas sont disposés en grille 2 x 3 (macro \Cas), les droites graduées
+% gardent leur taille d'origine et les phrases à compléter passent en
+% \small (17pt).
+\documentclass[a4paper,landscape]{article}
+
+\usepackage{fontspec}
+\usepackage[french]{babel}
+\usepackage{geometry}
+\geometry{a4paper,landscape,top=1.4cm,bottom=1.6cm,left=1.8cm,right=1.8cm,footskip=1cm}
+
+\setmainfont{Helvetica Neue}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage[inline]{enumitem}
+\usepackage{ragged2e}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{graphicx}
+\usepackage{adjustbox}
+\usepackage{pifont}
+% Badges « Exercice n » en cursive Playwrite FR Moderne (police du site),
+% chargée à 85 % de la taille courante (XeLaTeX ou LuaLaTeX ; gras sous pdfLaTeX).
+\makeatletter
+\ifdefined\XeTeXrevision\def\ExoFont@ok{}\fi
+\ifdefined\directlua\def\ExoFont@ok{}\fi
+\ifdefined\ExoFont@ok
+\newcommand{\ExoFont}{\font\ExoFont@f="[../polices/PlaywriteFRModerne.ttf]" at \dimexpr\f@size pt*85/100\relax\ExoFont@f}
+\else
+\newcommand{\ExoFont}{\bfseries}
+\fi
+\makeatother
+% \ExoTexte{...} : texte du badge en cursive, avec la hauteur d'une majuscule de la
+% police courante (la cursive est plus haute et ferait grandir chaque badge).
+\newcommand{\ExoTexte}[1]{\raisebox{0pt}[\fontcharht\font`E][0pt]{\ExoFont #1}}
+\usepackage{frcursive}
+% Correctif du bug de crénage de frcursive sous XeLaTeX (repris de
+% CLT2627.sty et de "Séquence 2 - Feuille d'exercices - Vecteurs.tex") :
+% sans lui, certaines paires de lettres consécutives dans \cursive
+% explosent (une lettre projetée loin à droite), ce qui coupe des mots
+% comme "Représenter".
+\makeatletter
+\ifdefined\XeTeXcharclass
+\XeTeXcharclass `a 201 \XeTeXcharclass `b 201 \XeTeXcharclass `c 201
+\XeTeXcharclass `d 201 \XeTeXcharclass `e 201 \XeTeXcharclass `f 201
+\XeTeXcharclass `g 201 \XeTeXcharclass `h 201 \XeTeXcharclass `i 201
+\XeTeXcharclass `j 201 \XeTeXcharclass `k 201 \XeTeXcharclass `l 201
+\XeTeXcharclass `m 201 \XeTeXcharclass `n 201 \XeTeXcharclass `o 201
+\XeTeXcharclass `p 201 \XeTeXcharclass `q 201 \XeTeXcharclass `r 201
+\XeTeXcharclass `s 201 \XeTeXcharclass `t 201 \XeTeXcharclass `u 201
+\XeTeXcharclass `v 201 \XeTeXcharclass `w 201 \XeTeXcharclass `x 201
+\XeTeXcharclass `y 201 \XeTeXcharclass `z 201
+\XeTeXcharclass `A 201 \XeTeXcharclass `B 201 \XeTeXcharclass `C 201
+\XeTeXcharclass `D 201 \XeTeXcharclass `E 201 \XeTeXcharclass `F 201
+\XeTeXcharclass `G 201 \XeTeXcharclass `H 201 \XeTeXcharclass `I 201
+\XeTeXcharclass `J 201 \XeTeXcharclass `K 201 \XeTeXcharclass `L 201
+\XeTeXcharclass `M 201 \XeTeXcharclass `N 201 \XeTeXcharclass `O 201
+\XeTeXcharclass `P 201 \XeTeXcharclass `Q 201 \XeTeXcharclass `R 201
+\XeTeXcharclass `S 201 \XeTeXcharclass `T 201 \XeTeXcharclass `U 201
+\XeTeXcharclass `V 201 \XeTeXcharclass `W 201 \XeTeXcharclass `X 201
+\XeTeXcharclass `Y 201 \XeTeXcharclass `Z 201
+\XeTeXcharclass `\é 201 \XeTeXcharclass `\è 201 \XeTeXcharclass `\ê 201
+\XeTeXcharclass `\ë 201 \XeTeXcharclass `\É 201 \XeTeXcharclass `\È 201
+\XeTeXcharclass `\Ê 201 \XeTeXcharclass `\Ë 201 \XeTeXcharclass `\à 201
+\XeTeXcharclass `\â 201 \XeTeXcharclass `\ä 201 \XeTeXcharclass `\À 201
+\XeTeXcharclass `\Â 201 \XeTeXcharclass `\Ä 201 \XeTeXcharclass `\ô 201
+\XeTeXcharclass `\ö 201 \XeTeXcharclass `\Ô 201 \XeTeXcharclass `\Ö 201
+\XeTeXcharclass `\î 201 \XeTeXcharclass `\ï 201 \XeTeXcharclass `\Î 201
+\XeTeXcharclass `\Ï 201 \XeTeXcharclass `\ù 201 \XeTeXcharclass `\û 201
+\XeTeXcharclass `\ü 201 \XeTeXcharclass `\Ù 201 \XeTeXcharclass `\Û 201
+\XeTeXcharclass `\Ü 201 \XeTeXcharclass `\ç 201 \XeTeXcharclass `\Ç 201
+\XeTeXcharclass `\œ 201 \XeTeXcharclass `\Œ 201 \XeTeXcharclass `\æ 201
+\XeTeXcharclass `\Æ 201
+\let\cursive@orig\cursive
+\renewcommand{\cursive}{%
+  \cursive@orig
+  \XeTeXinterchartoks 201 201 = {\kern0pt }%
+}
+\fi
+\makeatother
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,shapes.misc}
+\tikzset{ptcross/.style={cross out,draw,thick,minimum size=3pt,inner sep=0pt}}
+\usepackage[hidelinks]{hyperref}
+
+\definecolor{diffgreen}{HTML}{40C057}
+\definecolor{diffblue}{HTML}{228BE6}
+\definecolor{diffred}{HTML}{FA5252}
+\definecolor{skyblue}{HTML}{339AF0}
+\definecolor{objorange}{HTML}{F76707}
+\newcommand{\starfull}[1]{{\color{#1}\ding{72}}}
+\newcommand{\starempty}{{\color{gray!45}\ding{73}}}
+\newcommand{\Vj}[1]{\overrightarrow{\text{#1}}}
+\newcommand{\Pt}[1]{\textsf{\footnotesize #1}}
+
+% ============================================================ %
+% Taille de police : 20pt pour le texte courant (un peu moins que les
+% 22pt du cours en paysage, la page portrait étant plus étroite), tailles
+% voisines redéfinies en proportion.
+% ============================================================ %
+\renewcommand{\normalsize}{\fontsize{20}{27}\selectfont}
+\renewcommand{\small}{\fontsize{17}{22}\selectfont}
+\renewcommand{\large}{\fontsize{23}{29}\selectfont}
+\renewcommand{\Large}{\fontsize{27}{33}\selectfont}
+\renewcommand{\LARGE}{\fontsize{31}{38}\selectfont}
+\renewcommand{\huge}{\fontsize{35}{42}\selectfont}
+\renewcommand{\Huge}{\fontsize{39}{46}\selectfont}
+\normalsize
+\linespread{1.15}
+\setlength{\parskip}{10pt}
+\setlength{\parindent}{0pt}
+\RaggedRight % texte non justifié (ragged2e) dans tout le document
+
+\newcommand*{\textcircledd}[1]{\begin{tikzpicture}[baseline=(letter.base)]\node[draw,circle,inner sep=3pt] (letter) {#1};\end{tikzpicture}}
+\newcommand{\numeroCerne}[1]{\protect\textcircledd{\bfseries\large #1}}
+\setlist[enumerate,1]{label=\numeroCerne{\arabic*}, leftmargin=*, labelsep=10pt, itemsep=9pt, topsep=6pt, partopsep=0pt, parsep=0pt}
+\setlist[enumerate,2]{label=(\alph*), leftmargin=1.6em, itemsep=7pt, topsep=5pt, parsep=0pt}
+\setlist[itemize,1]{leftmargin=1.4em, itemsep=8pt, topsep=6pt}
+% Sous-questions (a), (b), (c)... en ligne plutôt qu'empilées : à cette
+% taille de police, une sous-question par ligne fait déborder les
+% exercices 11 et 12 de leur page.
+\newlist{souslist}{enumerate*}{1}
+\setlist[souslist]{label=(\alph*), itemjoin=\hspace{1.6em}, mode=unboxed}
+
+% Titre "Exercice N" + étoiles + compétence cursive, agrandi.
+\newcommand{\ExoTitre}[3]{%
+\noindent\tcbox[on line, colback=skyblue, colframe=skyblue, boxsep=4pt, left=10pt, right=10pt, top=4pt, bottom=4pt, arc=5pt]{\textcolor{white}{\large\ExoTexte{Exercice~#1}}}\quad{\Large #2}\hfill{\Large\color{skyblue}\cursive\hyphenchar\font=-1 #3}\par
+\vspace{16pt}%
+}
+
+% Rappel d'objectif en haut de chaque page (répété à chaque exercice).
+\newcommand{\ObjRappel}[2]{%
+% \sloppy : sans lui, le rappel de l'objectif 1 dépasse dans la marge de
+% droite (TeX préfère une ligne trop longue à un renvoi à la ligne).
+\begingroup\sloppy
+\noindent{\color{objorange}\bfseries\large Objectif #1~:}~{\large\color{objorange}#2}\par
+\endgroup
+\vspace{6pt}
+\noindent{\color{gray!45}\rule{\linewidth}{0.6pt}}\par
+\vspace{18pt}%
+}
+
+% Mise en page d'un exercice avec figure : chaque exercice tient sur UNE
+% page. La page étant en paysage (large mais basse), l'énoncé est placé à
+% gauche et la figure à droite, ce qui laisse à la figure toute la
+% hauteur restante au lieu de la coincer sous le texte.
+%
+% La figure reprend le tikzpicture original tel quel (mêmes coordonnées,
+% même échelle) et est redimensionnée en bloc, ce qui agrandit
+% uniformément le dessin ET les étiquettes \Pt. La hauteur disponible est
+% mesurée ici (\pagegoal-\pagetotal = place verticale restante sous le
+% titre de l'exercice) plutôt que fixée à la main, puis largeur ET
+% hauteur sont contraintes (adjustbox, pas resizebox) : la figure ne peut
+% donc jamais basculer seule sur la page suivante.
+%
+% Le \vspace{0pt} en tête de chaque minipage aligne les deux colonnes par
+% leur bord supérieur et non par la ligne de base de leur première ligne ;
+% sans lui, la figure s'empilerait au-dessus de cette ligne de base et le
+% bloc déborderait de la page.
+%
+% #1 = largeur de la colonne de texte (fraction de \linewidth, à réduire
+% pour les figures larges), #2 = énoncé, #3 = figure.
+\newlength{\GCavail}
+\newlength{\GCparskip}
+% (+m : les arguments doivent accepter les paragraphes, certains textes
+%  de corrigé contiennent une ligne blanche.)
+\NewDocumentCommand{\GCexo}{O{0.46} +m +m}{%
+\par\penalty0\relax
+\ifdim\pagegoal=\maxdimen
+  \setlength{\GCavail}{\textheight}%
+\else
+  \setlength{\GCavail}{\dimexpr\pagegoal-\pagetotal\relax}%
+\fi
+\addtolength{\GCavail}{-0.8\baselineskip}% marge de sécurité en bas de page
+\ifdim\GCavail<3cm\relax\setlength{\GCavail}{3cm}\fi
+\setlength{\GCparskip}{\parskip}%
+\noindent
+\begin{minipage}[t]{#1\linewidth}\vspace{0pt}%
+% Une minipage réinitialise les paramètres de paragraphe : sans ces deux
+% lignes, le texte de la colonne redeviendrait justifié (avec des espaces
+% étirés) et les paragraphes ne seraient plus séparés.
+\RaggedRight
+\setlength{\parskip}{\GCparskip}%
+\hyphenpenalty=10000\exhyphenpenalty=10000% pas de mots coupés en fin de ligne
+
+#2
+\end{minipage}\hfill
+\begin{minipage}[t]{\dimexpr0.96\linewidth-#1\linewidth\relax}\vspace{0pt}%
+\centering
+\adjustbox{width=\linewidth,height=\GCavail,keepaspectratio}{#3}%
+\end{minipage}\par
+}
+
+% Un cas des exercices 1 et 2 : numéro (+ égalité éventuelle), droite
+% graduée centrée, puis texte à compléter. #1 = en-tête du cas, #2 =
+% tikzpicture, #3 = lignes à compléter (vide pour les cas sans étayage).
+% Droites graduées lisibles en grand : trait épais, graduations hautes,
+% croix plus grosses (les positions et les unités restent celles de la
+% feuille d'origine, à un changement d'échelle horizontale près).
+\newcommand{\Cas}[3]{%
+\renewcommand{\Pt}[1]{\textsf{\small ##1}}%
+\tikzset{every picture/.style={thick},ptcross/.style={cross out,draw,very thick,minimum size=7pt,inner sep=0pt}}%
+\noindent{#1}\par\vspace{0pt}
+{\centering #2\par}
+\ifx\relax#3\relax\else\vspace{2pt}{\small\setlength{\parskip}{0pt}#3}\fi
+}
+
+% Variante de \Cas pour l'exercice 1 (le seul qui porte en plus le rappel
+% d'objectif en haut de page) : le numéro est posé à gauche de la droite
+% graduée au lieu d'occuper sa propre ligne, et les phrases à compléter
+% passent en 16pt, pour que l'exercice tienne sur une page.
+\newcommand{\CasL}[3]{%
+\renewcommand{\Pt}[1]{\textsf{\small ##1}}%
+\tikzset{every picture/.style={thick},ptcross/.style={cross out,draw,very thick,minimum size=7pt,inner sep=0pt}}%
+\noindent\adjustbox{valign=c}{#1}\hfill\adjustbox{valign=c}{#2}\hfill\null\par
+\ifx\relax#3\relax\else\vspace{6pt}{\fontsize{16}{20}\selectfont\setlength{\parskip}{0pt}#3}\fi
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[C]{\small Feuille d'exercices n\textdegree{}3 --- Vecteurs --- \thepage/\pageref{LastPage}}
+
+\begin{document}
+
+% ============================================================ %
+% Page de garde
+% ============================================================ %
+\thispagestyle{empty}
+\begin{center}
+\vspace*{2cm}
+\begin{tcolorbox}[
+  enhanced,
+  width=0.95\linewidth,
+  colback=white,
+  colframe=black,
+  boxrule=1pt,
+  arc=10pt,
+  sharp corners=downhill,
+  left=16pt, right=16pt, top=18pt, bottom=12pt,
+  halign=center,
+  overlay={
+    \node[fill=white, anchor=west, font=\large, inner xsep=6pt]
+      at ([xshift=18pt]frame.north west) {Feuille d'exercices n\textdegree{}3};
+  },
+]
+{\Huge Vecteurs du plan}
+\end{tcolorbox}
+\vspace{1.8cm}
+{\Large Un exercice par page.}\\[10pt]
+{\large Exercices 1 \`a 8 (Objectifs 5 et 6).}
+\end{center}
+\newpage
+\setcounter{page}{1}
+
+% ============================================================ %
+% Objectif 5
+% ============================================================ %
+
+\ObjRappel{5}{Produit d'un vecteur par un nombre r\'eel et colin\'earit\'e de deux vecteurs}
+\ExoTitre{1}{\starfull{diffblue}\starfull{diffblue}\starempty}{Calculer}
+\vspace{-10pt}
+Exprimer le vecteur $\Vj{AC}$ en fonction du vecteur $\Vj{AB}$ dans chacun des cas suivants~:
+
+\noindent\begin{minipage}[t]{0.48\linewidth}\vspace{0pt}\RaggedRight
+\CasL{\numeroCerne{1}}{%
+\begin{tikzpicture}[x=1.88cm,y=0.5cm]
+\draw (-2,0) -- (3,0);
+\foreach \x in {-1,-0.5,0.5,1,1.5,2.5} \draw (\x,-0.28) -- (\x,0.28);
+\node[ptcross] at (0,0) {}; \node[above] at (0,0) {\Pt{A}}; \node[ptcross] at (2,0) {}; \node[above] at (2,0) {\Pt{B}}; \node[ptcross] at (-1.5,0) {}; \node[above] at (-1.5,0) {\Pt{C}};
+\end{tikzpicture}}{%
+Les vecteurs $\Vj{AC}$ et $\Vj{AB}$ ont m\^eme direction.\\[1pt]
+Ils ont~: $\square$~m\^eme sens \quad $\square$~sens oppos\'e.\\[2pt]
+On a~: $AC=\dots$ et $AB=\dots$.\\[2pt]
+Donc la longueur $AC$ vaut $\dfrac{\dots}{\dots}$ celle de $AB$.\\[2pt]
+On a donc~: $\Vj{AC}=\dots\,\dfrac{\dots}{\dots}\,\Vj{AB}$}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\linewidth}\vspace{0pt}\RaggedRight
+\CasL{\numeroCerne{2}}{%
+\begin{tikzpicture}[x=2.69cm,y=0.5cm]
+\draw (-1,0) -- (2.5,0);
+\foreach \x in {-0.5,1,1.5} \draw (\x,-0.28) -- (\x,0.28);
+\node[ptcross] at (0,0) {}; \node[below] at (0,0) {\Pt{A}}; \node[ptcross] at (0.51,0) {}; \node[above] at (0.51,0) {\Pt{B}}; \node[ptcross] at (2,0) {}; \node[above] at (2,0) {\Pt{C}};
+\end{tikzpicture}}{%
+Les vecteurs $\Vj{AC}$ et $\Vj{AB}$ ont m\^eme direction.\\[1pt]
+Ils ont~: $\square$~m\^eme sens \quad $\square$~sens oppos\'e.\\[2pt]
+On a~: $AC=\dots$ et $AB=\dots$.\\[2pt]
+Donc la longueur $AC$ vaut $\dfrac{\dots}{\dots}$ celle de $AB$.\\[2pt]
+On a donc~: $\Vj{AC}=\dots\,\dfrac{\dots}{\dots}\,\Vj{AB}$}
+\end{minipage}
+
+\vspace{4pt}
+
+\noindent\begin{minipage}[t]{0.24\linewidth}\vspace{0pt}
+\CasL{\numeroCerne{3}}{%
+\begin{tikzpicture}[x=1.500cm,y=0.5cm]
+\draw (-2,0) -- (1.2,0);
+\foreach \x in {-1,-0.5,1} \draw (\x,-0.28) -- (\x,0.28);
+\node[ptcross] at (0,0) {}; \node[below] at (0,0) {\Pt{A}}; \node[ptcross] at (0.51,0) {}; \node[above] at (0.51,0) {\Pt{B}}; \node[ptcross] at (-1.5,0) {}; \node[above] at (-1.5,0) {\Pt{C}};
+\end{tikzpicture}}{}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.24\linewidth}\vspace{0pt}
+\CasL{\numeroCerne{4}}{%
+\begin{tikzpicture}[x=1.600cm,y=0.5cm]
+\draw (-1,0) -- (2,0);
+\foreach \x in {0.5,1.5} \draw (\x,-0.28) -- (\x,0.28);
+\node[ptcross] at (0,0) {}; \node[above] at (0,0) {\Pt{A}}; \node[ptcross] at (1,0) {}; \node[above] at (1,0) {\Pt{B}}; \node[ptcross] at (-0.5,0) {}; \node[below] at (-0.5,0) {\Pt{C}};
+\end{tikzpicture}}{}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.24\linewidth}\vspace{0pt}
+\CasL{\numeroCerne{5}}{%
+\begin{tikzpicture}[x=0.873cm,y=0.5cm]
+\draw (-1,0) -- (4.5,0);
+\foreach \x in {-0.5,0.5,1.5,2,2.5,3,4} \draw (\x,-0.28) -- (\x,0.28);
+\node[ptcross] at (0,0) {}; \node[above] at (0,0) {\Pt{A}}; \node[ptcross] at (3.5,0) {}; \node[above] at (3.5,0) {\Pt{B}}; \node[ptcross] at (1,0) {}; \node[above] at (1,0) {\Pt{C}};
+\end{tikzpicture}}{}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.24\linewidth}\vspace{0pt}
+\CasL{\numeroCerne{6}}{%
+\begin{tikzpicture}[x=0.960cm,y=0.5cm]
+\draw (-1,0) -- (4,0);
+\foreach \x in {-0.5,1,1.5,2,2.5,3.5} \draw (\x,-0.28) -- (\x,0.28);
+\node[ptcross] at (0,0) {}; \node[above] at (0,0) {\Pt{A}}; \node[ptcross] at (3,0) {}; \node[above] at (3,0) {\Pt{B}}; \node[ptcross] at (0.5,0) {}; \node[below] at (0.5,0) {\Pt{C}};
+\end{tikzpicture}}{}
+\end{minipage}
+
+\newpage
+\ExoTitre{2}{\starfull{diffblue}\starfull{diffblue}\starempty}{Repr\'esenter}
+Dans chacun des cas suivants, repr\'esenter le vecteur $\Vj{AC}$ tel que~:
+
+\noindent\begin{minipage}[t]{0.48\linewidth}\vspace{0pt}\RaggedRight
+\Cas{\numeroCerne{1}~$\Vj{AC}=-\dfrac32\Vj{AB}$}{%
+\begin{tikzpicture}[x=1.88cm,y=0.5cm]
+\draw (-2,0) -- (3,0);
+\foreach \x in {-1.5,-1,-0.5,0.5,1.5,2,2.5} \draw (\x,-0.28) -- (\x,0.28);
+\node[ptcross] at (0,0) {}; \node[above] at (0,0) {\Pt{A}}; \node[ptcross] at (1,0) {}; \node[above] at (1,0) {\Pt{B}};
+\end{tikzpicture}}{%
+Les vecteurs $\Vj{AC}$ et $\Vj{AB}$ ont m\^eme direction.\\[1pt]
+Ils ont~: $\square$~m\^eme sens \quad $\square$~sens oppos\'e.\\[2pt]
+On a~: $AB=\dots$, or $AC=\dfrac{\dots}{\dots}\times AB$.\\[2pt]
+Donc la longueur $AC$ vaut $\dfrac{\dots}{\dots}\times\dots=\dots$}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\linewidth}\vspace{0pt}\RaggedRight
+\Cas{\numeroCerne{2}~$\Vj{AC}=\dfrac78\Vj{AB}$}{%
+\begin{tikzpicture}[x=1.57cm,y=0.5cm]
+\draw (-1.5,0) -- (4.5,0);
+\foreach \x in {-1,0,0.5,1,1.5,2,2.5,3,4} \draw (\x,-0.28) -- (\x,0.28);
+\node[ptcross] at (-0.5,0) {}; \node[above] at (-0.5,0) {\Pt{A}}; \node[ptcross] at (3.5,0) {}; \node[above] at (3.5,0) {\Pt{B}};
+\end{tikzpicture}}{%
+Les vecteurs $\Vj{AC}$ et $\Vj{AB}$ ont m\^eme direction.\\[1pt]
+Ils ont~: $\square$~m\^eme sens \quad $\square$~sens oppos\'e.\\[2pt]
+On a~: $AB=\dots$, or $AC=\dfrac{\dots}{\dots}\times AB$.\\[2pt]
+Donc la longueur $AC$ vaut $\dfrac{\dots}{\dots}\times\dots=\dots$}
+\end{minipage}
+
+\vspace{10pt}
+
+\noindent\begin{minipage}[t]{0.24\linewidth}\vspace{0pt}
+\Cas{\numeroCerne{3}~$\Vj{AC}=\dfrac14\Vj{AB}$}{%
+\begin{tikzpicture}[x=1.400cm,y=0.5cm]
+\draw (-1,0) -- (3,0);
+\foreach \x in {-0.5,0.5,1,1.5,2.5} \draw (\x,-0.28) -- (\x,0.28);
+\node[ptcross] at (0,0) {}; \node[above] at (0,0) {\Pt{A}}; \node[ptcross] at (2,0) {}; \node[above] at (2,0) {\Pt{B}};
+\end{tikzpicture}}{}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.24\linewidth}\vspace{0pt}
+\Cas{\numeroCerne{4}~$\Vj{AC}=-\dfrac12\Vj{AB}$}{%
+\begin{tikzpicture}[x=0.933cm,y=0.5cm]
+\draw (-2,0) -- (4,0);
+\foreach \x in {-1.5,-1,-0.5,0.5,1,1.5,2,2.5,3,3.5} \draw (\x,-0.28) -- (\x,0.28);
+\node[ptcross] at (0,0) {}; \node[above] at (0,0) {\Pt{A}}; \node[ptcross] at (3,0) {}; \node[above] at (3,0) {\Pt{B}};
+\end{tikzpicture}}{}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.24\linewidth}\vspace{0pt}
+\Cas{\numeroCerne{5}~$\Vj{AC}=\dfrac23\Vj{AB}$}{%
+\begin{tikzpicture}[x=1.600cm,y=0.5cm]
+\draw (-1,0) -- (2.5,0);
+\foreach \x in {-0.5,0.5,1,2} \draw (\x,-0.28) -- (\x,0.28);
+\node[ptcross] at (0,0) {}; \node[above] at (0,0) {\Pt{A}}; \node[ptcross] at (1.5,0) {}; \node[above] at (1.5,0) {\Pt{B}};
+\end{tikzpicture}}{}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.24\linewidth}\vspace{0pt}
+\Cas{\numeroCerne{6}~$\Vj{AC}=-\dfrac43\Vj{AB}$}{%
+\begin{tikzpicture}[x=0.700cm,y=0.5cm]
+\draw (-2,0) -- (6,0);
+\foreach \x in {-1.5,-1,-0.5,0,0.5,1,1.5,2.5,3,3.5,4,4.5,5.5} \draw (\x,-0.28) -- (\x,0.28);
+\node[ptcross] at (2,0) {}; \node[above] at (2,0) {\Pt{A}}; \node[ptcross] at (5,0) {}; \node[above] at (5,0) {\Pt{B}};
+\end{tikzpicture}}{}
+\end{minipage}
+
+\newpage
+\ExoTitre{3}{\starfull{diffblue}\starfull{diffblue}\starempty}{Calculer}
+Soient deux points $A$ et $B$. D\'eterminer la valeur des r\'eels $m$, $n$, $p$ et $q$ tels que~:
+\begin{enumerate}[label=(\alph*), itemsep=14pt]
+\item $3\Vj{AB}+\dfrac12\Vj{AB}=m\Vj{AB}$
+\item $2(3\Vj{BA})=n\Vj{AB}$
+\item $2\Vj{AB}-\Vj{BA}=p\Vj{AB}$
+\item $3\Vj{BA}-4\Vj{AB}=q\Vj{AB}$
+\end{enumerate}
+
+% ============================================================ %
+% Objectif 6
+% ============================================================ %
+
+\newpage
+\ObjRappel{6}{D\'ecomposition d'un vecteur en fonction de deux vecteurs non colin\'eaires}
+\ExoTitre{4}{\starfull{diffgreen}\starempty\starempty}{Repr\'esenter}
+\GCexo[0.47]{%
+Les vecteurs $\vec u$ et $\vec v$ sont donn\'es sur le quadrillage ci-contre. Construire~:
+\begin{enumerate}[label=(\alph*)]
+\item le point $M$ tel que $\Vj{AM}=\vec u+2\vec v$~;
+\item le point $N$ tel que $\Vj{BN}=2\vec u-\vec v$~;
+\item le point $R$ tel que $\Vj{CR}=-\vec u+3\vec v$.
+\end{enumerate}
+}{%
+\renewcommand{\Pt}[1]{\textsf{\fontsize{11}{13}\selectfont #1}}%
+\begin{tikzpicture}[scale=0.7]
+\draw[thin,gray!35] (0,0) grid (11,6);
+\draw[-{Stealth},thick,blue] (1,5) -- (3,5) node[midway,above]{$\vec u$};
+\draw[-{Stealth},thick,red] (5,5) -- (6,6) node[midway,below right]{$\vec v$};
+\coordinate (A) at (1,1); \node[ptcross] at (A) {}; \node[below] at (A) {\Pt{A}};
+\coordinate (B) at (4,4); \node[ptcross] at (B) {}; \node[above] at (B) {\Pt{B}};
+\coordinate (C) at (9,1); \node[ptcross] at (C) {}; \node[below] at (C) {\Pt{C}};
+\end{tikzpicture}}
+
+\newpage
+\ExoTitre{5}{\starfull{diffgreen}\starempty\starempty}{Repr\'esenter}
+\GCexo{%
+Sur la figure ci-contre, exprimer les vecteurs $\vec{w_1}$, $\vec{w_2}$ et $\vec{w_3}$ en fonction de $\vec u$ et $\vec v$.
+}{%
+\begin{tikzpicture}[scale=0.9]
+\draw[thin,gray!35] (-1.5,-1.5) grid (3.5,3.5);
+\draw[-{Stealth},thick] (0,0) -- (1,0) node[midway,below]{$\vec u$};
+\draw[-{Stealth},thick] (0,0) -- (0,1) node[midway,left]{$\vec v$};
+\draw[-{Stealth},thick,blue] (0,0) -- (3,2) node[midway,above]{$\vec{w_1}$};
+\draw[-{Stealth},thick,red] (0,0) -- (-1,3) node[midway,above]{$\vec{w_2}$};
+\draw[-{Stealth},thick,teal] (0,0) -- (2,-1) node[midway,below right]{$\vec{w_3}$};
+\end{tikzpicture}}
+
+\newpage
+\ExoTitre{6}{\starfull{diffblue}\starfull{diffblue}\starempty}{Repr\'esenter}
+\GCexo[0.34]{%
+La figure ci-contre est un pavage form\'e de parall\'elogrammes tous identiques. On pose $\vec u=\Vj{AA'}$ et $\vec v=\Vj{AA''}$.
+
+Exprimer les vecteurs $\Vj{AB}$, $\Vj{AC}$, $\Vj{BD}$, $\Vj{DC}$ et $\Vj{EB}$ en fonction de $\vec u$ et $\vec v$.
+}{%
+\renewcommand{\Pt}[1]{\textsf{\fontsize{11}{13}\selectfont #1}}%
+\begin{tikzpicture}[x={(1.2cm,0cm)},y={(0.5cm,0.95cm)}]
+\foreach \i in {0,...,5} \draw[thin,gray!35] (\i,0) -- (\i,4);
+\foreach \j in {0,...,4} \draw[thin,gray!35] (0,\j) -- (5,\j);
+\draw[-{Stealth},thick,blue] (0,0) -- (1,0) node[midway,below]{$\vec u$};
+\draw[-{Stealth},thick,red] (0,0) -- (0,1) node[midway,left]{$\vec v$};
+\node[ptcross] at (0,0) {}; \node[below left] at (0,0) {\Pt{A}};
+\node[ptcross] at (1,0) {}; \node[below] at (1,0) {\Pt{A'}};
+\node[ptcross] at (0,1) {}; \node[above left] at (0,1) {\Pt{A''}};
+\node[ptcross] at (3,1) {}; \node[below right] at (3,1) {\Pt{B}};
+\node[ptcross] at (1,3) {}; \node[above left] at (1,3) {\Pt{C}};
+\node[ptcross] at (4,2) {}; \node[right] at (4,2) {\Pt{D}};
+\node[ptcross] at (0,2) {}; \node[left] at (0,2) {\Pt{E}};
+\end{tikzpicture}}
+
+\newpage
+\ExoTitre{7}{\starfull{diffblue}\starfull{diffblue}\starempty}{Raisonner}
+\GCexo{%
+$ABCD$ est un parall\'elogramme et $I$ est le milieu de $[CD]$. On pose $\vec u=\Vj{AB}$ et $\vec v=\Vj{AD}$.
+
+Exprimer le vecteur $\Vj{AI}$ en fonction de $\vec u$ et $\vec v$.
+}{%
+\begin{tikzpicture}[scale=1.3]
+\coordinate (A) at (0,0); \coordinate (B) at (3,0); \coordinate (D) at (0.8,2); \coordinate (C) at (3.8,2);
+\coordinate (I) at ($(D)!0.5!(C)$);
+\draw (A)--(B)--(C)--(D)--cycle; \draw[dashed] (A)--(I);
+\node[below] at (A) {\Pt{A}}; \node[below] at (B) {\Pt{B}}; \node[above] at (D) {\Pt{D}}; \node[above] at (C) {\Pt{C}};
+\node[above] at (I) {\Pt{I}};
+\end{tikzpicture}}
+
+\newpage
+\ExoTitre{8}{\starfull{diffred}\starfull{diffred}\starfull{diffred}}{Raisonner}
+\GCexo[0.52]{%
+$ABCDEF$ est un hexagone r\'egulier de centre $O$. On pose $\vec u=\Vj{OA}$ et $\vec v=\Vj{OB}$.
+\begin{enumerate}
+\item Exprimer les vecteurs $\Vj{OD}$, $\Vj{OC}$, $\Vj{OE}$ et $\Vj{OF}$ en fonction de $\vec u$ et $\vec v$.
+\item En utilisant la relation de Chasles, exprimer les vecteurs $\Vj{CB}$, $\Vj{AB}$, $\Vj{DF}$ et $\Vj{CD}$ en fonction de $\vec u$ et $\vec v$ uniquement.
+
+\textit{Exemple~:} $\Vj{DB}=\Vj{DO}+\Vj{OB}=\vec u+\vec v$.
+\end{enumerate}
+}{%
+\renewcommand{\Pt}[1]{\textsf{\fontsize{11}{13}\selectfont #1}}%
+\begin{tikzpicture}[scale=1]
+\foreach \i/\lab in {0/A,60/B,120/C,180/D,240/E,300/F}
+\coordinate (\lab) at (\i:1.4);
+\draw (A)--(B)--(C)--(D)--(E)--(F)--cycle;
+\draw (A)--(D); \draw (B)--(E); \draw (C)--(F);
+\draw[-{Stealth},thick,blue] (0,0) -- (A) node[midway,below]{$\vec u$};
+\draw[-{Stealth},thick,red] (0,0) -- (B) node[midway,above left]{$\vec v$};
+\node[below right] at (A) {\Pt{A}}; \node[above right] at (B) {\Pt{B}}; \node[above] at (C) {\Pt{C}};
+\node[above left] at (D) {\Pt{D}}; \node[below left] at (E) {\Pt{E}}; \node[below] at (F) {\Pt{F}};
+\node[below left,inner sep=3pt] at (0,0) {\Pt{O}};
+\end{tikzpicture}}
+
+\end{document}

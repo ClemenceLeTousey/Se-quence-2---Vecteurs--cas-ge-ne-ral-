@@ -1,0 +1,27 @@
+
+\documentclass[border=4pt]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,shapes.misc}
+\renewcommand{\familydefault}{\sfdefault}
+\definecolor{vbleu}{HTML}{1C5FD6}
+\definecolor{orange}{HTML}{E8590C}
+\definecolor{vert}{HTML}{2F9E44}
+\definecolor{gris}{HTML}{495057}
+\definecolor{violet}{HTML}{7048E8}
+\tikzset{
+  vec/.style={->,very thick,>={Stealth[length=2.4mm]}},
+  ref/.style={orange,thick,dashed},
+  par/.style={vert,thick,dashed},
+  sec/.style={gris,thick,dashed},
+  ptcross/.style={cross out,draw,thick,minimum size=1.6mm,inner sep=0pt},
+}
+\usepackage{array}
+\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}
+\newcommand{\V}[1]{\overrightarrow{\mathrm{#1}}}
+\begin{document}
+
+\begin{minipage}{16cm}\large {\color{gris}\Large Remarque — Vérifier avec les carreaux}\par\vspace{4pt}Le vecteur $\vec{u}$ correspond à un déplacement de 2 carreaux vers la droite et 1 carreau vers le haut : le déplacement vertical est la moitié du déplacement horizontal.\par {\normalsize\begin{tabular}{l|cccc} & $\vec{u}$ & $\vec{v}$ & $\vec{c}$ & $\vec{r}$\\\hline Horizontal (carreaux) & 2 & 4 & 4 & 6\\ Vertical (carreaux) & 1 & 2 & 2 & 3\end{tabular}}\par C'est un tableau de proportionnalité.\\ À l'inverse, $\vec{w}$ correspond à un déplacement de 3 carreaux vers la droite et 2 vers le bas : 2 n'est pas la moitié de 3.\end{minipage}
+\end{document}

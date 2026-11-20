@@ -1,0 +1,27 @@
+
+\documentclass[border=4pt]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,shapes.misc}
+\renewcommand{\familydefault}{\sfdefault}
+\definecolor{vbleu}{HTML}{1C5FD6}
+\definecolor{orange}{HTML}{E8590C}
+\definecolor{vert}{HTML}{2F9E44}
+\definecolor{gris}{HTML}{495057}
+\definecolor{violet}{HTML}{7048E8}
+\tikzset{
+  vec/.style={->,very thick,>={Stealth[length=2.4mm]}},
+  ref/.style={orange,thick,dashed},
+  par/.style={vert,thick,dashed},
+  sec/.style={gris,thick,dashed},
+  ptcross/.style={cross out,draw,thick,minimum size=1.6mm,inner sep=0pt},
+}
+\usepackage{array}
+\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}
+\newcommand{\V}[1]{\overrightarrow{\mathrm{#1}}}
+\begin{document}
+
+\begin{minipage}{16cm}\large \begin{minipage}{15.5cm}{\color{vert}\Large Réponses}\par\vspace{6pt}\renewcommand{\arraystretch}{1.6}\begin{tabular}{lllll}$\vec{v}=-2\,\vec{u}$ & $\vec{c}=2\,\vec{u}$ & $\vec{r}=3\,\vec{u}$ & $\vec{b}=-1\,\vec{w}$ & $\vec{s}=-2\,\vec{w}$\\$\vec{a}=-2\,\vec{t}$ & $\vec{s}=2\,\vec{b}$ & $\vec{u}=-\dfrac12\,\vec{v}$ & $\vec{r}=\dfrac32\,\vec{c}$ & $\vec{r}=-\dfrac32\,\vec{v}$\end{tabular}\par\vspace{8pt}{\color{gris}Rappel : par convention, le coefficient de colinéarité ne s'écrit pas sous forme décimale ($\dfrac32$ et non 1,5).}\end{minipage}\end{minipage}
+\end{document}

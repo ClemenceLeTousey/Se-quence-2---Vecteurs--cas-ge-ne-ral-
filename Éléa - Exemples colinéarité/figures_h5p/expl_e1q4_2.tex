@@ -1,0 +1,27 @@
+
+\documentclass[border=4pt]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,shapes.misc}
+\renewcommand{\familydefault}{\sfdefault}
+\definecolor{vbleu}{HTML}{1C5FD6}
+\definecolor{orange}{HTML}{E8590C}
+\definecolor{vert}{HTML}{2F9E44}
+\definecolor{gris}{HTML}{495057}
+\definecolor{violet}{HTML}{7048E8}
+\tikzset{
+  vec/.style={->,very thick,>={Stealth[length=2.4mm]}},
+  ref/.style={orange,thick,dashed},
+  par/.style={vert,thick,dashed},
+  sec/.style={gris,thick,dashed},
+  ptcross/.style={cross out,draw,thick,minimum size=1.6mm,inner sep=0pt},
+}
+\usepackage{array}
+\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}
+\newcommand{\V}[1]{\overrightarrow{\mathrm{#1}}}
+\begin{document}
+
+\begin{minipage}{16cm}\large \begin{minipage}{15.5cm}{\color{vert}\Large Explication (2/3)}\par\vspace{4pt}{\color{vert}$\vec{s}=-2\,\vec{w}$} : les vecteurs $\vec{s}$ et $\vec{w}$ ont même direction et sont de sens opposé. La norme de $\vec{s}$ est deux fois plus grande que celle de $\vec{w}$.\par\vspace{6pt}{\color{vert}$\vec{a}=-2\,\vec{t}$} : les vecteurs $\vec{a}$ et $\vec{t}$ ont même direction et sont de sens opposé. La norme de $\vec{a}$ est deux fois plus grande que celle de $\vec{t}$.\par\vspace{6pt}{\color{vert}$\vec{s}=2\,\vec{b}$} : les vecteurs $\vec{s}$ et $\vec{b}$ ont même direction et sont de même sens. La norme de $\vec{s}$ est deux fois plus grande que celle de $\vec{b}$.\end{minipage}\end{minipage}
+\end{document}

@@ -1,0 +1,83 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><title>Séquence 2 – Éléa – Fiche de montage</title><script>window.MathJax={tex:{inlineMath:[["\\(","\\)"]]}};</script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script><style>body{font-family:-apple-system,Helvetica,Arial,sans-serif;max-width:860px;margin:24px auto;padding:0 16px;line-height:1.5;color:#222}h4{margin-top:22px}</style></head><body><h3>Séquence 2 – Éléa – Fiche de montage</h3>
+<h2>Séquence 2 – Vecteurs : parcours Éléa différencié</h2>
+<p><i>Fiche de montage. Temps estimé : 1 h à 1 h 30 pour tout assembler une première fois. Les fichiers à utiliser sont dans le même dossier que cette fiche.</i></p>
+
+<h3>1. Principe</h3>
+<p>Le parcours est découpé en 4 blocs qui suivent le cours. Dans chaque bloc, un <b>test d'entrée</b> (6 questions tirées au hasard dans la banque du bloc) aiguille automatiquement l'élève, grâce aux <b>restrictions d'accès</b> de Moodle :</p>
+<table border="1" cellpadding="6" style="border-collapse:collapse">
+<tr style="background:#eef"><th>Note au test d'entrée</th><th>Ce que l'élève voit ensuite</th></tr>
+<tr><td>&lt; 50 %</td><td><b>Je révise</b> : page de rappel + vidéos + 3 exercices corrigés + exercices ★ des feuilles</td></tr>
+<tr><td>50 % à 79 %</td><td><b>Je m'entraîne</b> : exercices ★★ des feuilles et du manuel (corrigé PDF déposé)</td></tr>
+<tr><td>≥ 80 %</td><td><b>Je vais plus loin</b> : exercices ★★★ + activité Capytale du bloc</td></tr>
+<tr><td>—</td><td><b>Je valide</b> : test de validation (6 autres questions de la même banque), visible une fois l'étape précédente achevée. Il débloque le bloc suivant.</td></tr>
+</table>
+<p>Pendant les tests, chaque question fournit deux <b>indices</b> successifs (le second renvoie au paragraphe exact du cours et à la vidéo), puis un <b>corrigé</b> avec renvoi aux exercices. C'est le mode « interactif avec essais multiples » de Moodle.</p>
+
+<h3>2. Importer la banque de questions (5 min)</h3>
+<ol>
+<li>Dans le parcours Éléa : menu <b>Plus → Banque de questions → Importer</b>.</li>
+<li>Format : <b>Moodle XML</b>. Fichier : <code>Séquence 2 - Éléa - Banque de questions.xml</code>. Laisser « Obtenir la catégorie du fichier » coché.</li>
+<li>Après l'import, la banque contient la catégorie <b>Séquence 2 – Vecteurs</b> et ses sous-catégories :</li>
+</ol>
+<table border="1" cellpadding="6" style="border-collapse:collapse"><tr style="background:#eef"><th>Sous-catégorie</th><th>Questions</th></tr><tr><td>0 – Positionnement (prérequis)</td><td style='text-align:center'>5</td></tr><tr><td>Bloc 1 – Définition d'un vecteur</td><td style='text-align:center'>15</td></tr><tr><td>Bloc 2 – Somme et relation de Chasles</td><td style='text-align:center'>15</td></tr><tr><td>Bloc 3 – Produit par un réel, colinéarité</td><td style='text-align:center'>15</td></tr><tr><td>Bloc 4 – Décomposition, alignement, milieu</td><td style='text-align:center'>15</td></tr><tr><td>Bilan – synthèse</td><td style='text-align:center'>4</td></tr></table>
+<p>Les figures sont incluses dans le fichier XML (il n'y a rien d'autre à téléverser). Les formules s'affichent grâce au filtre MathJax, activé par défaut sur Éléa. Vérifier sur une question : <b>Aperçu</b>.</p>
+
+<h3>3. Créer les sections et les activités</h3>
+<p>Réglages communs à <b>tous les tests</b> (Test → Paramètres) :</p>
+<ul>
+<li><b>Comportement des questions :</b> « Interactif avec essais multiples » (c'est ce qui affiche les indices).</li>
+<li><b>Nombre de tentatives :</b> 2 pour les tests d'entrée, illimité pour les tests de validation. Méthode de notation : note la plus haute.</li>
+<li><b>Options de relecture :</b> cocher « Feedback spécifique », « Feedback général », « Réponse juste » pendant et après la tentative.</li>
+<li><b>Mise en page :</b> une question par page, questions mélangées.</li>
+<li><b>Achèvement d'activité :</b> « L'élève doit recevoir une note ».</li>
+</ul>
+<p>Pour remplir un test : <b>Questions → Ajouter → une question aléatoire</b>, choisir la sous-catégorie du bloc, nombre de questions = 6. Les deux tests (entrée et validation) d'un même bloc tirent dans la même sous-catégorie : Moodle ne retire pas les questions déjà vues, mais avec 15 questions par bloc le recouvrement est faible ; on peut aussi ajouter à la main 6 questions fixes pour le test d'entrée et laisser l'aléatoire pour la validation.</p>
+
+<h4>Section 0 – Avant de commencer</h4>
+<ul>
+<li><b>Test « Positionnement »</b> : 5 questions de la sous-catégorie <i>0 – Positionnement</i>, 1 tentative, non comptabilisé (note maximale 0 ou catégorie de notes « hors total »).</li>
+<li><b>Fichier</b> : <i>Séquence 2 - Cours - Vecteurs.pdf</i> ; <b>Fichier</b> : version Grands Caractères, avec restriction d'accès « Groupe » = le groupe des élèves concernés (à créer dans Participants → Groupes).</li>
+<li><b>Fichiers</b> : Feuilles d'exercices 2, 3 et 3¾ (et leurs corrigés, éventuellement cachés jusqu'à une date).</li>
+</ul>
+
+<h4>Sections 1 à 4 – un bloc par section (même schéma)</h4>
+<table border="1" cellpadding="6" style="border-collapse:collapse">
+<tr style="background:#eef"><th>Activité</th><th>Type</th><th>Restriction d'accès</th><th>Contenu</th></tr>
+<tr><td>Je me teste</td><td>Test</td><td>Bloc 1 : aucune. Blocs 2 à 4 : <i>Note</i> « Je valide (bloc précédent) » ≥ 80 %</td><td>6 questions aléatoires de la sous-catégorie du bloc, 2 tentatives</td></tr>
+<tr><td>Je révise</td><td>Page</td><td><i>Note</i> « Je me teste » &lt; 50 %</td><td>Coller le contenu du fichier <code>Bloc N - Je révise.html</code> (voir § 4)</td></tr>
+<tr><td>Je m'entraîne</td><td>Page (ou Étiquette)</td><td><i>Note</i> « Je me teste » ≥ 50 % <b>et</b> &lt; 80 %</td><td>Liste des exercices ★★ du bloc (tableau ci-dessous) + lien vers le corrigé PDF</td></tr>
+<tr><td>Je vais plus loin</td><td>Page + URL</td><td><i>Note</i> « Je me teste » ≥ 80 %</td><td>Exercices ★★★ + lien Capytale du bloc</td></tr>
+<tr><td>Je valide</td><td>Test</td><td><i>Achèvement d'activité</i> : « Je révise » OU « Je m'entraîne » OU « Je vais plus loin » marqué achevé (ensemble de restrictions, « au moins une »)</td><td>6 questions aléatoires de la même sous-catégorie, tentatives illimitées</td></tr>
+</table>
+<p>Pour saisir une restriction de note : Paramètres de l'activité → <b>Restreindre l'accès → Ajouter une restriction → Note</b>, choisir l'activité, cocher « doit être ≥ » et/ou « doit être &lt; ». Pour « Je valide », utiliser <b>Ajouter une restriction → Ensemble de restrictions</b> puis « L'étudiant doit satisfaire <b>au moins une</b> » et trois restrictions d'achèvement. Laisser l'œil <b>ouvert</b> (l'élève voit l'activité grisée avec la condition) ou <b>barré</b> (activité invisible tant que la condition n'est pas remplie) : le barré est préférable ici, pour que chaque élève ne voie que son chemin.</p>
+<p>Pour que les restrictions sur l'achèvement fonctionnent, activer dans les pages « Je révise / Je m'entraîne / Je vais plus loin » l'achèvement <b>« L'élève doit afficher cette activité »</b> (ou « marquer manuellement » si tu préfères que l'élève coche).</p>
+
+<h4>Renvois par bloc et par niveau (pour les pages « Je m'entraîne » et « Je vais plus loin »)</h4>
+<table border="1" cellpadding="6" style="border-collapse:collapse">
+<tr style="background:#eef"><th>Bloc</th><th style="color:#40C057">★ (Je révise)</th><th style="color:#228BE6">★★ (Je m'entraîne)</th><th style="color:#FA5252">★★★ (Je vais plus loin)</th></tr><tr><td><b>Bloc 1</b><br>Définition d'un vecteur (Obj. 1, 2, 3)</td><td>Feuille 2 : Ex 1, 2, 5, 6, 10, 11 · Manuel Ex 15, 18 p. 183, Ex 23, 27 p. 184</td><td>Feuille 2 : Ex 3, 7, 12 · Manuel Ex 28 p. 184, Ex 30, 31 p. 185</td><td>Feuille 2 : Ex 4, 8, 9 · Manuel Ex 35 p. 185, Ex 37, 38 p. 186 · Capytale Définitions</td></tr><tr><td><b>Bloc 2</b><br>Somme et relation de Chasles (Obj. 4)</td><td>Feuille 2 : Ex 13, 14 · Manuel Ex 39 p. 186, Ex 42, 43, 45, 46 p. 187</td><td>Feuille 2 : Ex 15, 16 · Manuel Ex 41 p. 186</td><td>Manuel Ex 71, 72, 73 p. 192 · Capytale Somme</td></tr><tr><td><b>Bloc 3</b><br>Produit par un réel, colinéarité (Obj. 5)</td><td>Feuille 3 : Ex 1, 2 · Manuel Ex 18, 19 p. 207, Ex 41, 42 p. 208</td><td>Feuille 3 : Ex 3 · Feuille 3¾ : Ex 1, 2, 3 · Manuel Ex 43, 44 p. 209</td><td>Feuille 3¾ : Ex 4 · Capytale Colinéarité</td></tr><tr><td><b>Bloc 4</b><br>Décomposition, alignement, milieu (Obj. 6, 7)</td><td>Feuille 3 : Ex 4, 5</td><td>Feuille 3 : Ex 6, 7 · Manuel Ex 45 p. 209, Ex 74 p. 212</td><td>Feuille 3 : Ex 8 · Feuille 3¾ : Ex 5 · Manuel Ex 75, 78 p. 212</td></tr></table>
+
+<h4>Section 5 – Bilan</h4>
+<ul>
+<li><b>Test « Bilan »</b> : 12 questions aléatoires de la catégorie <i>Séquence 2 – Vecteurs</i> en cochant « inclure les sous-catégories », plus les 4 questions de <i>Bilan – synthèse</i>. Restriction : « Je valide (Bloc 4) » ≥ 80 %. Comportement « Feedback a posteriori » cette fois (pas d'indices) pour se rapprocher des conditions du DS.</li>
+<li><b>URL</b> : les deux vidéos de révision d'Yvan Monka (LE COURS et le QCM), en accès libre.</li>
+<li><b>Badge</b> (facultatif) : Administration → Badges → « Vecteurs », critère : test Bilan ≥ 80 %.</li>
+</ul>
+
+<h3>4. Les pages « Je révise »</h3>
+<p>Quatre fichiers <code>Bloc N - Je révise.html</code>. Pour chacun : ouvrir le fichier dans un éditeur de texte, copier <b>tout</b> le contenu entre les repères <code>&lt;!-- DEBUT --&gt;</code> et <code>&lt;!-- FIN --&gt;</code>, puis dans Éléa : ajouter une <b>Page</b>, dans le contenu cliquer sur l'outil <b>« Code HTML » (&lt;/&gt;)</b> de l'éditeur, coller, enregistrer. Les fichiers <code>… (aperçu).html</code> permettent de visualiser le rendu dans un navigateur avant de coller.</p>
+<p>Les figures sont incluses dans le code (images encodées) ; si Éléa refuse une image, elle est aussi disponible en PNG dans le dossier <code>figures</code>, à insérer avec le bouton image de l'éditeur. Les vidéos sont intégrées ; si l'intégration est bloquée par l'établissement, le lien texte sous chaque vidéo reste fonctionnel.</p>
+
+<h3>5. Ce que tu vois côté enseignante</h3>
+<ul>
+<li><b>Notes</b> : le carnet de notes montre, pour chaque élève, le score d'entrée et le score de validation de chaque bloc — donc le chemin suivi.</li>
+<li><b>Rapport d'activité → Achèvement d'activités</b> : tableau élèves × activités, pour repérer qui est passé par « Je révise ».</li>
+<li><b>Test → Résultats → Statistiques</b> : le taux de réussite par question montre les points du chapitre qui posent problème à la classe.</li>
+</ul>
+
+<h3>6. Pistes d'évolution</h3>
+<ul>
+<li>Remplacer les QCM « quel point est l'image… » par des questions <b>glisser-déposer sur image</b> (type de question Moodle) une fois le montage rodé.</li>
+<li>Ajouter des questions <b>Calculée</b> à valeurs aléatoires pour les coefficients k (Bloc 3).</li>
+<li>Réutiliser les mêmes sous-catégories pour un test « Automatismes vecteurs » hebdomadaire de 3 questions.</li>
+</ul>
+</body></html>

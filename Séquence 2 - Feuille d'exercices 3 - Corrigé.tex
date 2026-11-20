@@ -16,6 +16,20 @@
 \usepackage{tikz}
 \usetikzlibrary{calc,arrows.meta,shapes.misc}
 \tikzset{ptcross/.style={cross out,draw,thick,minimum size=3pt,inner sep=0pt}}
+% Badges « Exercice n » en cursive Playwrite FR Moderne (police du site),
+% chargée à 85 % de la taille courante (XeLaTeX ou LuaLaTeX ; gras sous pdfLaTeX).
+\makeatletter
+\ifdefined\XeTeXrevision\def\ExoFont@ok{}\fi
+\ifdefined\directlua\def\ExoFont@ok{}\fi
+\ifdefined\ExoFont@ok
+\newcommand{\ExoFont}{\font\ExoFont@f="[../polices/PlaywriteFRModerne.ttf]" at \dimexpr\f@size pt*85/100\relax\ExoFont@f}
+\else
+\newcommand{\ExoFont}{\bfseries}
+\fi
+\makeatother
+% \ExoTexte{...} : texte du badge en cursive, avec la hauteur d'une majuscule de la
+% police courante (la cursive est plus haute et ferait grandir chaque badge).
+\newcommand{\ExoTexte}[1]{\raisebox{0pt}[\fontcharht\font`E][0pt]{\ExoFont #1}}
 \usepackage{tcolorbox}
 \tcbuselibrary{skins}
 \usepackage[hidelinks]{hyperref}
@@ -52,7 +66,7 @@
 % couleur que les cartes d'exercice de la feuille), suivi de la r\'eponse.
 \newcommand{\Corr}[2]{%
 \par\vspace{6pt}
-\noindent\tcbox[on line, colback=skyblue, colframe=skyblue, boxsep=1pt, left=4pt, right=4pt, top=1pt, bottom=1pt, arc=2pt]{\textcolor{white}{\bfseries Exercice~#1}}\par\nobreak\vspace{3pt}\nobreak
+\noindent\tcbox[on line, colback=skyblue, colframe=skyblue, boxsep=1pt, left=4pt, right=4pt, top=1pt, bottom=1pt, arc=2pt]{\textcolor{white}{\ExoTexte{Exercice~#1}}}\par\nobreak\vspace{3pt}\nobreak
 \noindent\ignorespaces #2
 \par
 }

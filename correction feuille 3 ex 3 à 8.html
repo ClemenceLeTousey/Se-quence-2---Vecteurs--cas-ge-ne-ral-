@@ -1,0 +1,826 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Feuille 3 – Exercices 3 à 8</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fbfaf7;
+    --panel: #ffffff;
+    --ink: #1f2328;
+    --muted: #6b7280;
+    --line: #e4e2dc;
+    --c1: #7048E8;
+    --c2: #D9480F;
+    --c3: #0C8599;
+    --res: #C92A2A;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink); }
+  body {
+    font-family: "Source Sans 3", "Source Sans Pro", "Helvetica Neue", Arial, sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 1.45;
+  }
+  header {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    flex-wrap: wrap;
+    padding: 14px 24px; border-bottom: 1px solid var(--line); background: var(--panel);
+  }
+  h1 { font-size: 24px; font-weight: 500; margin: 0; }
+  .tag { font-size: 16px; color: var(--muted); }
+  main {
+    display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: 24px; padding: 20px 24px; max-width: 1400px; margin: 0 auto;
+  }
+  @media (max-width: 900px) { main { grid-template-columns: 1fr; padding: 16px; } header { padding: 12px 16px; } }
+  .fig { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 8px; align-self: start; }
+  .fig svg { width: 100%; height: auto; max-height: 60vh; display: block; }
+  .figtitle { font-size: 19px; padding: 6px 10px 0; min-height: 2.2em; }
+  .board { font-size: 26px; padding: 6px 18px 4px; display: flex; flex-direction: column; gap: 4px; }
+  .board:empty { display: none; }
+  .board .bl { transition: opacity .4s ease; }
+  .board .bl.old { color: var(--muted); }
+  .side { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 18px; }
+  .tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .tab {
+    font: inherit; font-size: 16px; font-weight: 600; cursor: pointer;
+    border: 1px solid var(--line); background: var(--panel); color: var(--ink);
+    padding: 4px 12px; border-radius: 6px;
+  }
+  .tab.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .consigne { margin: 4px 0 6px; color: var(--muted); font-size: 17px; }
+  .questions { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 2px 12px; }
+  .questions.wide { grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); }
+  .questions .q {
+    display: flex; gap: 8px; align-items: center; font-size: 18px;
+    padding: 4px 8px; border-radius: 6px; cursor: pointer; border-left: 4px solid transparent;
+  }
+  .questions .q .num { flex: none; color: var(--muted); }
+  .questions .q.active { background: #f1f0ec; border-left-color: var(--ink); }
+  .questions .q.done { color: var(--muted); }
+  .etape { font-size: 15px; color: var(--muted); margin-bottom: 4px; }
+  .caption { font-size: 21px; min-height: 8.5em; }
+  .caption p { margin: 0 0 10px; }
+  .nav { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .btn {
+    font: inherit; font-size: 17px; font-weight: 600;
+    border: 1px solid var(--line); background: var(--panel); color: var(--ink);
+    padding: 8px 18px; border-radius: 8px; cursor: pointer;
+  }
+  .btn.primary { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .btn:disabled { opacity: .35; cursor: default; }
+  .progress { flex: 1; min-width: 120px; height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; }
+  .progress div { height: 100%; background: var(--ink); width: 0; transition: width .3s; }
+  .hint { font-size: 14px; color: var(--muted); }
+  .recap { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 18px; }
+  .recap p { margin: 0; }
+  .recapfig { padding: 10px 14px; font-size: 20px; }
+  .recapfig .hint { margin: 10px 0 2px; }
+
+  /* Notation vectorielle : flèche dessinée en SVG au-dessus de la lettre */
+  .m { white-space: nowrap; }
+  .vec { position: relative; display: inline-block; padding-top: .32em; line-height: 1; }
+  .vec span.up { font-style: normal; padding: 0 .04em; }
+  .vec span.up.it { font-style: italic; padding: 0 .1em 0 .02em; }
+  .vec sub { font-size: .65em; font-style: normal; vertical-align: -.25em; line-height: 0; }
+  .vec svg { position: absolute; top: 0; height: .42em; overflow: visible; }
+  .vec svg.shaft { left: .08em; right: .12em; width: calc(100% - .2em); }
+  .vec svg.head { right: .02em; width: .3em; }
+  .frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; font-size: .86em; line-height: 1.12; margin: 0 .12em; }
+  .frac > span:first-child { border-bottom: 1.4px solid currentColor; padding: 0 .18em; }
+  .c1 { color: var(--c1); } .c2 { color: var(--c2); } .c3 { color: var(--c3); } .res { color: var(--res); }
+  .it { font-style: italic; }
+
+  /* Animations */
+  .draw { transition: stroke-dashoffset .7s ease-in-out; }
+  .fade { transition: opacity .35s ease; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Feuille d’exercices n°3 — Exercices 3 à 8 — Corrigé</h1>
+  <span class="tag">Produit d’un vecteur par un réel · Décomposition d’un vecteur</span>
+</header>
+
+<main>
+  <div class="fig">
+    <div class="figtitle" id="figtitle"></div>
+    <div class="board" id="board"></div>
+    <svg id="fig" xmlns="http://www.w3.org/2000/svg"></svg>
+    <div class="recapfig" id="recapfig" style="display:none"></div>
+  </div>
+  <div class="side">
+    <div class="card">
+      <div class="tabs" id="tabs"></div>
+      <p class="consigne" id="consigne"></p>
+      <div class="questions" id="questions"></div>
+    </div>
+    <div class="card">
+      <div class="etape" id="etape"></div>
+      <div class="caption" id="caption"></div>
+      <div class="nav">
+        <button class="btn" id="prev">◀ Précédent</button>
+        <button class="btn primary" id="next">Suivant ▶</button>
+        <div class="progress"><div id="bar"></div></div>
+      </div>
+      <p class="hint">Clic n'importe où, barre d'espace ou flèche → pour avancer · ← pour revenir · clic sur un exercice ou une question pour y aller directement.</p>
+    </div>
+  </div>
+</main>
+
+<script>
+/* --------------------------------------------------- Notation dans le texte */
+const ARROW =
+  `<svg class="shaft" viewBox="0 0 10 10" preserveAspectRatio="none"><line x1="0" y1="5" x2="10" y2="5" stroke="currentColor" stroke-width="1.3" vector-effect="non-scaling-stroke"/></svg>` +
+  `<svg class="head" viewBox="0 0 10 10" preserveAspectRatio="none"><polyline points="2,1 9.5,5 2,9" fill="none" stroke="currentColor" stroke-width="1.3" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+/* V('AB') : vecteur nommé par deux points ; Vi('u') ou Vi('w', 1) : vecteur nommé par une lettre */
+const V = name => `<span class="vec"><span class="up">${name}</span>${ARROW}</span>`;
+const Vi = (name, sub) => `<span class="vec"><span class="up it">${name}${sub ? `<sub>${sub}</sub>` : ''}</span>${ARROW}</span>`;
+const M = s => `<span class="m">${s}</span>`;
+const F = (n, d) => `<span class="frac"><span>${n}</span><span>${d}</span></span>`;
+const I = s => `<span class="it">${s}</span>`;
+const col = (c, s) => `<span class="${c}">${s}</span>`;
+const u = col('c1', Vi('u')), v = col('c2', Vi('v'));
+const W = n => Vi('w', n);
+const sp = '&#8239;';            // espace fine insécable entre un nombre et un vecteur
+const K = (k, vec) => k + sp + vec;
+const P = s => `<p>${s}</p>`;
+
+/* Morceaux de formule pour les étiquettes de la figure SVG */
+const su = { v: 'u', it: true }, sv = { v: 'v', it: true };
+const sw = n => ({ v: 'w', it: true, sub: n });
+const sV = s => ({ v: s });
+const MOINS = ' − ', PLUS = ' + ';
+
+/* --------------------------------------------------------- Exercices */
+const EX = {
+  3: { comp: 'Calculer', consigne: `Déterminer les réels ${I('m')}, ${I('n')}, ${I('p')} et ${I('q')}.`, wide: true,
+    items: [
+      ['a', '(a)', M(K('3', V('AB')) + ' + ' + K(F(1, 2), V('AB')) + ' = ' + K(I('m'), V('AB')))],
+      ['b', '(b)', M('2(' + K('3', V('BA')) + ') = ' + K(I('n'), V('AB')))],
+      ['c', '(c)', M(K('2', V('AB')) + ' − ' + V('BA') + ' = ' + K(I('p'), V('AB')))],
+      ['d', '(d)', M(K('3', V('BA')) + ' − ' + K('4', V('AB')) + ' = ' + K(I('q'), V('AB')))]
+    ] },
+  4: { comp: 'Représenter', consigne: `Construire les points M, N et R.`,
+    items: [
+      ['a', '(a)', M(V('AM') + ' = ' + Vi('u') + ' + ' + K('2', Vi('v')))],
+      ['b', '(b)', M(V('BN') + ' = ' + K('2', Vi('u')) + ' − ' + Vi('v'))],
+      ['c', '(c)', M(V('CR') + ' = −' + Vi('u') + ' + ' + K('3', Vi('v')))]
+    ] },
+  5: { comp: 'Représenter', consigne: `Exprimer ${W(1)}, ${W(2)} et ${W(3)} en fonction de ${Vi('u')} et ${Vi('v')}.`,
+    items: [['w1', '', W(1)], ['w2', '', W(2)], ['w3', '', W(3)]] },
+  6: { comp: 'Représenter', consigne: `Exprimer les vecteurs en fonction de ${Vi('u')} et ${Vi('v')}.`,
+    items: [['AB', '', V('AB')], ['AC', '', V('AC')], ['BD', '', V('BD')], ['DC', '', V('DC')], ['EB', '', V('EB')]] },
+  7: { comp: 'Raisonner', consigne: `Exprimer ${V('AI')} en fonction de ${Vi('u')} et ${Vi('v')}.`,
+    items: [['AI', '', V('AI')], ['autre', '', 'autre chemin']] },
+  8: { comp: 'Raisonner', consigne: `Exprimer les vecteurs en fonction de ${Vi('u')} et ${Vi('v')}.`,
+    items: [['OD', '1.', V('OD')], ['OC', '1.', V('OC')], ['OE', '1.', V('OE')], ['OF', '1.', V('OF')],
+            ['DB', '2.', V('DB') + ' (exemple)'], ['CB', '2.', V('CB')], ['AB', '2.', V('AB')], ['DF', '2.', V('DF')], ['CD', '2.', V('CD')]] }
+};
+
+/* ------------------------------------------------------------ Figures */
+/* Chaque figure est un réseau : le point (x, y) est dessiné en x·e1 + y·e2 (pixels). */
+const axe = (lo, hi) => {
+  const G = Math.min(60, 680 / (hi - lo));
+  return { e1: [G, 0], e2: [0, 55],
+    base: [{ k: 'axis', lo, hi }, { k: 'pt', at: [0, 0], name: 'A', pos: 'ne' }, { k: 'pt', at: [2, 0], name: 'B', pos: 'ne' },
+           { k: 'vec', from: [0, -1], to: [2, -1], c: 'c1', guide: true, lab: [sV('AB')], lpos: 'above' }] };
+};
+const FIG = {
+  '3-0': axe(-3, 5), '3-a': axe(-1, 9), '3-b': axe(-13, 4), '3-c': axe(-1, 8), '3-d': axe(-15, 4),
+  4: { e1: [58, 0], e2: [0, -58], base: [
+    { k: 'grid', x: [0, 11], y: [0, 6] },
+    { k: 'vec', from: [1, 5], to: [3, 5], c: 'c1', lab: [su] },
+    { k: 'vec', from: [5, 5], to: [6, 6], c: 'c2', lab: [sv], side: -1 },
+    { k: 'pt', at: [1, 1], name: 'A', pos: 's' }, { k: 'pt', at: [4, 4], name: 'B', pos: 'nw' }, { k: 'pt', at: [9, 1], name: 'C', pos: 's' }] },
+  5: { e1: [80, 0], e2: [0, -80], base: [
+    { k: 'grid', x: [-1.5, 3.5], y: [-1.5, 3.5] },
+    { k: 'vec', from: [0, 0], to: [3, 2], c: 'ink', w: 2.4, lab: [sw(1)] },
+    { k: 'vec', from: [0, 0], to: [-1, 3], c: 'ink', w: 2.4, lab: [sw(2)] },
+    { k: 'vec', from: [0, 0], to: [2, -1], c: 'ink', w: 2.4, lab: [sw(3)], side: -1 },
+    { k: 'vec', from: [0, 0], to: [1, 0], c: 'c1', lab: [su], side: -1 },
+    { k: 'vec', from: [0, 0], to: [0, 1], c: 'c2', lab: [sv], side: -1 }] },
+  6: { e1: [114, 0], e2: [47.5, -90.25], base: [
+    { k: 'grid', x: [0, 5], y: [0, 4] },
+    { k: 'vec', from: [0, 0], to: [1, 0], c: 'c1', lab: [su], side: -1 },
+    { k: 'vec', from: [0, 0], to: [0, 1], c: 'c2', lab: [sv] },
+    { k: 'pt', at: [0, 0], name: 'A', pos: 'sw' }, { k: 'pt', at: [1, 0], name: 'A′', pos: 'se' },
+    { k: 'pt', at: [0, 1], name: 'A″', pos: 'w' }, { k: 'pt', at: [3, 1], name: 'B', pos: 'se' },
+    { k: 'pt', at: [1, 3], name: 'C', pos: 'nw' }, { k: 'pt', at: [4, 2], name: 'D', pos: 'e' },
+    { k: 'pt', at: [0, 2], name: 'E', pos: 'w' }] },
+  7: { e1: [300, 0], e2: [80, -200], base: [
+    { k: 'poly', pts: [[0, 0], [1, 0], [1, 1], [0, 1]], close: true },
+    { k: 'poly', pts: [[0, 0], [0.5, 1]], dash: true, c: 'grey' },
+    { k: 'vec', from: [0, 0], to: [1, 0], c: 'c1', lab: [su], side: -1 },
+    { k: 'vec', from: [0, 0], to: [0, 1], c: 'c2', lab: [sv] },
+    { k: 'pt', at: [0, 0], name: 'A', pos: 'sw' }, { k: 'pt', at: [1, 0], name: 'B', pos: 'se' },
+    { k: 'pt', at: [1, 1], name: 'C', pos: 'ne' }, { k: 'pt', at: [0, 1], name: 'D', pos: 'nw' },
+    { k: 'pt', at: [0.5, 1], name: 'I', pos: 'n' }] },
+  8: { e1: [160, 0], e2: [80, -138.56], base: [
+    { k: 'poly', pts: [[1, 0], [0, 1], [-1, 1], [-1, 0], [0, -1], [1, -1]], close: true },
+    { k: 'poly', pts: [[1, 0], [-1, 0]], c: 'grey' }, { k: 'poly', pts: [[0, 1], [0, -1]], c: 'grey' }, { k: 'poly', pts: [[-1, 1], [1, -1]], c: 'grey' },
+    { k: 'vec', from: [0, 0], to: [1, 0], c: 'c1', lab: [su], side: -1 },
+    { k: 'vec', from: [0, 0], to: [0, 1], c: 'c2', lab: [sv] },
+    { k: 'pt', at: [1, 0], name: 'A', pos: 'e' }, { k: 'pt', at: [0, 1], name: 'B', pos: 'ne' },
+    { k: 'pt', at: [-1, 1], name: 'C', pos: 'nw' }, { k: 'pt', at: [-1, 0], name: 'D', pos: 'w' },
+    { k: 'pt', at: [0, -1], name: 'E', pos: 'sw' }, { k: 'pt', at: [1, -1], name: 'F', pos: 'se' },
+    { k: 'pt', at: [0, 0], name: 'O', pos: [0, 30], cross: false }] }
+};
+const figKey = st => FIG[st.ex + '-' + st.item] ? st.ex + '-' + st.item : st.ex;
+
+/* Éléments de figure */
+const vec = (from, to, c, lab, o = {}) => ({ k: 'vec', from, to, c, lab, ...o });
+const pt = (at, name, pos, c = 'res') => ({ k: 'pt', at, name, pos, c });
+/* Déplacements mis bout à bout : seq = [{ d: [dx, dy], c, n, lab }] */
+function chain(start, seq, o = {}) {
+  const out = []; let p = start;
+  for (const s of seq) for (let i = 0; i < (s.n || 1); i++) {
+    const q = [p[0] + s.d[0], p[1] + s.d[1]];
+    out.push({ k: 'vec', from: p, to: q, c: s.c, dash: true, w: 2.6, lab: s.lab, side: s.side, lpos: s.lpos, ...o });
+    p = q;
+  }
+  return out;
+}
+/* Ligne de l'axe (exercice 3) : vecteur au rang row, étiquette dessous si row > 0 */
+const av = (from, to, row, c, lab, o = {}) =>
+  ({ k: 'vec', from: [from, row], to: [to, row], c, lab, guide: true, lpos: row > 0 ? 'below' : 'above', ...o });
+
+/* ------------------------------------------------------------- Étapes */
+const STEPS = [];
+const add = s => STEPS.push(s);
+const intro = (ex, cap, els = [], board = []) => add({ ex, item: '0', intro: true, cap, els, board });
+
+/* ======================== Exercice 3 */
+intro(3,
+  P(`On veut tout écrire sous la forme « un nombre fois ${V('AB')} ».`) +
+  P(`Deux outils&nbsp;: on regroupe les multiples d’un même vecteur, comme en calcul littéral, et on utilise ${M(V('BA') + ' = −' + V('AB'))}&nbsp;: les vecteurs ${V('BA')} et ${V('AB')} sont opposés.`) +
+  P(`Sur les figures, ${V('AB')} mesure 2 graduations.`),
+  [av(2, 0, -2, 'c2', [sV('BA')])],
+  [M(V('BA') + ' = −' + V('AB'))]);
+
+add({ ex: 3, item: 'a',
+  cap: P(`Les deux termes sont des multiples du même vecteur ${V('AB')}.`) + P(`On les regroupe, comme on le ferait pour ${M('3' + I('x') + ' + ' + F(1, 2) + I('x'))}.`),
+  els: [av(0, 6, 1, 'c1', ['3', sV('AB')], { dash: true }), av(6, 7, 1, 'c2', [{ fr: [1, 2] }, sV('AB')], { dash: true })],
+  board: [M(K('3', V('AB')) + ' + ' + K(F(1, 2), V('AB')))] });
+add({ ex: 3, item: 'a',
+  cap: P(`On met ${V('AB')} en facteur&nbsp;: on additionne les nombres placés devant ${V('AB')}.`),
+  els: [], board: [M('= (3 + ' + F(1, 2) + ')' + sp + V('AB'))] });
+add({ ex: 3, item: 'a',
+  cap: P(`${M('3 + ' + F(1, 2) + ' = ' + F(6, 2) + ' + ' + F(1, 2) + ' = ' + F(7, 2))}`) + P(`Donc <span class="res">${M(I('m') + ' = ' + F(7, 2))}</span>.`),
+  els: [av(0, 7, 2, 'res', [{ fr: [7, 2] }, sV('AB')], { w: 3.4 })],
+  board: [M('= ' + K(F(7, 2), V('AB'))), col('res', M(I('m') + ' = ' + F(7, 2)))],
+  res: M(I('m') + ' = ' + F(7, 2)) });
+
+add({ ex: 3, item: 'b',
+  cap: P(`On commence par la parenthèse&nbsp;: 2 fois ${M(K('3', V('BA')))}, c’est ${M('2 × 3 = 6')} fois ${V('BA')}.`),
+  els: [av(0, -6, 1, 'c2', ['3', sV('BA')], { dash: true }), av(-6, -12, 1, 'c2', ['3', sV('BA')], { dash: true })],
+  board: [M('2(' + K('3', V('BA')) + ')'), M('= ' + K('6', V('BA')))] });
+add({ ex: 3, item: 'b',
+  cap: P(`On veut un résultat en fonction de ${V('AB')}, pas de ${V('BA')}.`) + P(`Or ${M(V('BA') + ' = −' + V('AB'))}&nbsp;: même direction, même longueur, sens opposés.`),
+  els: [av(2, 0, -2, 'c2', [sV('BA')])],
+  board: [M('= 6 × (−' + V('AB') + ')')] });
+add({ ex: 3, item: 'b',
+  cap: P(`${M('6 × (−' + V('AB') + ') = −' + K('6', V('AB')))}`) + P(`Donc <span class="res">${M(I('n') + ' = −6')}</span>.`) + P(`Sur la figure, le résultat va dans le sens opposé à ${V('AB')}&nbsp;: le nombre est bien négatif.`),
+  els: [av(0, -12, 2, 'res', ['−6', sV('AB')], { w: 3.4 })],
+  board: [M('= −' + K('6', V('AB'))), col('res', M(I('n') + ' = −6'))],
+  res: M(I('n') + ' = −6') });
+
+add({ ex: 3, item: 'c',
+  cap: P(`Attention au signe moins devant ${V('BA')}.`) + P(`${M('−' + V('BA'))} est l’opposé de ${V('BA')}&nbsp;: c’est donc ${V('AB')}.`),
+  els: [av(2, 0, -2, 'c2', [sV('BA')])],
+  board: [M(K('2', V('AB')) + ' − ' + V('BA'))] });
+add({ ex: 3, item: 'c',
+  cap: P(`On remplace ${M('−' + V('BA'))} par ${M('+' + V('AB'))}.`) + P(`Sur la figure&nbsp;: 2 fois ${V('AB')}, puis encore une fois ${V('AB')}.`),
+  els: [av(0, 4, 1, 'c1', ['2', sV('AB')], { dash: true }), av(4, 6, 1, 'c2', ['−', sV('BA')], { dash: true })],
+  board: [M('= ' + K('2', V('AB')) + ' + ' + V('AB'))] });
+add({ ex: 3, item: 'c',
+  cap: P(`${M(K('2', V('AB')) + ' + ' + V('AB') + ' = ' + K('3', V('AB')))}`) + P(`Donc <span class="res">${M(I('p') + ' = 3')}</span>.`),
+  els: [av(0, 6, 2, 'res', ['3', sV('AB')], { w: 3.4 })],
+  board: [M('= ' + K('3', V('AB'))), col('res', M(I('p') + ' = 3'))],
+  res: M(I('p') + ' = 3') });
+
+add({ ex: 3, item: 'd',
+  cap: P(`On transforme d’abord ${M(K('3', V('BA')))}.`) + P(`Comme ${M(V('BA') + ' = −' + V('AB'))}, on a ${M(K('3', V('BA')) + ' = −' + K('3', V('AB')))}.`),
+  els: [av(2, 0, -2, 'c2', [sV('BA')]), av(0, -6, 1, 'c2', ['3', sV('BA')], { dash: true })],
+  board: [M(K('3', V('BA')) + ' − ' + K('4', V('AB'))), M('= −' + K('3', V('AB')) + ' − ' + K('4', V('AB')))] });
+add({ ex: 3, item: 'd',
+  cap: P(`${M('−' + K('4', V('AB')))}&nbsp;: 4 fois ${V('AB')}, dans le sens opposé.`) + P(`On met ${V('AB')} en facteur.`),
+  els: [av(-6, -14, 1, 'c1', ['−4', sV('AB')], { dash: true })],
+  board: [M('= (−3 − 4)' + sp + V('AB'))] });
+add({ ex: 3, item: 'd',
+  cap: P(`${M('−3 − 4 = −7')}`) + P(`Donc <span class="res">${M(I('q') + ' = −7')}</span>.`),
+  els: [av(0, -14, 2, 'res', ['−7', sV('AB')], { w: 3.4 })],
+  board: [M('= −' + K('7', V('AB'))), col('res', M(I('q') + ' = −7'))],
+  res: M(I('q') + ' = −7') });
+
+/* ======================== Exercice 4 */
+intro(4,
+  P(`On lit d’abord les deux vecteurs sur le quadrillage.`) +
+  P(`Le vecteur ${u} correspond à un déplacement de 2 carreaux vers la droite.`) +
+  P(`Le vecteur ${v} correspond à un déplacement de 1 carreau vers la droite et 1 carreau vers le haut.`) +
+  P(`Pour construire une somme, on met les vecteurs bout à bout (relation de Chasles).`));
+
+const R4 = (txt) => ({ keep: true, ...txt });
+add({ ex: 4, item: 'a',
+  cap: P(M(V('AM') + ' = ' + u + ' + ' + K('2', v))) + P(`On part de A et on suit d’abord ${u}&nbsp;: 2 carreaux vers la droite.`),
+  els: chain([1, 1], [{ d: [2, 0], c: 'c1', lab: [su] }]) });
+add({ ex: 4, item: 'a',
+  cap: P(`Puis on suit deux fois ${v}&nbsp;: à chaque fois, 1 carreau vers la droite et 1 carreau vers le haut.`),
+  els: chain([3, 1], [{ d: [1, 1], c: 'c2', n: 2, lab: [sv] }]) });
+add({ ex: 4, item: 'a',
+  cap: P(`On arrive au point <span class="res">M</span>.`) + P(`Le vecteur ${V('AM')} correspond à un déplacement de 4 carreaux vers la droite et 2 carreaux vers le haut.`),
+  els: [R4(vec([1, 1], [5, 3], 'res', [sV('AM')], { side: -1 })), R4(pt([5, 3], 'M', 'e'))],
+  res: `M&nbsp;: ${M(V('AM') + ' = ' + Vi('u') + ' + ' + K('2', Vi('v')))}` });
+
+add({ ex: 4, item: 'b',
+  cap: P(M(V('BN') + ' = ' + K('2', u) + ' − ' + v)) + P(`On part de B et on suit deux fois ${u}&nbsp;: 4 carreaux vers la droite.`),
+  els: chain([4, 4], [{ d: [2, 0], c: 'c1', n: 2, lab: [su] }]) });
+add({ ex: 4, item: 'b',
+  cap: P(`${M('−' + v)} est le vecteur opposé à ${v}&nbsp;: même direction, même longueur, sens contraire.`) + P(`On suit donc ${M('−' + v)}&nbsp;: 1 carreau vers la gauche et 1 carreau vers le bas.`),
+  els: chain([8, 4], [{ d: [-1, -1], c: 'c2', lab: ['−', sv] }]) });
+add({ ex: 4, item: 'b',
+  cap: P(`On arrive au point <span class="res">N</span>.`) + P(`Le vecteur ${V('BN')} correspond à un déplacement de 3 carreaux vers la droite et 1 carreau vers le bas.`),
+  els: [R4(vec([4, 4], [7, 3], 'res', [sV('BN')], { lo: [45, 32] })), R4(pt([7, 3], 'N', 's'))],
+  res: `N&nbsp;: ${M(V('BN') + ' = ' + K('2', Vi('u')) + ' − ' + Vi('v'))}` });
+
+add({ ex: 4, item: 'c',
+  cap: P(M(V('CR') + ' = −' + u + ' + ' + K('3', v))) + P(`On part de C et on suit ${M('−' + u)}, l’opposé de ${u}&nbsp;: 2 carreaux vers la gauche.`),
+  els: chain([9, 1], [{ d: [-2, 0], c: 'c1', lab: ['−', su], lpos: 'below' }]) });
+add({ ex: 4, item: 'c',
+  cap: P(`Puis on suit trois fois ${v}.`),
+  els: chain([7, 1], [{ d: [1, 1], c: 'c2', n: 3, lab: [sv] }]) });
+add({ ex: 4, item: 'c',
+  cap: P(`On arrive au point <span class="res">R</span>.`) + P(`Le vecteur ${V('CR')} correspond à un déplacement de 1 carreau vers la droite et 3 carreaux vers le haut.`) +
+    P(`Remarque&nbsp;: l’ordre des déplacements n’a pas d’importance. En suivant d’abord ${M(K('3', v))} puis ${M('−' + u)}, on arrive aussi en R.`),
+  els: [R4(vec([9, 1], [10, 4], 'res', [sV('CR')], { side: -1 })), R4(pt([10, 4], 'R', 'n'))],
+  res: `R&nbsp;: ${M(V('CR') + ' = −' + Vi('u') + ' + ' + K('3', Vi('v')))}` });
+
+/* ======================== Exercice 5 */
+intro(5,
+  P(`Le vecteur ${u} correspond à un déplacement de 1 carreau vers la droite, le vecteur ${v} à un déplacement de 1 carreau vers le haut.`) +
+  P(`Pour chaque vecteur, on cherche comment aller de son origine à son extrémité en se déplaçant d’abord horizontalement (avec ${u}), puis verticalement (avec ${v}).`));
+
+const ex5 = [
+  ['w1', [3, 2], [{ d: [1, 0], c: 'c1', n: 3, lab: [su], lpos: 'below' }, { d: [0, 1], c: 'c2', n: 2, lab: [sv], side: -1 }],
+    `3 carreaux vers la droite et 2 carreaux vers le haut`, `3 fois ${u}, puis 2 fois ${v}.`, K('3', u) + ' + ' + K('2', v), K('3', Vi('u')) + ' + ' + K('2', Vi('v')), ''],
+  ['w2', [-1, 3], [{ d: [-1, 0], c: 'c1', lab: ['−', su], lpos: 'below' }, { d: [0, 1], c: 'c2', n: 3, lab: [sv] }],
+    `1 carreau vers la gauche et 3 carreaux vers le haut`, `Vers la gauche, c’est le sens opposé à ${u}&nbsp;: c’est ${M('−' + u)}. Puis 3 fois ${v}.`, '−' + u + ' + ' + K('3', v), '−' + Vi('u') + ' + ' + K('3', Vi('v')),
+    P(`Un déplacement vers la gauche donne un nombre négatif devant ${u}.`)],
+  ['w3', [2, -1], [{ d: [1, 0], c: 'c1', n: 2, lab: [su] }, { d: [0, -1], c: 'c2', lab: ['−', sv], side: -1 }],
+    `2 carreaux vers la droite et 1 carreau vers le bas`, `2 fois ${u}, puis ${M('−' + v)}&nbsp;: vers le bas, c’est le sens opposé à ${v}.`, K('2', u) + ' − ' + v, K('2', Vi('u')) + ' − ' + Vi('v'),
+    P(`Un déplacement vers le bas donne un nombre négatif devant ${v}.`)]
+];
+for (const [id, end, seq, depl, fois, exprC, expr, rq] of ex5) {
+  const n = id.slice(1);
+  add({ ex: 5, item: id,
+    cap: P(`On part de l’origine de ${W(n)} et on cherche comment atteindre son extrémité.`),
+    els: [vec([0, 0], end, 'res', [sw(n)], { w: 3.6, side: id === 'w1' ? 1 : -1 })] });
+  add({ ex: 5, item: id,
+    cap: P(`Le vecteur ${W(n)} correspond à un déplacement de ${depl}.`) + P(fois),
+    els: chain([0, 0], seq) });
+  add({ ex: 5, item: id,
+    cap: P(`Donc <span class="res">${M(W(n) + ' = ' + exprC)}</span>.`) + rq,
+    els: [], res: M(W(n) + ' = ' + expr) });
+}
+
+/* ======================== Exercice 6 */
+intro(6,
+  P(`Le pavage est formé de parallélogrammes tous identiques.`) +
+  P(`Un pas le long d’un côté horizontal correspond à ${u}, un pas le long d’un côté oblique correspond à ${v}.`) +
+  P(`Pour décomposer un vecteur, on compte les pas dans la direction de ${u}, puis dans la direction de ${v}.`));
+
+const ex6 = [
+  ['AB', [0, 0], [3, 1], [{ d: [1, 0], c: 'c1', n: 3, lab: [su] }, { d: [0, 1], c: 'c2', lab: [sv], side: -1 }],
+    `3 pas dans le sens de ${u}, puis 1 pas dans le sens de ${v}.`, K('3', u) + ' + ' + v, K('3', Vi('u')) + ' + ' + Vi('v'), ''],
+  ['AC', [0, 0], [1, 3], [{ d: [1, 0], c: 'c1', lab: [su], side: -1 }, { d: [0, 1], c: 'c2', n: 3, lab: [sv], side: -1 }],
+    `1 pas dans le sens de ${u}, puis 3 pas dans le sens de ${v}.`, u + ' + ' + K('3', v), Vi('u') + ' + ' + K('3', Vi('v')), ''],
+  ['BD', [3, 1], [4, 2], [{ d: [1, 0], c: 'c1', lab: [su], side: -1 }, { d: [0, 1], c: 'c2', lab: [sv], side: -1 }],
+    `1 pas dans le sens de ${u}, puis 1 pas dans le sens de ${v}.`, u + ' + ' + v, Vi('u') + ' + ' + Vi('v'), ''],
+  ['DC', [4, 2], [1, 3], [{ d: [-1, 0], c: 'c1', n: 3, lab: ['−', su] }, { d: [0, 1], c: 'c2', lab: [sv] }],
+    `3 pas dans le sens <em>contraire</em> de ${u}, puis 1 pas dans le sens de ${v}.`, '−' + K('3', u) + ' + ' + v, '−' + K('3', Vi('u')) + ' + ' + Vi('v'),
+    P(`Les pas dans le sens contraire de ${u} se comptent avec un signe moins.`)],
+  ['EB', [0, 2], [3, 1], [{ d: [1, 0], c: 'c1', n: 3, lab: [su] }, { d: [0, -1], c: 'c2', lab: ['−', sv] }],
+    `3 pas dans le sens de ${u}, puis 1 pas dans le sens contraire de ${v}.`, K('3', u) + ' − ' + v, K('3', Vi('u')) + ' − ' + Vi('v'),
+    P(`Vérification avec la relation de Chasles&nbsp;: ${M(V('AB') + ' = ' + V('AE') + ' + ' + V('EB'))} ${M('= ' + K('2', v) + ' + ' + K('3', u) + ' − ' + v)} ${M('= ' + K('3', u) + ' + ' + v)}. On retrouve bien le résultat trouvé pour ${V('AB')}.`)]
+];
+for (const [id, from, to, seq, pas, exprC, expr, rq] of ex6) {
+  add({ ex: 6, item: id,
+    cap: P(`On cherche un chemin de ${id[0]} à ${id[1]} en suivant les côtés du pavage.`),
+    els: [vec(from, to, 'res', [sV(id)], { w: 3.6, side: id === 'AB' || id === 'EB' ? -1 : 1 })] });
+  add({ ex: 6, item: id, cap: P(pas), els: chain(from, seq) });
+  add({ ex: 6, item: id,
+    cap: P(`Donc <span class="res">${M(V(id) + ' = ' + exprC)}</span>.`) + rq,
+    els: [], res: M(V(id) + ' = ' + expr) });
+}
+
+/* ======================== Exercice 7 */
+intro(7,
+  P(`On veut écrire ${V('AI')} uniquement avec ${u} = ${V('AB')} et ${v} = ${V('AD')}.`) +
+  P(`Pour cela, on passe par d’autres points de la figure grâce à la relation de Chasles.`));
+
+add({ ex: 7, item: 'AI',
+  cap: P(`Relation de Chasles&nbsp;: on passe par le point D.`) + P(M(V('AI') + ' = ' + V('AD') + ' + ' + V('DI'))),
+  els: [vec([0, 0], [0, 1], 'c2', null, { dash: true }), vec([0, 1], [0.5, 1], 'c3', [sV('DI')], { side: -1 })],
+  board: [M(V('AI') + ' = ' + V('AD') + ' + ' + V('DI'))] });
+add({ ex: 7, item: 'AI',
+  cap: P(`${M(V('AD') + ' = ' + v)}&nbsp;: c’est la définition de ${v}.`) + P(`Il reste à exprimer ${V('DI')}.`),
+  els: [], board: [M(V('AI') + ' = ' + v + ' + ' + V('DI'))] });
+add({ ex: 7, item: 'AI',
+  cap: P(`I est le milieu de [DC]&nbsp;: ${V('DI')} a la même direction et le même sens que ${V('DC')}, et il est deux fois plus court.`) + P(M(V('DI') + ' = ' + K(F(1, 2), V('DC')))),
+  els: [vec([0, 1], [1, 1], 'ink', [sV('DC')], { dash: true, w: 2.2 })],
+  board: [M(V('DI') + ' = ' + K(F(1, 2), V('DC')))] });
+add({ ex: 7, item: 'AI',
+  cap: P(`ABCD est un parallélogramme, donc ${M(V('DC') + ' = ' + V('AB'))}.`) + P(`Or ${M(V('AB') + ' = ' + u)}, donc ${M(V('DC') + ' = ' + u)} et ${M(V('DI') + ' = ' + K(F(1, 2), u))}.`),
+  els: [vec([0, 1], [1, 1], 'c1', null, { w: 3 })],
+  board: [M(V('DI') + ' = ' + K(F(1, 2), u))] });
+add({ ex: 7, item: 'AI',
+  cap: P(`On remplace dans la relation de Chasles&nbsp;:`) + P(`<span class="res">${M(V('AI') + ' = ' + K(F(1, 2), u) + ' + ' + v)}</span>`),
+  els: [{ keep: true, ...vec([0, 0], [0.5, 1], 'res', [sV('AI')], { w: 3.6, side: -1 }) }],
+  board: [col('res', M(V('AI') + ' = ' + v + ' + ' + K(F(1, 2), u) + ' = ' + K(F(1, 2), u) + ' + ' + v))],
+  res: M(V('AI') + ' = ' + K(F(1, 2), Vi('u')) + ' + ' + Vi('v')) });
+
+add({ ex: 7, item: 'autre',
+  cap: P(`On peut aussi passer par B puis par C&nbsp;:`) + P(M(V('AI') + ' = ' + V('AB') + ' + ' + V('BC') + ' + ' + V('CI'))),
+  els: [vec([0, 0], [1, 0], 'c1', null, { dash: true }), vec([1, 0], [1, 1], 'c2', [sV('BC')], { dash: true, side: 1 }), vec([1, 1], [0.5, 1], 'c3', [sV('CI')], { side: 1, lpos: 'above' })],
+  board: [M(V('AI') + ' = ' + V('AB') + ' + ' + V('BC') + ' + ' + V('CI'))] });
+add({ ex: 7, item: 'autre',
+  cap: P(`${M(V('BC') + ' = ' + V('AD') + ' = ' + v)} (parallélogramme).`) + P(`${V('CI')} va dans le sens contraire de ${u} et mesure la moitié de CD&nbsp;: ${M(V('CI') + ' = −' + K(F(1, 2), u))}.`),
+  els: [], board: [M('= ' + u + ' + ' + v + ' − ' + K(F(1, 2), u))] });
+add({ ex: 7, item: 'autre',
+  cap: P(`${M(u + ' − ' + K(F(1, 2), u) + ' = ' + K(F(1, 2), u))}`) + P(`On retrouve le même résultat&nbsp;: ${M(V('AI') + ' = ' + K(F(1, 2), u) + ' + ' + v)}.`),
+  els: [], board: [col('res', M('= ' + K(F(1, 2), u) + ' + ' + v))] });
+
+/* ======================== Exercice 8 */
+intro(8,
+  P(`ABCDEF est un hexagone régulier de centre O.`) +
+  P(`Les six triangles OAB, OBC, OCD, ODE, OEF et OFA sont équilatéraux&nbsp;: toutes les longueurs OA, OB, AB, BC… sont égales.`) +
+  P(`Le centre O est le milieu des grandes diagonales [AD], [BE] et [CF].`));
+
+add({ ex: 8, item: 'OD',
+  cap: P(`O est le milieu de [AD]&nbsp;: D est le symétrique de A par rapport à O.`),
+  els: [vec([0, 0], [-1, 0], 'res', [sV('OD')], { w: 3.4 })] });
+add({ ex: 8, item: 'OD',
+  cap: P(`${V('OD')} et ${V('OA')} ont même direction, même longueur et des sens opposés.`) + P(`Donc <span class="res">${M(V('OD') + ' = −' + V('OA') + ' = −' + u)}</span>.`),
+  els: [], board: [M(V('OD') + ' = −' + V('OA') + ' = −' + u)], res: M(V('OD') + ' = −' + Vi('u')) });
+
+add({ ex: 8, item: 'OC',
+  cap: P(`Les triangles OAB et OBC sont équilatéraux&nbsp;: OABC est un losange, donc un parallélogramme.`) + P(`Donc ${M(V('OC') + ' = ' + V('AB'))}.`),
+  els: [vec([0, 0], [-1, 1], 'res', [sV('OC')], { w: 3.4 }), vec([1, 0], [0, 1], 'res', [sV('AB')], { w: 2.4, dash: true })],
+  board: [M(V('OC') + ' = ' + V('AB'))] });
+add({ ex: 8, item: 'OC',
+  cap: P(`Relation de Chasles en passant par O&nbsp;:`) + P(M(V('AB') + ' = ' + V('AO') + ' + ' + V('OB') + ' = −' + u + ' + ' + v)),
+  els: chain([1, 0], [{ d: [-1, 0], c: 'c1', lab: ['−', su], lpos: 'above' }, { d: [0, 1], c: 'c2', lab: [sv] }]),
+  board: [M(V('AB') + ' = ' + V('AO') + ' + ' + V('OB') + ' = −' + u + ' + ' + v)] });
+add({ ex: 8, item: 'OC',
+  cap: P(`Donc <span class="res">${M(V('OC') + ' = −' + u + ' + ' + v)}</span>.`),
+  els: [], board: [col('res', M(V('OC') + ' = −' + u + ' + ' + v))], res: M(V('OC') + ' = −' + Vi('u') + ' + ' + Vi('v')) });
+
+add({ ex: 8, item: 'OE',
+  cap: P(`O est le milieu de [BE]&nbsp;: E est le symétrique de B par rapport à O.`),
+  els: [vec([0, 0], [0, -1], 'res', [sV('OE')], { w: 3.4 })] });
+add({ ex: 8, item: 'OE',
+  cap: P(`${V('OE')} et ${V('OB')} sont opposés.`) + P(`Donc <span class="res">${M(V('OE') + ' = −' + V('OB') + ' = −' + v)}</span>.`),
+  els: [], board: [M(V('OE') + ' = −' + V('OB') + ' = −' + v)], res: M(V('OE') + ' = −' + Vi('v')) });
+
+add({ ex: 8, item: 'OF',
+  cap: P(`O est le milieu de [CF]&nbsp;: F est le symétrique de C par rapport à O, donc ${M(V('OF') + ' = −' + V('OC'))}.`),
+  els: [vec([0, 0], [1, -1], 'res', [sV('OF')], { w: 3.4, side: -1 }), vec([0, 0], [-1, 1], 'ink', [sV('OC')], { w: 2.2, dash: true })],
+  board: [M(V('OF') + ' = −' + V('OC'))] });
+add({ ex: 8, item: 'OF',
+  cap: P(`On remplace ${V('OC')} par ${M('−' + u + ' + ' + v)} et on enlève les parenthèses&nbsp;: le signe moins change tous les signes.`) + P(`Donc <span class="res">${M(V('OF') + ' = ' + u + ' − ' + v)}</span>.`),
+  els: [], board: [M('= −(−' + u + ' + ' + v + ')'), col('res', M('= ' + u + ' − ' + v))], res: M(V('OF') + ' = ' + Vi('u') + ' − ' + Vi('v')) });
+
+/* Question 2 : on passe toujours par O */
+const ex8b = [
+  ['DB', [-1, 0], [0, 1], [{ d: [1, 0], c: 'c1', lab: [su], lpos: 'below' }, { d: [0, 1], c: 'c2', lab: [sv] }],
+    `On passe par le centre O, puis on utilise les résultats de la question 1.`,
+    [M(V('DB') + ' = ' + V('DO') + ' + ' + V('OB'))],
+    P(`${M(V('DO') + ' = −' + V('OD') + ' = ' + u)}.`),
+    [M('= ' + u + ' + ' + v)], u + ' + ' + v, Vi('u') + ' + ' + Vi('v'), ''],
+  ['CB', [-1, 1], [0, 1], [{ d: [1, -1], c: 'c1', lab: [su, MOINS, sv], lpos: 'below' }, { d: [0, 1], c: 'c2', lab: [sv], side: -1 }],
+    ``,
+    [M(V('CB') + ' = ' + V('CO') + ' + ' + V('OB'))],
+    P(`${M(V('CO') + ' = −' + V('OC') + ' = −(−' + u + ' + ' + v + ') = ' + u + ' − ' + v)}.`),
+    [M('= ' + u + ' − ' + v + ' + ' + v)], u, Vi('u'),
+    P(`Vérification sur la figure&nbsp;: ${V('CB')} et ${V('OA')} ont même direction, même sens et même longueur.`)],
+  ['AB', [1, 0], [0, 1], [{ d: [-1, 0], c: 'c1', lab: ['−', su], lpos: 'above' }, { d: [0, 1], c: 'c2', lab: [sv] }],
+    ``,
+    [M(V('AB') + ' = ' + V('AO') + ' + ' + V('OB'))],
+    P(`${M(V('AO') + ' = −' + V('OA') + ' = −' + u)}.`),
+    [], '−' + u + ' + ' + v, '−' + Vi('u') + ' + ' + Vi('v'),
+    P(`C’est le calcul déjà fait pour ${V('OC')} à la question 1.`)],
+  ['DF', [-1, 0], [1, -1], [{ d: [1, 0], c: 'c1', lab: [su], lpos: 'above' }, { d: [1, -1], c: 'c1', lab: [su, MOINS, sv], side: -1 }],
+    ``,
+    [M(V('DF') + ' = ' + V('DO') + ' + ' + V('OF'))],
+    P(`${M(V('DO') + ' = ' + u)} et ${M(V('OF') + ' = ' + u + ' − ' + v)} (question 1).`),
+    [M('= ' + u + ' + ' + u + ' − ' + v)], K('2', u) + ' − ' + v, K('2', Vi('u')) + ' − ' + Vi('v'), ''],
+  ['CD', [-1, 1], [-1, 0], [{ d: [1, -1], c: 'c1', lab: [su, MOINS, sv], side: -1 }, { d: [-1, 0], c: 'c1', lab: ['−', su], lpos: 'below' }],
+    ``,
+    [M(V('CD') + ' = ' + V('CO') + ' + ' + V('OD'))],
+    P(`${M(V('CO') + ' = ' + u + ' − ' + v)} et ${M(V('OD') + ' = −' + u)}.`),
+    [M('= ' + u + ' − ' + v + ' − ' + u)], '−' + v, '−' + Vi('v'),
+    P(`Vérification sur la figure&nbsp;: ${V('CD')} et ${V('OB')} ont même direction, même longueur et des sens opposés.`)]
+];
+for (const [id, from, to, seq, pre, b1, cap2, b2, exprC, expr, rq] of ex8b) {
+  add({ ex: 8, item: id,
+    cap: (pre ? P(pre) : '') + P(`Relation de Chasles en passant par O&nbsp;: ${b1[0]}.`),
+    els: chain(from, seq), board: b1 });
+  add({ ex: 8, item: id, cap: cap2, els: [], board: b2.length ? b2 : [M('= ' + exprC)] });
+  add({ ex: 8, item: id,
+    cap: P(`Donc <span class="res">${M(V(id) + ' = ' + exprC)}</span>.`) + rq,
+    els: [{ keep: false, ...vec(from, to, 'res', [sV(id)], { w: 3.6, side: id === 'DF' ? -1 : 1 }) }],
+    board: [col('res', M(V(id) + ' = ' + exprC))],
+    res: M(V(id) + ' = ' + expr) });
+}
+
+/* Récapitulatif */
+add({ ex: 9, item: '0', recap: true, cap: P(`Récapitulatif de tous les résultats.`), els: [] });
+
+/* ----------------------------------------------------------- Dessin SVG */
+const HEX = { c1: '#7048E8', c2: '#D9480F', c3: '#0C8599', res: '#C92A2A', ink: '#1f2328', grey: '#9aa0a6', grid: '#dddad3' };
+const NS = 'http://www.w3.org/2000/svg';
+const svg = document.getElementById('fig');
+let FG = FIG[4];
+const XY = p => [p[0] * FG.e1[0] + p[1] * FG.e2[0], p[0] * FG.e1[1] + p[1] * FG.e2[1]];
+
+function el(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function cross(x, y, color, layer, s = 6, w = 2.2) {
+  const g = el('g', { stroke: color, 'stroke-width': w, 'stroke-linecap': 'round' }, layer);
+  el('line', { x1: x - s, y1: y - s, x2: x + s, y2: y + s }, g);
+  el('line', { x1: x - s, y1: y + s, x2: x + s, y2: y - s }, g);
+  return g;
+}
+
+/* Écriture mathématique dans la figure : renvoie un groupe centré en (cx, cy) */
+function svgMath(parts, cx, cy, color, layer, size = 22) {
+  const g = el('g', { fill: color }, layer);
+  const halo = { stroke: '#fff', 'stroke-width': 5, 'paint-order': 'stroke', 'stroke-linejoin': 'round' };
+  let x = 0, top = -size * 0.95, bot = size * 0.28;
+  const txt = (s, xx, yy, sz, it) => {
+    const t = el('text', { x: xx, y: yy, 'font-size': sz, ...halo, ...(it ? { 'font-style': 'italic' } : {}) }, g);
+    t.textContent = s;
+    return t.getComputedTextLength();
+  };
+  for (const p of parts) {
+    if (typeof p === 'string') { x += txt(p, x, 0, size); continue; }
+    if (p.fr) {
+      const s2 = size * 0.68;
+      const w1 = Math.max(txt(String(p.fr[0]), x + 2, -size * 0.42, s2), txt(String(p.fr[1]), x + 2, size * 0.28, s2));
+      el('line', { x1: x + 1, y1: -size * 0.33, x2: x + w1 + 3, y2: -size * 0.33, stroke: color, 'stroke-width': 1.3 }, g);
+      x += w1 + 7; top = Math.min(top, -size * 0.95); bot = Math.max(bot, size * 0.32);
+      continue;
+    }
+    const x0 = x;
+    x += txt(p.v, x, 0, size, p.it) + (p.it && !p.sub ? 2 : 0);
+    if (p.sub) { x -= 1; x += txt(p.sub, x, size * 0.28, size * 0.65); }
+    const ay = -size * (p.it ? 0.78 : 0.86), x1 = x0 + 1.5, x2 = x - 0.5;
+    el('line', { x1, y1: ay, x2, y2: ay, stroke: color, 'stroke-width': 1.4 }, g);
+    el('polyline', { points: `${x2 - 4.5},${ay - 3.2} ${x2},${ay} ${x2 - 4.5},${ay + 3.2}`, fill: 'none', stroke: color, 'stroke-width': 1.4, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, g);
+    x += 1;
+  }
+  const h = bot - top;
+  g.setAttribute('transform', `translate(${cx - x / 2},${cy - (top + bot) / 2})`);
+  g.dataset.w = x; g.dataset.h = h;
+  return g;
+}
+
+const POS = { n: [0, -22], s: [0, 24], e: [20, 0], w: [-20, 0], ne: [15, -18], nw: [-15, -18], se: [15, 20], sw: [-15, 20] };
+function drawPt(e, layer) {
+  const [x, y] = XY(e.at), color = HEX[e.c || 'ink'];
+  const g = el('g', {}, layer);
+  if (e.cross !== false) cross(x, y, color, g, e.c === 'res' ? 7 : 6, e.c === 'res' ? 2.8 : 2.2);
+  const o = Array.isArray(e.pos) ? e.pos : POS[e.pos || 'ne'];
+  const t = el('text', { x: x + o[0], y: y + o[1], 'text-anchor': 'middle', 'dominant-baseline': 'middle', 'font-size': 24, fill: color,
+    stroke: '#fff', 'stroke-width': 5, 'paint-order': 'stroke' }, g);
+  t.textContent = e.name;
+  return g;
+}
+
+function drawVec(e, layer) {
+  const [x1, y1] = XY(e.from), [x2, y2] = XY(e.to), color = HEX[e.c];
+  const dx = x2 - x1, dy = y2 - y1, len = Math.hypot(dx, dy), ux = dx / len, uy = dy / len;
+  const w = e.w || 3, hl = 9 + w * 1.4, hw = 3 + w;
+  const g = el('g', {}, layer);
+  if (e.guide) {
+    const yA = XY([0, 0])[1];
+    for (const xx of [x1, x2]) el('line', { x1: xx, y1: yA, x2: xx, y2: y1, stroke: HEX.grey, 'stroke-width': 1, 'stroke-dasharray': '3 4' }, g);
+  }
+  const line = el('line', { x1, y1, x2: x2 - ux * hl, y2: y2 - uy * hl, stroke: color, 'stroke-width': w, 'stroke-linecap': e.dash ? 'butt' : 'round',
+    ...(e.dash ? { 'stroke-dasharray': '8 5' } : {}) }, g);
+  const head = el('polygon', { points: `${x2},${y2} ${x2 - ux * hl - uy * hw},${y2 - uy * hl + ux * hw} ${x2 - ux * hl + uy * hw},${y2 - uy * hl - ux * hw}`, fill: color }, g);
+  let lab = null;
+  if (e.lab) {
+    const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+    lab = svgMath(e.lab, 0, 0, color, g);
+    const lw = +lab.dataset.w, lh = +lab.dataset.h;
+    let nx, ny;
+    if (e.lo) { nx = 0; ny = 0; }
+    else if (e.lpos === 'above') { nx = 0; ny = -1; } else if (e.lpos === 'below') { nx = 0; ny = 1; }
+    else { const s = e.side || 1; nx = uy * s; ny = -ux * s; }
+    const off = 8 + Math.abs(nx) * lw / 2 + Math.abs(ny) * lh / 2;
+    const cx = mx + nx * off + (e.lo ? e.lo[0] : 0), cy = my + ny * off + (e.lo ? e.lo[1] : 0);
+    lab.setAttribute('transform', lab.getAttribute('transform').replace(/translate\(([-\d.e]+),([-\d.e]+)\)/,
+      (_, a, b) => `translate(${+a + cx},${+b + cy})`));
+  }
+  return { g, line, head, lab, len: len - hl };
+}
+
+function drawBase(e, layer) {
+  if (e.k === 'grid') {
+    for (let i = Math.ceil(e.x[0]); i <= Math.floor(e.x[1]); i++) {
+      const [a, b] = [XY([i, e.y[0]]), XY([i, e.y[1]])];
+      el('line', { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: HEX.grid, 'stroke-width': 1 }, layer);
+    }
+    for (let j = Math.ceil(e.y[0]); j <= Math.floor(e.y[1]); j++) {
+      const [a, b] = [XY([e.x[0], j]), XY([e.x[1], j])];
+      el('line', { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: HEX.grid, 'stroke-width': 1 }, layer);
+    }
+  } else if (e.k === 'axis') {
+    const [a, b] = [XY([e.lo, 0]), XY([e.hi, 0])];
+    el('line', { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: HEX.ink, 'stroke-width': 1.6 }, layer);
+    for (let x = Math.ceil(e.lo); x <= e.hi; x++) {
+      if (x === e.lo || x === e.hi) continue;
+      const [px, py] = XY([x, 0]);
+      el('line', { x1: px, y1: py - 6, x2: px, y2: py + 6, stroke: HEX.ink, 'stroke-width': 1.4 }, layer);
+    }
+  } else if (e.k === 'poly') {
+    const pts = e.pts.map(p => XY(p).join(',')).join(' ');
+    el(e.close ? 'polygon' : 'polyline', { points: pts, fill: 'none', stroke: HEX[e.c || 'ink'], 'stroke-width': e.c === 'grey' ? 1.2 : 1.8,
+      ...(e.dash ? { 'stroke-dasharray': '6 5' } : {}) }, layer);
+  } else if (e.k === 'pt') drawPt(e, layer);
+  else if (e.k === 'vec') drawVec(e, layer);
+}
+
+/* Cadre de chaque figure : calculé une fois, avec tous les éléments de toutes ses étapes */
+const VIEW = {};
+function viewOf(key) {
+  if (VIEW[key]) return VIEW[key];
+  const g = el('g', {}, svg);
+  for (const e of FIG[key].base) drawBase(e, g);
+  for (const s of STEPS) if (figKey(s) == key) for (const e of s.els) drawBase(e, g);
+  const bb = g.getBBox();
+  svg.removeChild(g);
+  const pad = 20, w = Math.max(760, bb.width + 2 * pad), h = Math.max(240, bb.height + 2 * pad);
+  return VIEW[key] = `${bb.x + bb.width / 2 - w / 2} ${bb.y + bb.height / 2 - h / 2} ${w} ${h}`;
+}
+
+/* ----------------------------------------------------------------- État */
+let cur = 0;
+const exStart = ex => STEPS.findIndex(s => s.ex === ex);
+const itemLabel = (ex, item) => { const it = EX[ex].items.find(i => i[0] === item); return it ? (it[1] ? it[1] + ' ' : '') + it[2] : ''; };
+
+function render(animate) {
+  svg.innerHTML = '';
+  const st = STEPS[cur];
+  const figT = document.getElementById('figtitle'), board = document.getElementById('board'), rf = document.getElementById('recapfig');
+  if (st.recap) {
+    svg.style.display = 'none'; board.innerHTML = ''; rf.style.display = '';
+    figT.innerHTML = 'Résultats des exercices 3 à 8.';
+    rf.innerHTML = [3, 4, 5, 6, 7, 8].map(ex =>
+      `<p class="hint">Exercice ${ex}</p><div class="recap">${STEPS.filter(s => s.ex === ex && s.res).map(s => `<p>${s.res}</p>`).join('')}</div>`).join('');
+    updatePanel(); return;
+  }
+  svg.style.display = ''; rf.style.display = 'none';
+  const key = figKey(st);
+  FG = FIG[key];
+  svg.setAttribute('viewBox', viewOf(key));
+  figT.innerHTML = `Exercice ${st.ex}` + (st.intro ? '' : ` — ${itemLabel(st.ex, st.item)}`);
+
+  const gBase = el('g', {}, svg), gEls = el('g', {}, svg), gTop = el('g', {}, svg);
+  for (const e of FG.base) drawBase(e, gBase);
+
+  /* Tableau des calculs : lignes des étapes déjà vues pour la même question */
+  let bl = [];
+  for (let j = exStart(st.ex); j <= cur; j++) {
+    const S = STEPS[j];
+    if (S.item === st.item && S.board) bl.push(...S.board.map(l => [l, j === cur]));
+  }
+  board.innerHTML = bl.map(([l, isNew], i) => `<div class="bl${animate && isNew ? ' new' : ''}">${l}</div>`).join('');
+  if (animate) board.querySelectorAll('.bl.new').forEach((d, i) => { d.style.opacity = 0; d.style.transitionDelay = (0.15 + i * 0.35) + 's'; requestAnimationFrame(() => requestAnimationFrame(() => { d.style.opacity = ''; })); });
+
+  let t = 0;
+  for (let j = exStart(st.ex); j <= cur; j++) {
+    const S = STEPS[j];
+    for (const e of S.els) {
+      const same = S.item === st.item;
+      if (!same && !e.keep) continue;
+      const isNew = animate && j === cur;
+      if (e.k === 'vec') {
+        const v = drawVec(e, e.c === 'res' ? gTop : gEls);
+        if (isNew) {
+          if (e.dash) fadeIn(v.line, t); else animLine(v.line, v.len, t);
+          fadeIn(v.head, t + 0.55); if (v.lab) fadeIn(v.lab, t + 0.55);
+          t += e.dash ? 0.45 : 0.75;
+        }
+      } else if (e.k === 'pt') {
+        const p = drawPt(e, gTop);
+        if (isNew) { fadeIn(p, t); t += 0.2; }
+      }
+    }
+  }
+  updatePanel();
+}
+
+function animLine(node, len, delay) {
+  node.style.strokeDasharray = len;
+  node.style.strokeDashoffset = len;
+  node.classList.add('draw');
+  node.style.transitionDelay = delay + 's';
+  requestAnimationFrame(() => requestAnimationFrame(() => { node.style.strokeDashoffset = 0; }));
+}
+function fadeIn(node, delay) {
+  node.style.opacity = 0;
+  node.classList.add('fade');
+  node.style.transitionDelay = delay + 's';
+  requestAnimationFrame(() => requestAnimationFrame(() => { node.style.opacity = ''; }));
+}
+
+/* ------------------------------------------------------------- Panneau */
+const tabs = document.getElementById('tabs'), qBox = document.getElementById('questions');
+for (const ex of [3, 4, 5, 6, 7, 8, 9]) {
+  const b = document.createElement('button');
+  b.className = 'tab'; b.dataset.ex = ex;
+  b.textContent = ex === 9 ? 'Récapitulatif' : 'Exercice ' + ex;
+  b.addEventListener('click', () => { cur = exStart(ex); render(true); });
+  tabs.appendChild(b);
+}
+let shownEx = null;
+function buildQuestions(ex) {
+  shownEx = ex;
+  qBox.innerHTML = '';
+  if (ex === 9) { document.getElementById('consigne').innerHTML = 'Tous les résultats des exercices 3 à 8.'; return; }
+  document.getElementById('consigne').innerHTML = `Exercice ${ex} — ${EX[ex].consigne} <span style="white-space:nowrap">(${EX[ex].comp})</span>`;
+  qBox.classList.toggle('wide', !!EX[ex].wide);
+  for (const [id, num, txt] of EX[ex].items) {
+    const d = document.createElement('div');
+    d.className = 'q'; d.dataset.id = id;
+    d.innerHTML = (num ? `<span class="num">${num}</span>` : '') + `<span>${txt}</span>`;
+    d.addEventListener('click', () => { cur = STEPS.findIndex(s => s.ex === ex && s.item === id); render(true); });
+    qBox.appendChild(d);
+  }
+}
+
+function updatePanel() {
+  const st = STEPS[cur];
+  if (shownEx !== st.ex) buildQuestions(st.ex);
+  [...tabs.children].forEach(b => b.classList.toggle('active', +b.dataset.ex === st.ex));
+  if (st.ex !== 9) {
+    const ids = EX[st.ex].items.map(i => i[0]), k = st.intro ? -1 : ids.indexOf(st.item);
+    [...qBox.children].forEach(d => {
+      const i = ids.indexOf(d.dataset.id);
+      d.classList.toggle('active', i === k);
+      d.classList.toggle('done', i < k);
+    });
+  }
+  let et;
+  if (st.recap) et = 'Récapitulatif';
+  else if (st.intro) et = `Exercice ${st.ex} — présentation`;
+  else {
+    const same = STEPS.filter(s => s.ex === st.ex && s.item === st.item);
+    et = `Exercice ${st.ex} — étape ${same.indexOf(st) + 1} sur ${same.length}`;
+  }
+  document.getElementById('etape').textContent = et;
+  document.getElementById('caption').innerHTML = st.cap;
+  document.getElementById('prev').disabled = cur === 0;
+  document.getElementById('next').disabled = cur === STEPS.length - 1;
+  document.getElementById('bar').style.width = (100 * cur / (STEPS.length - 1)) + '%';
+  history.replaceState(null, '', '#' + cur);
+}
+
+function go(delta) {
+  const n = Math.max(0, Math.min(STEPS.length - 1, cur + delta));
+  if (n === cur) return;
+  cur = n; render(delta > 0);
+}
+document.getElementById('prev').addEventListener('click', () => go(-1));
+document.getElementById('next').addEventListener('click', () => go(1));
+// Les boutons ne gardent pas le focus (sinon la barre d'espace les réactiverait)
+document.addEventListener('click', e => { const b = e.target.closest('button'); if (b) b.blur(); });
+// Clic n'importe où sur la page = étape suivante (sauf boutons et choix d'une question)
+document.addEventListener('click', e => {
+  if (e.target.closest('button, .q, a')) return;
+  go(1);
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); go(1); }
+  if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(-1); }
+});
+
+// Accès direct : …html#12 = étape 12
+const h = /^#(\d+)$/.exec(location.hash);
+if (h) cur = Math.min(STEPS.length - 1, +h[1]);
+(document.fonts ? document.fonts.ready : Promise.resolve()).then(() => render(false));
+</script>
+</body>
+</html>

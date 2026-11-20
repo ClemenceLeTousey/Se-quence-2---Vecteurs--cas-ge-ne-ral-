@@ -1,0 +1,429 @@
+% !TEX program = xelatex
+% Version grands caractères (paysage, ~18pt, une page par exercice) de
+% "Séquence 2 - Feuille d'exercices 2 - Corrigé.tex", pour une élève
+% déficiente visuelle. Document autonome (n'utilise PAS CLT2627.sty),
+% construit sur le même modèle que "Séquence 2 - Feuille d'exercices -
+% Vecteurs - Grands Caractères.tex" : police sans-serif, texte non
+% justifié, interligne large, paysage, et un corrigé par page, dans le
+% même ordre et avec la même pagination que la feuille grands caractères
+% (page n = exercice n).
+%
+% Le texte est en 18pt et non en 20pt comme la feuille : les corrigés
+% sont nettement plus longs que les énoncés, et 18pt est ce qui permet de
+% garder un exercice par page sans supprimer de justification.
+%
+% Quand le corrigé comporte une figure, le texte occupe la colonne de
+% gauche et la figure la colonne de droite (voir \GCexo plus bas) : la
+% page paysage étant large mais basse, c'est ce qui laisse le plus de
+% place à la figure tout en gardant l'ensemble sur une seule page.
+%
+% Couvre les Objectifs 1 à 4 / Exercices 1 à 16, comme la feuille grands
+% caractères.
+\documentclass[a4paper,landscape]{article}
+
+\usepackage{fontspec}
+\usepackage[french]{babel}
+\usepackage{geometry}
+\geometry{a4paper,landscape,top=1.4cm,bottom=1.6cm,left=1.8cm,right=1.8cm,footskip=1cm}
+
+\setmainfont{Helvetica Neue}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xcolor}
+% Badges « Exercice n » en cursive Playwrite FR Moderne (police du site),
+% chargée à 85 % de la taille courante (XeLaTeX ou LuaLaTeX ; gras sous pdfLaTeX).
+\makeatletter
+\ifdefined\XeTeXrevision\def\ExoFont@ok{}\fi
+\ifdefined\directlua\def\ExoFont@ok{}\fi
+\ifdefined\ExoFont@ok
+\newcommand{\ExoFont}{\font\ExoFont@f="[../polices/PlaywriteFRModerne.ttf]" at \dimexpr\f@size pt*85/100\relax\ExoFont@f}
+\else
+\newcommand{\ExoFont}{\bfseries}
+\fi
+\makeatother
+% \ExoTexte{...} : texte du badge en cursive, avec la hauteur d'une majuscule de la
+% police courante (la cursive est plus haute et ferait grandir chaque badge).
+\newcommand{\ExoTexte}[1]{\raisebox{0pt}[\fontcharht\font`E][0pt]{\ExoFont #1}}
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage{enumitem}
+\usepackage{ragged2e}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{graphicx}
+\usepackage{adjustbox}
+\usepackage{pifont}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,shapes.misc}
+\tikzset{ptcross/.style={cross out,draw,thick,minimum size=3pt,inner sep=0pt}}
+\usepackage[hidelinks]{hyperref}
+
+\definecolor{skyblue}{HTML}{339AF0}
+\definecolor{objorange}{HTML}{F76707}
+\definecolor{repred}{HTML}{E03131}
+% Couleur de réponse de remplacement : dans la figure de l'exercice 13, le
+% point G construit tombe exactement sur la pointe du vecteur $\vec v$ de
+% l'énoncé, lui aussi rouge ; le vecteur réponse $\Vj{VG}$ y est donc tracé
+% en violet pour que les deux flèches restent distinguables.
+\definecolor{repviolet}{HTML}{7048E8}
+\newcommand{\Vj}[1]{\overrightarrow{\text{#1}}}
+\newcommand{\Pt}[1]{\textsf{\footnotesize #1}}
+% Éléments de réponse mis en évidence (nombre ou mot à compléter).
+\newcommand{\Rep}[1]{{\color{repred}#1}}
+
+% ============================================================ %
+% Taille de police : 18pt pour le texte courant, tailles voisines
+% redéfinies en proportion.
+% ============================================================ %
+\renewcommand{\normalsize}{\fontsize{18}{24}\selectfont}
+\renewcommand{\small}{\fontsize{15}{20}\selectfont}
+\renewcommand{\large}{\fontsize{21}{27}\selectfont}
+\renewcommand{\Large}{\fontsize{25}{31}\selectfont}
+\renewcommand{\LARGE}{\fontsize{29}{35}\selectfont}
+\renewcommand{\huge}{\fontsize{33}{40}\selectfont}
+\renewcommand{\Huge}{\fontsize{37}{44}\selectfont}
+\normalsize
+\linespread{1.12}
+\setlength{\parskip}{8pt}
+\setlength{\parindent}{0pt}
+\RaggedRight % texte non justifié (ragged2e) dans tout le document
+% Par défaut ragged2e n'autorise qu'une variation de 2em en fin de ligne :
+% faute de place, TeX étire alors les espaces à l'intérieur de la ligne
+% (y compris autour des signes «=») ou laisse déborder dans la marge.
+% Un drapeau droit libre supprime les deux, ce qui est aussi plus lisible
+% en grands caractères.
+\setlength{\RaggedRightRightskip}{0pt plus 1fil}
+\RaggedRight
+
+\newcommand*{\textcircledd}[1]{\begin{tikzpicture}[baseline=(letter.base)]\node[draw,circle,inner sep=3pt] (letter) {#1};\end{tikzpicture}}
+\newcommand{\numeroCerne}[1]{\protect\textcircledd{\bfseries\large #1}}
+\setlist[enumerate,1]{label=\numeroCerne{\arabic*}, leftmargin=*, labelsep=10pt, itemsep=8pt, topsep=5pt, partopsep=0pt, parsep=0pt}
+\setlist[enumerate,2]{label=(\alph*), leftmargin=1.6em, itemsep=6pt, topsep=4pt, parsep=0pt}
+\setlist[itemize,1]{leftmargin=1.4em, itemsep=8pt, topsep=5pt}
+
+% Titre "Exercice N", même pastille bleu ciel que la feuille d'exercices.
+\newcommand{\ExoTitre}[1]{%
+\noindent\tcbox[on line, colback=skyblue, colframe=skyblue, boxsep=4pt, left=10pt, right=10pt, top=4pt, bottom=4pt, arc=5pt]{\textcolor{white}{\large\ExoTexte{Exercice~#1}}}\par
+\vspace{14pt}%
+}
+
+% Rappel d'objectif en haut de la première page de chaque objectif.
+\newcommand{\ObjRappel}[2]{%
+\noindent{\color{objorange}\bfseries\large Objectif #1~:}~{\large\color{objorange}#2}\par
+\vspace{6pt}
+\noindent{\color{gray!45}\rule{\linewidth}{0.6pt}}\par
+\vspace{16pt}%
+}
+
+% Mise en page d'un corrigé avec figure : chaque exercice tient sur UNE
+% page. La page étant en paysage (large mais basse), le texte est placé à
+% gauche et la figure à droite, ce qui laisse à la figure toute la
+% hauteur restante au lieu de la coincer sous le texte.
+%
+% La figure reprend le tikzpicture du corrigé normal tel quel (mêmes
+% coordonnées, même échelle) et est redimensionnée en bloc, ce qui
+% agrandit uniformément le dessin ET les étiquettes \Pt. La hauteur
+% disponible est mesurée ici (\pagegoal-\pagetotal = place verticale
+% restante sous le titre de l'exercice) plutôt que fixée à la main, puis
+% largeur ET hauteur sont contraintes (adjustbox, pas resizebox) : la
+% figure ne peut donc jamais basculer seule sur la page suivante.
+%
+% Le \vspace{0pt} en tête de chaque minipage aligne les deux colonnes par
+% leur bord supérieur et non par la ligne de base de leur première ligne ;
+% sans lui, la figure s'empilerait au-dessus de cette ligne de base et le
+% bloc déborderait de la page.
+%
+% #1 = largeur de la colonne de texte (fraction de \linewidth, à réduire
+% pour les figures larges), #2 = texte du corrigé, #3 = figure.
+\newlength{\GCavail}
+\newlength{\GCparskip}
+% (+m : les arguments doivent accepter les paragraphes, certains textes
+%  de corrigé contiennent une ligne blanche.)
+\NewDocumentCommand{\GCexo}{O{0.46} +m +m}{%
+\par\penalty0\relax
+\ifdim\pagegoal=\maxdimen
+  \setlength{\GCavail}{\textheight}%
+\else
+  \setlength{\GCavail}{\dimexpr\pagegoal-\pagetotal\relax}%
+\fi
+\addtolength{\GCavail}{-0.8\baselineskip}% marge de sécurité en bas de page
+\ifdim\GCavail<3cm\relax\setlength{\GCavail}{3cm}\fi
+\setlength{\GCparskip}{\parskip}%
+\noindent
+\begin{minipage}[t]{#1\linewidth}\vspace{0pt}%
+% Une minipage réinitialise les paramètres de paragraphe : sans ces deux
+% lignes, le texte de la colonne redeviendrait justifié (avec des espaces
+% étirés) et les paragraphes ne seraient plus séparés.
+\RaggedRight
+\setlength{\parskip}{\GCparskip}%
+\hyphenpenalty=10000\exhyphenpenalty=10000% pas de mots coupés en fin de ligne
+
+#2
+\end{minipage}\hfill
+\begin{minipage}[t]{\dimexpr0.96\linewidth-#1\linewidth\relax}\vspace{0pt}%
+\centering
+\adjustbox{width=\linewidth,height=\GCavail,keepaspectratio}{#3}%
+\end{minipage}\par
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[C]{\small Corrig\'e de la feuille d'exercices n\textdegree{}2 --- Vecteurs --- \thepage/\pageref{LastPage}}
+
+\begin{document}
+
+% ============================================================ %
+% Page de garde
+% ============================================================ %
+\thispagestyle{empty}
+\begin{center}
+\vspace*{2cm}
+\begin{tcolorbox}[
+  enhanced,
+  width=0.95\linewidth,
+  colback=white,
+  colframe=black,
+  boxrule=1pt,
+  arc=10pt,
+  sharp corners=downhill,
+  left=16pt, right=16pt, top=18pt, bottom=12pt,
+  halign=center,
+  overlay={
+    \node[fill=white, anchor=west, font=\large, inner xsep=6pt]
+      at ([xshift=18pt]frame.north west) {Corrig\'e de la feuille n\textdegree{}2};
+  },
+]
+{\Huge Vecteurs du plan}
+\end{tcolorbox}
+\vspace{1.8cm}
+{\Large Un exercice par page.}\\[10pt]
+{\large Exercices 1 \`a 16 (Objectifs 1 \`a 4).}
+\end{center}
+\newpage
+\setcounter{page}{1}
+
+% ============================================================ %
+% Objectif 1
+% ============================================================ %
+
+\ObjRappel{1}{Vecteur $\Vj{MM'}$ associ\'e \`a la translation qui transforme $M$ en $M'$}
+\ExoTitre{1}
+\GCexo[0.50]{%
+Pour aller de $A$ \`a $B$, on avance de 3 carreaux vers la droite et de 1 carreau vers le haut. On applique le m\^eme d\'eplacement \`a chaque point.
+\begin{enumerate}
+\item L'image de $C$ est $Y$, l'image de $D$ est $Z$ et l'image de $E$ est $D$.
+\item $\Vj{CY}=\Vj{DZ}=\Vj{ED}=\Vj{AB}$.
+\end{enumerate}
+}{%
+\begin{tikzpicture}[scale=0.38]
+\draw[thin,gray!35] (0,-1) grid (8,6);
+\coordinate (A) at (1,4); \coordinate (B) at (4,5);
+\coordinate (C) at (2,2); \coordinate (D) at (4,1); \coordinate (E) at (1,0);
+\coordinate (Y) at (5,3); \coordinate (Z) at (7,2); \coordinate (X) at (6,1);
+\draw[-{Stealth},thick] (A) -- (B);
+\draw[-{Stealth},thick,repred] (C) -- (Y);
+\draw[-{Stealth},thick,repred] (D) -- (Z);
+\draw[-{Stealth},thick,repred] (E) -- (D);
+\node[left] at (A) {\Pt{A}}; \node[above] at (B) {\Pt{B}};
+\foreach \p in {C,D,E,Y,Z,X} \node[ptcross] at (\p) {};
+\node[left] at (C) {\Pt{C}}; \node[left] at (D) {\Pt{D}}; \node[above] at (E) {\Pt{E}};
+\node[right] at (Y) {\Pt{Y}}; \node[right] at (Z) {\Pt{Z}}; \node[right] at (X) {\Pt{X}};
+\end{tikzpicture}}
+
+\newpage
+\ExoTitre{2}
+\begin{enumerate}
+\item $\Vj{AD}$ : on avance de 3 points vers la droite. L'image de $I$ est \Rep{$L$}.
+\item $\Vj{LR}$ : on recule d'un point vers la gauche et on descend d'une ligne. L'image de $J$ est \Rep{$O$}.
+\item $\Vj{NC}$ : on avance d'un point vers la droite et on monte de deux lignes. L'image de $R$ est \Rep{$F$}.
+\end{enumerate}
+
+\newpage
+\ExoTitre{3}
+\begin{enumerate}
+\item L'hexagone \Rep{6} est l'image de l'hexagone 1 dans la translation de vecteur $\Vj{AC}$.
+\item L'hexagone 6 est l'image de l'hexagone \Rep{4} dans la translation de vecteur $\Vj{AB}$.
+\item L'hexagone 3 est l'image de l'hexagone \Rep{7} dans la translation de vecteur $\Vj{DE}$.
+\end{enumerate}
+
+\newpage
+\ExoTitre{4}
+Par d\'efinition, $\Vj{AA'}=\vec u$.
+\begin{enumerate}
+\item Non. Si on avait $B=A'$, on aurait $\Vj{AB}=\Vj{AA'}=\vec u$, donc $\Vj{AB}$ aurait la m\^eme norme que $\vec u$~: c'est contraire \`a l'hypoth\`ese. Donc $B\neq A'$.
+\item Non, pour la m\^eme raison~: si $B=A'$, alors $\Vj{AB}=\vec u$ et $\Vj{AB}$ aurait le m\^eme sens que $\vec u$.
+\item $B=A'$ si et seulement si $\Vj{AB}=\vec u$, c'est-\`a-dire si et seulement si $\Vj{AB}$ a \textbf{la m\^eme direction}, \textbf{le m\^eme sens} et \textbf{la m\^eme norme} que $\vec u$. Il faut les trois conditions \`a la fois.
+\end{enumerate}
+
+% ============================================================ %
+% Objectif 2
+% ============================================================ %
+
+\newpage
+\ObjRappel{2}{\'Egalit\'e de deux vecteurs, vecteur nul}
+\ExoTitre{5}
+\begin{itemize}[label=$\star$]
+\item $\Vj{CD}$ est horizontal alors que $\Vj{AB}$ est oblique~: ils n'ont pas la \textbf{m\^eme direction}.
+\item $\Vj{GH}$ a la m\^eme direction et le m\^eme sens que $\Vj{AB}$, mais sa \textbf{norme} est deux fois plus grande.
+\item Le vecteur trac\'e d'origine $F$ et d'extr\'emit\'e $E$ est $\Vj{FE}$~: il a la m\^eme direction et la m\^eme norme que $\Vj{AB}$, mais il est de \textbf{sens contraire}.
+\end{itemize}
+
+\newpage
+\ExoTitre{6}
+\begin{itemize}[label=$\star$]
+\item oppos\'e \`a $\Vj{CD}$~: \Rep{$\vec p$}
+\item m\^eme direction et sens que $\Vj{AC}$~: \Rep{$\vec m$}
+\item m\^eme direction que $\Vj{BC}$ mais sens contraire~: \Rep{$\vec t$}
+\item \'egal au vecteur $\Vj{BA}$~: \Rep{$\vec v$}.
+\end{itemize}
+
+\newpage
+\ExoTitre{7}
+\GCexo[0.56]{%
+On sait que $\Vj{AB}=\Vj{CD}$. D'apr\`es la caract\'erisation par un parall\'elogramme, $ABDC$ est un parall\'elogramme (\'eventuellement aplati).
+
+Dans le parall\'elogramme $ABDC$, les c\^ot\'es $[AC]$ et $[BD]$ sont parall\`eles, de m\^eme longueur et \og parcourus dans le m\^eme sens \fg{}, c'est-\`a-dire $\Vj{AC}=\Vj{BD}$.
+}{%
+\begin{tikzpicture}[scale=0.55]
+\coordinate (A) at (0,0); \coordinate (B) at (2.6,0.4); \coordinate (C) at (0.8,2); \coordinate (D) at (3.4,2.4);
+\draw (A)--(B)--(D)--(C)--cycle;
+\draw[-{Stealth},thick] (A)--(B); \draw[-{Stealth},thick] (C)--(D);
+\draw[-{Stealth},thick,repred] (A)--(C); \draw[-{Stealth},thick,repred] (B)--(D);
+\node[below] at (A) {\Pt{A}}; \node[below] at (B) {\Pt{B}}; \node[above] at (C) {\Pt{C}}; \node[above] at (D) {\Pt{D}};
+\end{tikzpicture}}
+
+\newpage
+\ExoTitre{8}
+\GCexo[0.58]{%
+\begin{enumerate}
+\item Figure \`a main lev\'ee ci-contre.
+\item $ABCD$ est un parall\'elogramme, donc $\Vj{AB}=\Vj{DC}$.\\
+$ABEF$ est un parall\'elogramme, donc $\Vj{AB}=\Vj{FE}$.
+\item On en d\'eduit $\Vj{DC}=\Vj{FE}$. D'apr\`es la caract\'erisation par un parall\'elogramme, $DCEF$ est un parall\'elogramme~: le quadrilat\`ere $EFDC$ est donc un parall\'elogramme.
+\end{enumerate}
+}{%
+\begin{tikzpicture}[scale=0.5]
+\coordinate (A) at (0,0); \coordinate (B) at (3,0); \coordinate (D) at (1.2,1.6); \coordinate (C) at (4.2,1.6);
+\coordinate (F) at (-1,2.6); \coordinate (E) at (2,2.6);
+\draw (A)--(B)--(C)--(D)--cycle;
+\draw (A)--(B)--(E)--(F)--cycle;
+\draw[repred,dashed] (E)--(C); \draw[repred,dashed] (F)--(D);
+\node[below] at (A) {\Pt{A}}; \node[below] at (B) {\Pt{B}}; \node[right] at (C) {\Pt{C}}; \node[below right] at (D) {\Pt{D}};
+\node[above] at (F) {\Pt{F}}; \node[above] at (E) {\Pt{E}};
+\end{tikzpicture}}
+
+\newpage
+\ExoTitre{9}
+\begin{enumerate}
+\item $AEBC$ est un parall\'elogramme, donc $\Vj{EB}=\Vj{AC}$.\\
+$ACDF$ est un parall\'elogramme, donc $\Vj{AC}=\Vj{FD}$.\\
+Ainsi $\Vj{EB}=\Vj{AC}=\Vj{FD}$, d'o\`u $\Vj{EB}=\Vj{FD}$.
+\item Comme $\Vj{EB}=\Vj{FD}$, le quadrilat\`ere $EBDF$ est un parall\'elogramme (caract\'erisation par un parall\'elogramme).\\
+Son centre est le milieu de sa diagonale $[ED]$. Or $AEBC$ est un parall\'elogramme, donc $\Vj{AE}=\Vj{CB}$~; et $ABCD$ est un rectangle, donc $\Vj{CB}=\Vj{DA}$. Ainsi $\Vj{AE}=\Vj{DA}$, ce qui signifie que $A$ est le milieu de $[DE]$.\\
+Le parall\'elogramme $EBDF$ a donc pour centre $A$.
+\end{enumerate}
+
+% ============================================================ %
+% Objectif 3
+% ============================================================ %
+
+\newpage
+\ObjRappel{3}{Repr\'esentants d'un vecteur}
+\ExoTitre{10}
+\begin{enumerate}
+\item $\Vj{CD}$ et $\Vj{GH}$ sont deux repr\'esentants de $\Vj{AB}$~: m\^eme direction, m\^eme sens et m\^eme norme (2 carreaux vers la droite, 1 carreau vers le haut).
+\item Non~: $\Vj{EF}$ correspond \`a 1 carreau vers la droite et 2 carreaux vers le haut. Il n'a pas la m\^eme direction que $\Vj{AB}$ (les droites $(AB)$ et $(EF)$ ne sont pas parall\`eles), donc ce n'est pas un repr\'esentant de $\Vj{AB}$.
+\end{enumerate}
+
+\newpage
+\ExoTitre{11}
+\GCexo[0.62]{%
+\begin{enumerate}
+\item (a) $\Vj{EF}=\Vj{HG}$ \quad (b) $\Vj{GH}=\Vj{FE}$\\
+(c) $\Vj{EH}=\Vj{FG}$ \quad (d) $\Vj{GF}=\Vj{HE}$
+\item $\Vj{FE}$ (ou $\Vj{GH}$).
+\item (a) $\Vj{EI}=\Vj{IG}$ \quad (b) $\Vj{HI}=\Vj{IF}$\\
+(c) $\Vj{FI}=\Vj{IH}$
+\item $\Vj{EH}=-\Vj{HE}$ (ou $-\Vj{GF}$).
+\item (a) $\Vj{FG}$ \quad (b) $\Vj{FI}$ (car $\Vj{IH}=\Vj{FI}$).
+\end{enumerate}
+}{%
+\begin{tikzpicture}[scale=0.55]
+\coordinate (E) at (0,0); \coordinate (F) at (3,0); \coordinate (G) at (3.8,2); \coordinate (H) at (0.8,2);
+\coordinate (I) at ($(E)!0.5!(G)$);
+\draw (E)--(F)--(G)--(H)--cycle; \draw[gray!60] (E)--(G); \draw[gray!60] (F)--(H);
+\node[below] at (E) {\Pt{E}}; \node[below] at (F) {\Pt{F}}; \node[above] at (G) {\Pt{G}}; \node[above] at (H) {\Pt{H}};
+\node[ptcross] at (I) {}; \node[above,inner sep=2pt] at (I) {\Pt{I}};
+\end{tikzpicture}}
+
+\newpage
+\ExoTitre{12}
+\begin{enumerate}
+\item (a) $\Vj{AK}$ \qquad (b) $\Vj{CD}$
+\item (a) $\Vj{CD}$ \qquad (b) $\Vj{MF}$
+\item (a) $\Vj{PQ}$ \qquad (b) $\Vj{SH}$
+\item (a) $\Vj{SH}$ \qquad (b) $\Vj{UW}$
+\end{enumerate}
+
+% ============================================================ %
+% Objectif 4
+% ============================================================ %
+
+\newpage
+\ObjRappel{4}{Somme de deux vecteurs et relation de Chasles}
+\ExoTitre{13}
+\GCexo[0.34]{%
+On met les vecteurs bout \`a bout \`a partir du point de d\'epart (en pointill\'es), puis on trace le vecteur somme.
+}{%
+\begin{tikzpicture}[scale=0.5]
+\draw[thin,black!70] (0,0) grid (12,6);
+\draw[-{Stealth},thick,blue] (2,5) -- (2,3) node[midway,right]{$\vec u$};
+\draw[-{Stealth},thick,red] (6,5) -- (8,4) node[midway,above]{$\vec v$};
+\draw[-{Stealth},thick,teal] (4,1) -- (6,2) node[midway,below]{$\vec w$};
+\coordinate (B) at (1,4); \node[ptcross] at (B) {}; \node[left] at (B) {\Pt{B}};
+\coordinate (V) at (4,4); \node[ptcross] at (V) {}; \node[below] at (V) {\Pt{V}};
+\coordinate (I) at (1,1); \node[ptcross] at (I) {}; \node[below] at (I) {\Pt{I}};
+% P = B + u + v
+\draw[-{Stealth},blue,dashed] (B) -- (1,2); \draw[-{Stealth},red,dashed] (1,2) -- (3,1);
+\draw[-{Stealth},thick,repred] (B) -- (3,1);
+\node[ptcross,repred] at (3,1) {}; \node[above right,repred,inner sep=1pt] at (3,1) {\Pt{P}};
+% G = V + v + w
+\draw[-{Stealth},red,dashed] (V) -- (6,3); \draw[-{Stealth},teal,dashed] (6,3) -- (8,4);
+\draw[-{Stealth},thick,repviolet] (V) -- (8,4);
+\node[ptcross,repviolet] at (8,4) {}; \node[below right,repviolet,inner sep=2pt] at (8,4) {\Pt{G}};
+% K = I + w + u
+\draw[-{Stealth},teal,dashed] (I) -- (3,2); \draw[-{Stealth},blue,dashed] (3,2) -- (3,0);
+\draw[-{Stealth},thick,repred] (I) -- (3,0);
+\node[ptcross,repred] at (3,0) {}; \node[below,repred] at (3,0) {\Pt{K}};
+\end{tikzpicture}}
+
+\newpage
+\ExoTitre{14}
+\begin{enumerate}
+\item $\Vj{TR}+\Vj{UT}+\Vj{RU}=\Vj{UT}+\Vj{TR}+\Vj{RU}=\Vj{UR}+\Vj{RU}=\Vj{UU}=\vec 0$.
+\item $\Vj{ST}-\Vj{VU}+\Vj{TU}=\Vj{ST}+\Vj{TU}+\Vj{UV}=\Vj{SU}+\Vj{UV}=\Vj{SV}$.
+\end{enumerate}
+
+\newpage
+\ExoTitre{15}
+Dans l'hexagone r\'egulier, on utilise les \'egalit\'es de vecteurs entre c\^ot\'es et rayons, par exemple $\Vj{AB}=\Vj{OC}$, $\Vj{CD}=\Vj{BO}$, $\Vj{AF}=\Vj{BO}=\Vj{OE}$, $\Vj{DO}=\Vj{OA}$.
+\begin{enumerate}
+\item $\Vj{AB}+\Vj{CD}=\Vj{AB}+\Vj{BO}=\Vj{AO}$ \quad (ou $\Vj{OD}$, ou $\Vj{BC}$).
+\item $\Vj{OE}=\Vj{BO}$, donc $\Vj{OB}+\Vj{OE}=\Vj{OB}+\Vj{BO}=\Vj{OO}=\vec 0$.
+\item $\Vj{DO}=\Vj{OA}$, donc $\Vj{FO}+\Vj{DO}=\Vj{FO}+\Vj{OA}=\Vj{FA}$ \quad (ou $\Vj{OB}$).
+\item $-\Vj{DC}=\Vj{CD}=\Vj{AF}$, donc $\Vj{CA}-\Vj{DC}=\Vj{CA}+\Vj{AF}=\Vj{CF}$.
+\item $\Vj{AF}=\Vj{BO}$ et $\Vj{CD}=\Vj{OE}$, donc $\Vj{AF}+\Vj{CD}=\Vj{BO}+\Vj{OE}=\Vj{BE}$.
+\item $\Vj{AB}-\Vj{OA}+\Vj{AF}=\Vj{AB}+\Vj{AO}+\Vj{AF}$. Or $\Vj{AF}=\Vj{BO}$, donc $\Vj{AB}+\Vj{AF}=\Vj{AB}+\Vj{BO}=\Vj{AO}$.\\
+Ainsi la somme vaut $\Vj{AO}+\Vj{AO}=\Vj{AO}+\Vj{OD}=\Vj{AD}$.
+\end{enumerate}
+
+\newpage
+\ExoTitre{16}
+\begin{enumerate}
+\item $I$ est le milieu de $[BC]$, donc $I$ est entre $B$ et $C$ avec $IB=IC$. Les vecteurs $\Vj{IB}$ et $\Vj{IC}$ ont donc la m\^eme direction, la m\^eme norme et des sens contraires~: $\Vj{IC}=-\Vj{IB}$, d'o\`u $\Vj{IB}+\Vj{IC}=\vec 0$.
+\item D'apr\`es la relation de Chasles~:
+\[\Vj{AB}+\Vj{AC}=\big(\Vj{AI}+\Vj{IB}\big)+\big(\Vj{AI}+\Vj{IC}\big)=2\Vj{AI}+\underbrace{\Vj{IB}+\Vj{IC}}_{=\vec 0}=2\Vj{AI}.\]
+\end{enumerate}
+
+\end{document}

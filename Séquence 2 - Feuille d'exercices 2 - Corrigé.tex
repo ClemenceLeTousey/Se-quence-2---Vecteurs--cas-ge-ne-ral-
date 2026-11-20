@@ -16,6 +16,20 @@
 \usepackage{tikz}
 \usetikzlibrary{calc,arrows.meta,shapes.misc}
 \tikzset{ptcross/.style={cross out,draw,thick,minimum size=3pt,inner sep=0pt}}
+% Badges « Exercice n » en cursive Playwrite FR Moderne (police du site),
+% chargée à 85 % de la taille courante (XeLaTeX ou LuaLaTeX ; gras sous pdfLaTeX).
+\makeatletter
+\ifdefined\XeTeXrevision\def\ExoFont@ok{}\fi
+\ifdefined\directlua\def\ExoFont@ok{}\fi
+\ifdefined\ExoFont@ok
+\newcommand{\ExoFont}{\font\ExoFont@f="[../polices/PlaywriteFRModerne.ttf]" at \dimexpr\f@size pt*85/100\relax\ExoFont@f}
+\else
+\newcommand{\ExoFont}{\bfseries}
+\fi
+\makeatother
+% \ExoTexte{...} : texte du badge en cursive, avec la hauteur d'une majuscule de la
+% police courante (la cursive est plus haute et ferait grandir chaque badge).
+\newcommand{\ExoTexte}[1]{\raisebox{0pt}[\fontcharht\font`E][0pt]{\ExoFont #1}}
 \usepackage{tcolorbox}
 \tcbuselibrary{skins}
 \usepackage[hidelinks]{hyperref}
@@ -23,6 +37,11 @@
 \definecolor{skyblue}{HTML}{339AF0}
 \definecolor{objorange}{HTML}{F76707}
 \definecolor{repred}{HTML}{E03131}
+% Couleur de réponse de remplacement : dans la figure de l'exercice 13, le
+% point G construit tombe exactement sur la pointe du vecteur $\vec v$ de
+% l'énoncé, lui aussi rouge ; le vecteur réponse $\Vj{VG}$ y est donc tracé
+% en violet pour que les deux flèches restent distinguables.
+\definecolor{repviolet}{HTML}{7048E8}
 \newcommand{\Vj}[1]{\overrightarrow{\text{#1}}}
 \newcommand{\Pt}[1]{\textsf{\footnotesize #1}}
 \renewcommand{\familydefault}{\sfdefault}
@@ -52,7 +71,7 @@
 % couleur que les cartes d'exercice de la feuille), suivi de la r\'eponse.
 \newcommand{\Corr}[2]{%
 \par\vspace{6pt}
-\noindent\tcbox[on line, colback=skyblue, colframe=skyblue, boxsep=1pt, left=4pt, right=4pt, top=1pt, bottom=1pt, arc=2pt]{\textcolor{white}{\bfseries Exercice~#1}}\par\nobreak\vspace{3pt}\nobreak
+\noindent\tcbox[on line, colback=skyblue, colframe=skyblue, boxsep=1pt, left=4pt, right=4pt, top=1pt, bottom=1pt, arc=2pt]{\textcolor{white}{\ExoTexte{Exercice~#1}}}\par\nobreak\vspace{3pt}\nobreak
 \noindent\ignorespaces #2
 \par
 }
@@ -245,21 +264,21 @@ Le parall\'elogramme $EBDF$ a donc pour centre $A$.
 On met les vecteurs bout \`a bout \`a partir du point de d\'epart (en pointill\'es), puis on trace le vecteur somme.
 \begin{center}
 \begin{tikzpicture}[scale=0.5]
-\draw[thin,gray!35] (0,0) grid (12,6);
+\draw[thin,black!70] (0,0) grid (12,6);
 \draw[-{Stealth},thick,blue] (2,5) -- (2,3) node[midway,right]{$\vec u$};
 \draw[-{Stealth},thick,red] (6,5) -- (8,4) node[midway,above]{$\vec v$};
 \draw[-{Stealth},thick,teal] (4,1) -- (6,2) node[midway,below]{$\vec w$};
 \coordinate (B) at (1,4); \node[ptcross] at (B) {}; \node[left] at (B) {\Pt{B}};
-\coordinate (V) at (7.5,1); \node[ptcross] at (V) {}; \node[below] at (V) {\Pt{V}};
+\coordinate (V) at (4,4); \node[ptcross] at (V) {}; \node[below] at (V) {\Pt{V}};
 \coordinate (I) at (1,1); \node[ptcross] at (I) {}; \node[below] at (I) {\Pt{I}};
 % P = B + u + v
 \draw[-{Stealth},blue,dashed] (B) -- (1,2); \draw[-{Stealth},red,dashed] (1,2) -- (3,1);
 \draw[-{Stealth},thick,repred] (B) -- (3,1);
 \node[ptcross,repred] at (3,1) {}; \node[above right,repred,inner sep=1pt] at (3,1) {\Pt{P}};
 % G = V + v + w
-\draw[-{Stealth},red,dashed] (V) -- (9.5,0); \draw[-{Stealth},teal,dashed] (9.5,0) -- (11.5,1);
-\draw[-{Stealth},thick,repred] (V) -- (11.5,1);
-\node[ptcross,repred] at (11.5,1) {}; \node[above,repred] at (11.5,1) {\Pt{G}};
+\draw[-{Stealth},red,dashed] (V) -- (6,3); \draw[-{Stealth},teal,dashed] (6,3) -- (8,4);
+\draw[-{Stealth},thick,repviolet] (V) -- (8,4);
+\node[ptcross,repviolet] at (8,4) {}; \node[below right,repviolet,inner sep=2pt] at (8,4) {\Pt{G}};
 % K = I + w + u
 \draw[-{Stealth},teal,dashed] (I) -- (3,2); \draw[-{Stealth},blue,dashed] (3,2) -- (3,0);
 \draw[-{Stealth},thick,repred] (I) -- (3,0);

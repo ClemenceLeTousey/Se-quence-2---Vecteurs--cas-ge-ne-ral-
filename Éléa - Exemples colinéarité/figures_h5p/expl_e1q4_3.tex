@@ -1,0 +1,27 @@
+
+\documentclass[border=4pt]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,shapes.misc}
+\renewcommand{\familydefault}{\sfdefault}
+\definecolor{vbleu}{HTML}{1C5FD6}
+\definecolor{orange}{HTML}{E8590C}
+\definecolor{vert}{HTML}{2F9E44}
+\definecolor{gris}{HTML}{495057}
+\definecolor{violet}{HTML}{7048E8}
+\tikzset{
+  vec/.style={->,very thick,>={Stealth[length=2.4mm]}},
+  ref/.style={orange,thick,dashed},
+  par/.style={vert,thick,dashed},
+  sec/.style={gris,thick,dashed},
+  ptcross/.style={cross out,draw,thick,minimum size=1.6mm,inner sep=0pt},
+}
+\usepackage{array}
+\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}
+\newcommand{\V}[1]{\overrightarrow{\mathrm{#1}}}
+\begin{document}
+
+\begin{minipage}{16cm}\large \begin{minipage}{15.5cm}{\color{vert}\Large Explication (3/3)}\par\vspace{4pt}{\color{vert}$\vec{u}=-\dfrac12\,\vec{v}$} : les vecteurs $\vec{u}$ et $\vec{v}$ ont même direction et sont de sens opposé. La norme de $\vec{u}$ est deux fois plus petite que celle de $\vec{v}$ : c'est la moitié.\par\vspace{6pt}{\color{vert}$\vec{r}=\dfrac32\,\vec{c}$} : les vecteurs $\vec{r}$ et $\vec{c}$ ont même direction et sont de même sens. La norme de $\vec{r}$ est une fois et demie celle de $\vec{c}$. On peut se dire $\vec{r}=1{,}5\,\vec{c}$, mais le coefficient ne s'écrit pas – par convention – sous forme décimale. On sait que $1{,}5=\dfrac32$.\par\vspace{6pt}{\color{vert}$\vec{r}=-\dfrac32\,\vec{v}$} : les vecteurs $\vec{r}$ et $\vec{v}$ ont même direction et sont de sens opposé. La norme de $\vec{r}$ est une fois et demie celle de $\vec{v}$. On peut se dire $\vec{r}=-1{,}5\,\vec{v}$, mais le coefficient ne s'écrit pas – par convention – sous forme décimale. On sait que $1{,}5=\dfrac32$.\end{minipage}\end{minipage}
+\end{document}

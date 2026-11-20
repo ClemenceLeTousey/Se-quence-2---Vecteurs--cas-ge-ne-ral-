@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><title>Exemples colinéarité – Éléa – Fiche de montage</title>
+<script>window.MathJax={tex:{inlineMath:[["\\(","\\)"]]}};</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<style>body{font-family:"Source Sans 3",Arial,sans-serif;max-width:860px;margin:24px auto;padding:0 16px;line-height:1.5;color:#14202b;background:#fff}h1,h2{font-weight:500}code{background:#f1f3f5;padding:1px 4px}</style></head><body>
+<h1>Exemples colinéarité – Éléa – Fiche de montage</h1>
+
+<p>Ce dossier contient la version Éléa de la page <i>Exemples colinéarité.html</i> : le même cours, les mêmes exercices (vecteurs et points identiques à la feuille <i>Exemples colinéarité.pdf</i>), avec pour chaque question un <b>point méthode</b> affiché sous la consigne, deux <b>indices</b> successifs en cas d'erreur, puis une <b>correction par étapes</b> où les droites sont tracées sur la figure.</p>
+
+<h2>1. Importer la banque de questions (5 min)</h2>
+<p>Dans le parcours Éléa : <b>Plus → Banque de questions → Importer</b>. Format : <b>Moodle XML</b>. Fichier : <code>Exemples colinéarité - Éléa - Banque de questions.xml</code>. Laisser « Obtenir la catégorie du fichier » coché.</p>
+<p>Les questions arrivent dans la catégorie <b>Séquence 2 – Vecteurs › Exemples colinéarité</b> (9 questions). Les figures sont incluses dans le fichier ; les formules s'affichent grâce au filtre MathJax d'Éléa.</p>
+
+<h2>2. Ajouter le cours (2 min)</h2>
+<p>Ajouter une activité <b>Page</b> nommée « Cours – Vecteurs colinéaires ». Ouvrir <code>Exemples colinéarité - Éléa - Cours.html</code> dans un navigateur, tout sélectionner, copier et coller dans le contenu de la Page (ou coller le code source avec le bouton « &lt;/&gt; » de l'éditeur).</p>
+
+<h2>3. Créer le test (5 min)</h2>
+<p>Ajouter une activité <b>Test</b> nommée « Exemples colinéarité », puis dans les paramètres :</p>
+<ul>
+<li><b>Comportement des questions</b> : « Interactif avec essais multiples » (c'est ce qui affiche les indices après une erreur) ;</li>
+<li><b>Mise en page</b> : une question par page, navigation libre ;</li>
+<li><b>Options de relecture</b> : cocher « Feedback spécifique », « Feedback général » et « Réponse juste », pendant et après la tentative (le feedback général contient la correction par étapes) ;</li>
+<li><b>Questions</b> : ne pas mélanger, pour garder l'ordre de la feuille ;</li>
+<li><b>Nombre de tentatives</b> : illimité ; <b>méthode de notation</b> : note la plus haute.</li>
+</ul>
+<p>Dans <b>Questions → Ajouter → depuis la banque de questions</b>, choisir la catégorie <i>Exemples colinéarité</i> et ajouter les 9 questions dans l'ordre : Ex1-Q1, Ex1-Q2a, Ex1-Q2b, Ex1-Q3, Ex1-Q4, puis Ex2-Q1 à Ex2-Q4.</p>
+<p>Restriction d'accès conseillée sur le test : « Achèvement d'activité : la Page Cours doit être consultée ».</p>
+
+<h2>4. Ce que voit l'élève</h2>
+<ul>
+<li>la consigne et la figure, puis le point méthode (encadré jaune) ;</li>
+<li>après une mauvaise réponse : un indice, puis un second indice plus précis ;</li>
+<li>une fois la question terminée : la correction (encadré vert) avec les droites tracées, et la remarque « Vérifier avec les carreaux ».</li>
+</ul>
+<p>Saisie des coefficients (Ex1-Q4, Ex2-Q2, Ex2-Q3) : les élèves écrivent par exemple <code>-2</code> ou <code>3/2</code>. Une écriture décimale (<code>1,5</code>) est refusée avec un message rappelant la convention.</p>
+
+<h2>Variante H5P (sans import de banque de questions)</h2>
+<p>Le fichier <code>Exemples colinéarité.h5p</code> contient tout dans une seule activité (présentation H5P de 36 diapositives) : le cours, puis pour chaque question une diapositive « question » (figure + point méthode + question interactive), suivie des diapositives de correction étape par étape, avec les droites tracées. Passer à la diapositive suivante = « étape suivante ». Une diapositive bilan donne le score à la fin.</p>
+<ol>
+<li>Activer le <b>mode édition</b>, puis <b>Ajouter une activité ou ressource → H5P</b>.</li>
+<li>Donner un nom (« Exemples colinéarité »), puis glisser <code>Exemples colinéarité.h5p</code> dans la zone « Fichier du paquet ».</li>
+<li>Enregistrer et afficher.</li>
+</ol>
+<p>Saisie des coefficients entiers : <code>-2</code>, <code>3</code>… Les coefficients fractionnaires sont proposés en choix (H5P ne permet pas de taper une fraction).</p>
+<p>Le paquet est régénéré par <code>build_h5p_colinearite.py</code> (même dossier).</p>
+
+<h2>Modifier le contenu</h2>
+<p>Tout est généré par <code>build_elea_colinearite.py</code> (même dossier) : modifier le texte dans ce fichier puis lancer <code>python3 build_elea_colinearite.py</code> pour régénérer les trois fichiers, puis réimporter le XML.</p>
+
+</body></html>

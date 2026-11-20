@@ -1,0 +1,512 @@
+% !TEX program = xelatex
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage[left=0.6cm,right=0.6cm,top=1cm,bottom=1cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage{pifont}
+% Badges « Exercice n » en cursive Playwrite FR Moderne (police du site),
+% chargée à 85 % de la taille courante (XeLaTeX ou LuaLaTeX ; gras sous pdfLaTeX).
+\makeatletter
+\ifdefined\XeTeXrevision\def\ExoFont@ok{}\fi
+\ifdefined\directlua\def\ExoFont@ok{}\fi
+\ifdefined\ExoFont@ok
+\newcommand{\ExoFont}{\font\ExoFont@f="[../polices/PlaywriteFRModerne.ttf]" at \dimexpr\f@size pt*85/100\relax\ExoFont@f}
+\else
+\newcommand{\ExoFont}{\bfseries}
+\fi
+\makeatother
+% \ExoTexte{...} : texte du badge en cursive, avec la hauteur d'une majuscule de la
+% police courante (la cursive est plus haute et ferait grandir chaque badge).
+\newcommand{\ExoTexte}[1]{\raisebox{0pt}[\fontcharht\font`E][0pt]{\ExoFont #1}}
+\usepackage{frcursive}
+% Correctif du bug de crénage de frcursive sous XeLaTeX (repris de CLT2627.sty) :
+% sans lui, certaines paires de lettres consécutives dans \cursive explosent
+% (une lettre projetée loin à droite), ce qui coupe des mots comme "Représenter".
+\makeatletter
+\ifdefined\XeTeXcharclass
+\XeTeXcharclass `a 201 \XeTeXcharclass `b 201 \XeTeXcharclass `c 201
+\XeTeXcharclass `d 201 \XeTeXcharclass `e 201 \XeTeXcharclass `f 201
+\XeTeXcharclass `g 201 \XeTeXcharclass `h 201 \XeTeXcharclass `i 201
+\XeTeXcharclass `j 201 \XeTeXcharclass `k 201 \XeTeXcharclass `l 201
+\XeTeXcharclass `m 201 \XeTeXcharclass `n 201 \XeTeXcharclass `o 201
+\XeTeXcharclass `p 201 \XeTeXcharclass `q 201 \XeTeXcharclass `r 201
+\XeTeXcharclass `s 201 \XeTeXcharclass `t 201 \XeTeXcharclass `u 201
+\XeTeXcharclass `v 201 \XeTeXcharclass `w 201 \XeTeXcharclass `x 201
+\XeTeXcharclass `y 201 \XeTeXcharclass `z 201
+\XeTeXcharclass `A 201 \XeTeXcharclass `B 201 \XeTeXcharclass `C 201
+\XeTeXcharclass `D 201 \XeTeXcharclass `E 201 \XeTeXcharclass `F 201
+\XeTeXcharclass `G 201 \XeTeXcharclass `H 201 \XeTeXcharclass `I 201
+\XeTeXcharclass `J 201 \XeTeXcharclass `K 201 \XeTeXcharclass `L 201
+\XeTeXcharclass `M 201 \XeTeXcharclass `N 201 \XeTeXcharclass `O 201
+\XeTeXcharclass `P 201 \XeTeXcharclass `Q 201 \XeTeXcharclass `R 201
+\XeTeXcharclass `S 201 \XeTeXcharclass `T 201 \XeTeXcharclass `U 201
+\XeTeXcharclass `V 201 \XeTeXcharclass `W 201 \XeTeXcharclass `X 201
+\XeTeXcharclass `Y 201 \XeTeXcharclass `Z 201
+\XeTeXcharclass `\é 201 \XeTeXcharclass `\è 201 \XeTeXcharclass `\ê 201
+\XeTeXcharclass `\ë 201 \XeTeXcharclass `\É 201 \XeTeXcharclass `\È 201
+\XeTeXcharclass `\Ê 201 \XeTeXcharclass `\Ë 201 \XeTeXcharclass `\à 201
+\XeTeXcharclass `\â 201 \XeTeXcharclass `\ä 201 \XeTeXcharclass `\À 201
+\XeTeXcharclass `\Â 201 \XeTeXcharclass `\Ä 201 \XeTeXcharclass `\ô 201
+\XeTeXcharclass `\ö 201 \XeTeXcharclass `\Ô 201 \XeTeXcharclass `\Ö 201
+\XeTeXcharclass `\î 201 \XeTeXcharclass `\ï 201 \XeTeXcharclass `\Î 201
+\XeTeXcharclass `\Ï 201 \XeTeXcharclass `\ù 201 \XeTeXcharclass `\û 201
+\XeTeXcharclass `\ü 201 \XeTeXcharclass `\Ù 201 \XeTeXcharclass `\Û 201
+\XeTeXcharclass `\Ü 201 \XeTeXcharclass `\ç 201 \XeTeXcharclass `\Ç 201
+\XeTeXcharclass `\œ 201 \XeTeXcharclass `\Œ 201 \XeTeXcharclass `\æ 201
+\XeTeXcharclass `\Æ 201
+\let\cursive@orig\cursive
+\renewcommand{\cursive}{%
+  \cursive@orig
+  \XeTeXinterchartoks 201 201 = {\kern0pt }%
+}
+\fi
+\makeatother
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,shapes.misc}
+\tikzset{ptcross/.style={cross out,draw,thick,minimum size=3pt,inner sep=0pt}}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fontawesome5}
+\definecolor{calcblue}{HTML}{1C7ED6}
+\definecolor{diffgreen}{HTML}{40C057}
+\definecolor{diffblue}{HTML}{228BE6}
+\definecolor{diffred}{HTML}{FA5252}
+\definecolor{skyblue}{HTML}{339AF0}
+\definecolor{objorange}{HTML}{F76707}
+\newcommand{\starfull}[1]{{\color{#1}\ding{72}}}
+\newcommand{\starempty}{{\color{gray!45}\ding{73}}}
+\newcommand{\Vj}[1]{\overrightarrow{\text{#1}}}
+\newcommand{\VBlank}{\rule[0.15ex]{0.55cm}{0.35pt}}
+\newcommand{\Pt}[1]{\textsf{\footnotesize #1}}
+\renewcommand{\familydefault}{\sfdefault}
+\DeclareSymbolFont{sfnumbers}{OT1}{cmss}{m}{n}
+\SetSymbolFont{sfnumbers}{bold}{OT1}{cmss}{bx}{n}
+\DeclareMathSymbol{0}{\mathalpha}{sfnumbers}{`0}
+\DeclareMathSymbol{1}{\mathalpha}{sfnumbers}{`1}
+\DeclareMathSymbol{2}{\mathalpha}{sfnumbers}{`2}
+\DeclareMathSymbol{3}{\mathalpha}{sfnumbers}{`3}
+\DeclareMathSymbol{4}{\mathalpha}{sfnumbers}{`4}
+\DeclareMathSymbol{5}{\mathalpha}{sfnumbers}{`5}
+\DeclareMathSymbol{6}{\mathalpha}{sfnumbers}{`6}
+\DeclareMathSymbol{7}{\mathalpha}{sfnumbers}{`7}
+\DeclareMathSymbol{8}{\mathalpha}{sfnumbers}{`8}
+\DeclareMathSymbol{9}{\mathalpha}{sfnumbers}{`9}
+\setlength{\parindent}{0pt}
+\graphicspath{{./}}
+\newcommand*{\textcircledd}[1]{\begin{tikzpicture}[baseline=(letter.base)]\node[draw,circle,inner sep=1pt] (letter) {#1};\end{tikzpicture}}
+\newcommand{\numeroCerne}[1]{\protect\textcircledd{\bfseries\scriptsize #1}}
+\setlist[enumerate,1]{label=\numeroCerne{\arabic*}, leftmargin=*, labelsep=6pt, itemsep=3pt, topsep=2pt, partopsep=0pt, parsep=0pt}
+
+\NewDocumentEnvironment{Exo}{O{breakable} m m m}{%
+  \begin{tcolorbox}[
+    enhanced,
+    #1,
+    colback=white,
+    colframe=white,
+    boxrule=0pt,
+    arc=4pt, outer arc=4pt, sharp corners=south,
+    left=8pt, right=8pt, top=5pt, bottom=3pt,
+    before skip=4pt, after skip=4pt,
+  ]
+  \noindent\tcbox[on line, colback=skyblue, colframe=skyblue, boxsep=1pt, left=4pt, right=4pt, top=1pt, bottom=1pt, arc=2pt]{\textcolor{white}{\ExoTexte{Exercice~#2}}}~#3\hfill\mbox{\color{skyblue}\normalsize\cursive\hyphenchar\font=-1 #4}\par\vspace{3pt}%
+}{%
+  \end{tcolorbox}
+}
+
+\NewDocumentEnvironment{ExoCont}{O{unbreakable}}{%
+  \begin{tcolorbox}[
+    enhanced,
+    #1,
+    colback=white,
+    colframe=white,
+    boxrule=0pt,
+    arc=4pt, outer arc=4pt, sharp corners=south,
+    left=8pt, right=8pt, top=5pt, bottom=3pt,
+    before skip=4pt, after skip=4pt,
+  ]
+}{%
+  \end{tcolorbox}
+}
+
+\newcommand{\Objectif}[2]{%
+\vspace{4pt}
+\noindent{\large\color{objorange}\bfseries Objectif #1~:}\\{\large\color{objorange}#2}\par
+\vspace{2pt}
+}
+
+\NewDocumentCommand{\FeuilletTitre}{m}{%
+  \begin{center}
+  \begin{tcolorbox}[
+    enhanced,
+    width=0.58\linewidth,
+    colback=white,
+    colframe=black,
+    boxrule=0.8pt,
+    arc=8pt,
+    sharp corners=downhill,
+    left=10pt, right=10pt, top=8pt, bottom=6pt,
+    halign=center,
+    overlay={
+      \node[fill=white, anchor=west, font=\normalsize, inner xsep=4pt]
+        at ([xshift=14pt]frame.north west) {Feuille d'entra\^inement};
+    },
+  ]
+  {\huge #1}
+  \end{tcolorbox}
+  \end{center}
+}
+
+\pagestyle{empty}
+\definecolor{repred}{HTML}{E03131}
+\newcommand{\Rep}[1]{{\color{repred}#1}}
+% Ligne de corrigé : numéro d'exercice en pastille bleu ciel (comme le corrigé de la feuille 3).
+\newcommand{\Corr}[1]{%
+\par\vspace{8pt}
+\noindent\tcbox[on line, colback=skyblue, colframe=skyblue, boxsep=1pt, left=4pt, right=4pt, top=1pt, bottom=1pt, arc=2pt]{\textcolor{white}{\ExoTexte{Exercice~#1}}}\par\nobreak\vspace{3pt}\nobreak
+}
+\begin{document}
+
+\FeuilletTitre{Vecteurs colin\'eaires}
+
+\Objectif{5}{Produit d'un vecteur par un nombre r\'eel et colin\'earit\'e de deux vecteurs}
+
+\begin{Exo}[breakable]{1}{\starfull{diffblue}\starfull{diffblue}\starempty}{Repr\'esenter}
+\renewcommand{\Pt}[1]{\textsf{#1}}
+Exprimer le vecteur $\Vj{AC}$ en fonction du vecteur $\Vj{AB}$ dans chacun des cas suivants~:
+
+\medskip
+
+\noindent\begin{minipage}[t]{0.48\linewidth}\vspace{0pt}
+\noindent\numeroCerne{1}\par
+{\centering
+\begin{tikzpicture}[x=1.286cm,y=0.5cm]
+\draw (0,0) -- (7,0);
+\foreach \x in {2,4,5} \draw (\x,-0.08) -- (\x,0.08);
+\node[ptcross] at (3,0) {}; \node[above] at (3,0) {\Pt{A}};
+\node[ptcross] at (6,0) {}; \node[above] at (6,0) {\Pt{B}};
+\node[ptcross] at (1,0) {}; \node[above] at (1,0) {\Pt{C}};
+\end{tikzpicture}\par}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\linewidth}\vspace{0pt}
+\noindent\numeroCerne{2}\par
+{\centering
+\begin{tikzpicture}[x=1.286cm,y=0.5cm]
+\draw (0,0) -- (7,0);
+\foreach \x in {2,4,5} \draw (\x,-0.08) -- (\x,0.08);
+\node[ptcross] at (1,0) {}; \node[above] at (1,0) {\Pt{A}};
+\node[ptcross] at (3,0) {}; \node[above] at (3,0) {\Pt{B}};
+\node[ptcross] at (6,0) {}; \node[above] at (6,0) {\Pt{C}};
+\end{tikzpicture}\par}
+\end{minipage}
+
+\vspace{1.1cm}
+
+\noindent\begin{minipage}[t]{0.48\linewidth}\vspace{0pt}
+\noindent\numeroCerne{3}\par
+{\centering
+\begin{tikzpicture}[x=1.125cm,y=0.5cm]
+\draw (0,0) -- (8,0);
+\foreach \x in {1,3,5,6} \draw (\x,-0.08) -- (\x,0.08);
+\node[ptcross] at (7,0) {}; \node[above] at (7,0) {\Pt{A}};
+\node[ptcross] at (2,0) {}; \node[above] at (2,0) {\Pt{B}};
+\node[ptcross] at (4,0) {}; \node[above] at (4,0) {\Pt{C}};
+\end{tikzpicture}\par}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\linewidth}\vspace{0pt}
+\noindent\numeroCerne{4}\par
+{\centering
+\begin{tikzpicture}[x=1.500cm,y=0.5cm]
+\draw (-1,0) -- (5,0);
+\foreach \x in {1,4} \draw (\x,-0.08) -- (\x,0.08);
+\node[ptcross] at (2,0) {}; \node[above] at (2,0) {\Pt{A}};
+\node[ptcross] at (3,0) {}; \node[below] at (3,0) {\Pt{B}};
+\node[ptcross] at (0,0) {}; \node[above] at (0,0) {\Pt{C}};
+\end{tikzpicture}\par}
+\end{minipage}
+
+\vspace{1.1cm}
+
+\noindent\begin{minipage}[t]{0.48\linewidth}\vspace{0pt}
+\noindent\numeroCerne{5}\par
+{\centering
+\begin{tikzpicture}[x=0.750cm,y=0.5cm]
+\draw (-4,0) -- (8,0);
+\foreach \x in {-2,-1,0,1,2,4,5,6} \draw (\x,-0.08) -- (\x,0.08);
+\node[ptcross] at (3,0) {}; \node[above] at (3,0) {\Pt{A}};
+\node[ptcross] at (7,0) {}; \node[above] at (7,0) {\Pt{B}};
+\node[ptcross] at (-3,0) {}; \node[above] at (-3,0) {\Pt{C}};
+\end{tikzpicture}\par}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\linewidth}\vspace{0pt}
+\noindent\numeroCerne{6}\par
+{\centering
+\begin{tikzpicture}[x=1.125cm,y=0.5cm]
+\draw (0,0) -- (8,0);
+\foreach \x in {2,3,4,6} \draw (\x,-0.08) -- (\x,0.08);
+\node[ptcross] at (1,0) {}; \node[above] at (1,0) {\Pt{A}};
+\node[ptcross] at (7,0) {}; \node[above] at (7,0) {\Pt{B}};
+\node[ptcross] at (5,0) {}; \node[above] at (5,0) {\Pt{C}};
+\end{tikzpicture}\par}
+\end{minipage}
+
+\vspace{1.1cm}
+
+\noindent\begin{minipage}[t]{0.48\linewidth}\vspace{0pt}
+\noindent\numeroCerne{7}\par
+{\centering
+\begin{tikzpicture}[x=1.125cm,y=0.5cm]
+\draw (-2,0) -- (6,0);
+\foreach \x in {0,1,2,4} \draw (\x,-0.08) -- (\x,0.08);
+\node[ptcross] at (5,0) {}; \node[above] at (5,0) {\Pt{A}};
+\node[ptcross] at (3,0) {}; \node[above] at (3,0) {\Pt{B}};
+\node[ptcross] at (-1,0) {}; \node[above] at (-1,0) {\Pt{C}};
+\end{tikzpicture}\par}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\linewidth}\vspace{0pt}
+\noindent\numeroCerne{8}\par
+{\centering
+\begin{tikzpicture}[x=1.286cm,y=0.5cm]
+\draw (2,0) -- (9,0);
+\foreach \x in {5,6,7} \draw (\x,-0.08) -- (\x,0.08);
+\node[ptcross] at (4,0) {}; \node[above] at (4,0) {\Pt{A}};
+\node[ptcross] at (8,0) {}; \node[above] at (8,0) {\Pt{B}};
+\node[ptcross] at (3,0) {}; \node[below] at (3,0) {\Pt{C}};
+\end{tikzpicture}\par}
+\end{minipage}
+
+\end{Exo}
+
+\begin{Exo}[breakable]{2}{\starfull{diffblue}\starfull{diffblue}\starempty}{Repr\'esenter}
+\renewcommand{\Pt}[1]{\textsf{#1}}
+Dans chacun des cas suivants, repr\'esenter le vecteur $\Vj{AC}$ tel que~:
+
+\medskip
+
+\noindent\begin{minipage}[t]{0.48\linewidth}\vspace{0pt}
+\noindent\numeroCerne{1}~$\Vj{AC}=\dfrac{3}{2}\Vj{AB}$\par
+{\centering
+\begin{tikzpicture}[x=1.286cm,y=0.5cm]
+\draw (0,0) -- (7,0);
+\foreach \x in {1,3,5,6} \draw (\x,-0.08) -- (\x,0.08);
+\node[ptcross] at (2,0) {}; \node[above] at (2,0) {\Pt{A}};
+\node[ptcross] at (4,0) {}; \node[above] at (4,0) {\Pt{B}};
+\end{tikzpicture}\par}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\linewidth}\vspace{0pt}
+\noindent\numeroCerne{2}~$\Vj{AC}=-\dfrac{2}{3}\Vj{AB}$\par
+{\centering
+\begin{tikzpicture}[x=1.125cm,y=0.5cm]
+\draw (0,0) -- (8,0);
+\foreach \x in {1,2,3,5,6} \draw (\x,-0.08) -- (\x,0.08);
+\node[ptcross] at (4,0) {}; \node[above] at (4,0) {\Pt{A}};
+\node[ptcross] at (7,0) {}; \node[above] at (7,0) {\Pt{B}};
+\end{tikzpicture}\par}
+\end{minipage}
+
+\vspace{1.1cm}
+
+\noindent\begin{minipage}[t]{0.48\linewidth}\vspace{0pt}
+\noindent\numeroCerne{3}~$\Vj{AC}=\dfrac{5}{4}\Vj{AB}$\par
+{\centering
+\begin{tikzpicture}[x=1.125cm,y=0.5cm]
+\draw (0,0) -- (8,0);
+\foreach \x in {2,3,4,6,7} \draw (\x,-0.08) -- (\x,0.08);
+\node[ptcross] at (1,0) {}; \node[above] at (1,0) {\Pt{A}};
+\node[ptcross] at (5,0) {}; \node[above] at (5,0) {\Pt{B}};
+\end{tikzpicture}\par}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\linewidth}\vspace{0pt}
+\noindent\numeroCerne{4}~$\Vj{AC}=-\dfrac{1}{3}\Vj{AB}$\par
+{\centering
+\begin{tikzpicture}[x=0.900cm,y=0.5cm]
+\draw (0,0) -- (10,0);
+\foreach \x in {2,3,4,5,6,8,9} \draw (\x,-0.08) -- (\x,0.08);
+\node[ptcross] at (7,0) {}; \node[above] at (7,0) {\Pt{A}};
+\node[ptcross] at (1,0) {}; \node[above] at (1,0) {\Pt{B}};
+\end{tikzpicture}\par}
+\end{minipage}
+
+\vspace{1.1cm}
+
+\noindent\begin{minipage}[t]{0.48\linewidth}\vspace{0pt}
+\noindent\numeroCerne{5}~$\Vj{AC}=\dfrac{3}{5}\Vj{AB}$\par
+{\centering
+\begin{tikzpicture}[x=1.000cm,y=0.5cm]
+\draw (0,0) -- (9,0);
+\foreach \x in {1,3,4,5,6,8} \draw (\x,-0.08) -- (\x,0.08);
+\node[ptcross] at (7,0) {}; \node[above] at (7,0) {\Pt{A}};
+\node[ptcross] at (2,0) {}; \node[above] at (2,0) {\Pt{B}};
+\end{tikzpicture}\par}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\linewidth}\vspace{0pt}
+\noindent\numeroCerne{6}~$\Vj{AC}=-\dfrac{5}{2}\Vj{AB}$\par
+{\centering
+\begin{tikzpicture}[x=1.000cm,y=0.5cm]
+\draw (0,0) -- (9,0);
+\foreach \x in {1,2,3,4,5,7} \draw (\x,-0.08) -- (\x,0.08);
+\node[ptcross] at (6,0) {}; \node[above] at (6,0) {\Pt{A}};
+\node[ptcross] at (8,0) {}; \node[above] at (8,0) {\Pt{B}};
+\end{tikzpicture}\par}
+\end{minipage}
+
+\vspace{1.1cm}
+
+\noindent\begin{minipage}[t]{0.48\linewidth}\vspace{0pt}
+\noindent\numeroCerne{7}~$\Vj{AC}=-3\Vj{AB}$\par
+{\centering
+\begin{tikzpicture}[x=0.900cm,y=0.5cm]
+\draw (0,0) -- (10,0);
+\foreach \x in {2,4,5,6,7,8,9} \draw (\x,-0.08) -- (\x,0.08);
+\node[ptcross] at (3,0) {}; \node[above] at (3,0) {\Pt{A}};
+\node[ptcross] at (1,0) {}; \node[above] at (1,0) {\Pt{B}};
+\end{tikzpicture}\par}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.48\linewidth}\vspace{0pt}
+\noindent\numeroCerne{8}~$\Vj{AC}=\dfrac{7}{4}\Vj{AB}$\par
+{\centering
+\begin{tikzpicture}[x=0.900cm,y=0.5cm]
+\draw (0,0) -- (10,0);
+\foreach \x in {2,3,4,6,7,8,9} \draw (\x,-0.08) -- (\x,0.08);
+\node[ptcross] at (1,0) {}; \node[above] at (1,0) {\Pt{A}};
+\node[ptcross] at (5,0) {}; \node[above] at (5,0) {\Pt{B}};
+\end{tikzpicture}\par}
+\end{minipage}
+
+\end{Exo}
+
+\newpage
+
+\begin{center}
+{\Large Corrig\'e}
+\end{center}
+
+\renewcommand{\Pt}[1]{\textsf{#1}}
+\Corr{1}
+On compte les longueurs en graduations. Le signe est n\'egatif quand $\Vj{AC}$ et $\Vj{AB}$ sont de sens oppos\'e.
+\begin{multicols}{2}\raggedright
+\begin{enumerate}[itemsep=9pt]
+\item \begin{minipage}[t]{\linewidth}Sens oppos\'e, $AC=2$ et $AB=3$.\\[2pt]
+$\Vj{AC}=-\dfrac{2}{3}\,\Vj{AB}$\end{minipage}
+\item \begin{minipage}[t]{\linewidth}M\^eme sens, $AC=5$ et $AB=2$.\\[2pt]
+$\Vj{AC}=\dfrac{5}{2}\,\Vj{AB}$\end{minipage}
+\item \begin{minipage}[t]{\linewidth}M\^eme sens, $AC=3$ et $AB=5$.\\[2pt]
+$\Vj{AC}=\dfrac{3}{5}\,\Vj{AB}$\end{minipage}
+\item \begin{minipage}[t]{\linewidth}Sens oppos\'e, $AC=2$ et $AB=1$.\\[2pt]
+$\Vj{AC}=-2\,\Vj{AB}$\end{minipage}
+\item \begin{minipage}[t]{\linewidth}Sens oppos\'e, $AC=6$ et $AB=4$.\\[2pt]
+$\Vj{AC}=-\dfrac{6}{4}\,\Vj{AB}=-\dfrac{3}{2}\,\Vj{AB}$\end{minipage}
+\item \begin{minipage}[t]{\linewidth}M\^eme sens, $AC=4$ et $AB=6$.\\[2pt]
+$\Vj{AC}=\dfrac{4}{6}\,\Vj{AB}=\dfrac{2}{3}\,\Vj{AB}$\end{minipage}
+\item \begin{minipage}[t]{\linewidth}M\^eme sens, $AC=6$ et $AB=2$.\\[2pt]
+$\Vj{AC}=\dfrac{6}{2}\,\Vj{AB}=3\,\Vj{AB}$\end{minipage}
+\item \begin{minipage}[t]{\linewidth}Sens oppos\'e, $AC=1$ et $AB=4$.\\[2pt]
+$\Vj{AC}=-\dfrac{1}{4}\,\Vj{AB}$\end{minipage}
+\end{enumerate}
+\end{multicols}
+
+\Corr{2}
+On place $C$ sur la droite $(AB)$ : du c\^ot\'e de $B$ si le nombre est positif, \`a l'oppos\'e sinon.
+\begin{multicols}{2}\raggedright
+\begin{enumerate}[itemsep=9pt]
+\item \begin{minipage}[t]{\linewidth}\raggedright $\Vj{AC}=\dfrac{3}{2}\Vj{AB}$~: $\dfrac{3}{2}>0$ donc m\^eme sens.\\
+$AB=2$, donc $AC=\dfrac{3}{2}\times2=3$ graduations.\par\vspace{2pt}
+{\centering
+\begin{tikzpicture}[x=1.171cm,y=0.5cm]
+\draw (0,0) -- (7,0);
+\foreach \x in {1,3,6} \draw (\x,-0.08) -- (\x,0.08);
+\node[ptcross] at (2,0) {}; \node[above] at (2,0) {\Pt{A}};
+\node[ptcross] at (4,0) {}; \node[above] at (4,0) {\Pt{B}};
+\node[ptcross,repred] at (5,0) {}; \node[below,repred] at (5,0) {\Pt{C}};
+\draw[-{Stealth[length=6pt]},thick,repred] (2,1.7) -- (5,1.7);
+\end{tikzpicture}\par}\end{minipage}
+\item \begin{minipage}[t]{\linewidth}\raggedright $\Vj{AC}=-\dfrac{2}{3}\Vj{AB}$~: $-\dfrac{2}{3}<0$ donc sens oppos\'e.\\
+$AB=3$, donc $AC=\dfrac{2}{3}\times3=2$ graduations.\par\vspace{2pt}
+{\centering
+\begin{tikzpicture}[x=1.025cm,y=0.5cm]
+\draw (0,0) -- (8,0);
+\foreach \x in {1,3,5,6} \draw (\x,-0.08) -- (\x,0.08);
+\node[ptcross] at (4,0) {}; \node[above] at (4,0) {\Pt{A}};
+\node[ptcross] at (7,0) {}; \node[above] at (7,0) {\Pt{B}};
+\node[ptcross,repred] at (2,0) {}; \node[above,repred] at (2,0) {\Pt{C}};
+\draw[-{Stealth[length=6pt]},thick,repred] (4,1.7) -- (2,1.7);
+\end{tikzpicture}\par}\end{minipage}
+\item \begin{minipage}[t]{\linewidth}\raggedright $\Vj{AC}=\dfrac{5}{4}\Vj{AB}$~: $\dfrac{5}{4}>0$ donc m\^eme sens.\\
+$AB=4$, donc $AC=\dfrac{5}{4}\times4=5$ graduations.\par\vspace{2pt}
+{\centering
+\begin{tikzpicture}[x=1.025cm,y=0.5cm]
+\draw (0,0) -- (8,0);
+\foreach \x in {2,3,4,7} \draw (\x,-0.08) -- (\x,0.08);
+\node[ptcross] at (1,0) {}; \node[above] at (1,0) {\Pt{A}};
+\node[ptcross] at (5,0) {}; \node[above] at (5,0) {\Pt{B}};
+\node[ptcross,repred] at (6,0) {}; \node[below,repred] at (6,0) {\Pt{C}};
+\draw[-{Stealth[length=6pt]},thick,repred] (1,1.7) -- (6,1.7);
+\end{tikzpicture}\par}\end{minipage}
+\item \begin{minipage}[t]{\linewidth}\raggedright $\Vj{AC}=-\dfrac{1}{3}\Vj{AB}$~: $-\dfrac{1}{3}<0$ donc sens oppos\'e.\\
+$AB=6$, donc $AC=\dfrac{1}{3}\times6=2$ graduations.\par\vspace{2pt}
+{\centering
+\begin{tikzpicture}[x=0.820cm,y=0.5cm]
+\draw (0,0) -- (10,0);
+\foreach \x in {2,3,4,5,6,8} \draw (\x,-0.08) -- (\x,0.08);
+\node[ptcross] at (7,0) {}; \node[above] at (7,0) {\Pt{A}};
+\node[ptcross] at (1,0) {}; \node[above] at (1,0) {\Pt{B}};
+\node[ptcross,repred] at (9,0) {}; \node[above,repred] at (9,0) {\Pt{C}};
+\draw[-{Stealth[length=6pt]},thick,repred] (7,1.7) -- (9,1.7);
+\end{tikzpicture}\par}\end{minipage}
+\item \begin{minipage}[t]{\linewidth}\raggedright $\Vj{AC}=\dfrac{3}{5}\Vj{AB}$~: $\dfrac{3}{5}>0$ donc m\^eme sens.\\
+$AB=5$, donc $AC=\dfrac{3}{5}\times5=3$ graduations.\par\vspace{2pt}
+{\centering
+\begin{tikzpicture}[x=0.911cm,y=0.5cm]
+\draw (0,0) -- (9,0);
+\foreach \x in {1,3,5,6,8} \draw (\x,-0.08) -- (\x,0.08);
+\node[ptcross] at (7,0) {}; \node[above] at (7,0) {\Pt{A}};
+\node[ptcross] at (2,0) {}; \node[above] at (2,0) {\Pt{B}};
+\node[ptcross,repred] at (4,0) {}; \node[above,repred] at (4,0) {\Pt{C}};
+\draw[-{Stealth[length=6pt]},thick,repred] (7,1.7) -- (4,1.7);
+\end{tikzpicture}\par}\end{minipage}
+\item \begin{minipage}[t]{\linewidth}\raggedright $\Vj{AC}=-\dfrac{5}{2}\Vj{AB}$~: $-\dfrac{5}{2}<0$ donc sens oppos\'e.\\
+$AB=2$, donc $AC=\dfrac{5}{2}\times2=5$ graduations.\par\vspace{2pt}
+{\centering
+\begin{tikzpicture}[x=0.911cm,y=0.5cm]
+\draw (0,0) -- (9,0);
+\foreach \x in {2,3,4,5,7} \draw (\x,-0.08) -- (\x,0.08);
+\node[ptcross] at (6,0) {}; \node[above] at (6,0) {\Pt{A}};
+\node[ptcross] at (8,0) {}; \node[above] at (8,0) {\Pt{B}};
+\node[ptcross,repred] at (1,0) {}; \node[above,repred] at (1,0) {\Pt{C}};
+\draw[-{Stealth[length=6pt]},thick,repred] (6,1.7) -- (1,1.7);
+\end{tikzpicture}\par}\end{minipage}
+\item \begin{minipage}[t]{\linewidth}\raggedright $\Vj{AC}=-3\Vj{AB}$~: $-3<0$ donc sens oppos\'e.\\
+$AB=2$, donc $AC=3\times2=6$ graduations.\par\vspace{2pt}
+{\centering
+\begin{tikzpicture}[x=0.820cm,y=0.5cm]
+\draw (0,0) -- (10,0);
+\foreach \x in {2,4,5,6,7,8} \draw (\x,-0.08) -- (\x,0.08);
+\node[ptcross] at (3,0) {}; \node[above] at (3,0) {\Pt{A}};
+\node[ptcross] at (1,0) {}; \node[above] at (1,0) {\Pt{B}};
+\node[ptcross,repred] at (9,0) {}; \node[above,repred] at (9,0) {\Pt{C}};
+\draw[-{Stealth[length=6pt]},thick,repred] (3,1.7) -- (9,1.7);
+\end{tikzpicture}\par}\end{minipage}
+\item \begin{minipage}[t]{\linewidth}\raggedright $\Vj{AC}=\dfrac{7}{4}\Vj{AB}$~: $\dfrac{7}{4}>0$ donc m\^eme sens.\\
+$AB=4$, donc $AC=\dfrac{7}{4}\times4=7$ graduations.\par\vspace{2pt}
+{\centering
+\begin{tikzpicture}[x=0.820cm,y=0.5cm]
+\draw (0,0) -- (10,0);
+\foreach \x in {2,3,4,6,7,9} \draw (\x,-0.08) -- (\x,0.08);
+\node[ptcross] at (1,0) {}; \node[above] at (1,0) {\Pt{A}};
+\node[ptcross] at (5,0) {}; \node[above] at (5,0) {\Pt{B}};
+\node[ptcross,repred] at (8,0) {}; \node[above,repred] at (8,0) {\Pt{C}};
+\draw[-{Stealth[length=6pt]},thick,repred] (1,1.7) -- (8,1.7);
+\end{tikzpicture}\par}\end{minipage}
+\end{enumerate}
+\end{multicols}
+
+\end{document}

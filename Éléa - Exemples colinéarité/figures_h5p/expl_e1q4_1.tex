@@ -1,0 +1,27 @@
+
+\documentclass[border=4pt]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,shapes.misc}
+\renewcommand{\familydefault}{\sfdefault}
+\definecolor{vbleu}{HTML}{1C5FD6}
+\definecolor{orange}{HTML}{E8590C}
+\definecolor{vert}{HTML}{2F9E44}
+\definecolor{gris}{HTML}{495057}
+\definecolor{violet}{HTML}{7048E8}
+\tikzset{
+  vec/.style={->,very thick,>={Stealth[length=2.4mm]}},
+  ref/.style={orange,thick,dashed},
+  par/.style={vert,thick,dashed},
+  sec/.style={gris,thick,dashed},
+  ptcross/.style={cross out,draw,thick,minimum size=1.6mm,inner sep=0pt},
+}
+\usepackage{array}
+\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}
+\newcommand{\V}[1]{\overrightarrow{\mathrm{#1}}}
+\begin{document}
+
+\begin{minipage}{16cm}\large \begin{minipage}{15.5cm}{\color{vert}\Large Explication (1/3)}\par\vspace{4pt}{\color{vert}$\vec{v}=-2\,\vec{u}$} : les vecteurs $\vec{v}$ et $\vec{u}$ ont même direction et sont de sens opposé. La norme de $\vec{v}$ est deux fois plus grande que celle de $\vec{u}$.\par\vspace{6pt}{\color{vert}$\vec{c}=2\,\vec{u}$} : les vecteurs $\vec{c}$ et $\vec{u}$ ont même direction et sont de même sens. La norme de $\vec{c}$ est deux fois plus grande que celle de $\vec{u}$.\par\vspace{6pt}{\color{vert}$\vec{r}=3\,\vec{u}$} : les vecteurs $\vec{r}$ et $\vec{u}$ ont même direction et sont de même sens. La norme de $\vec{r}$ est trois fois plus grande que celle de $\vec{u}$.\par\vspace{6pt}{\color{vert}$\vec{b}=-1\,\vec{w}$} : les vecteurs $\vec{b}$ et $\vec{w}$ ont même direction et sont de sens opposé. La norme de $\vec{b}$ est égale à celle de $\vec{w}$ (on écrit aussi $\vec{b}=-\vec{w}$).\end{minipage}\end{minipage}
+\end{document}

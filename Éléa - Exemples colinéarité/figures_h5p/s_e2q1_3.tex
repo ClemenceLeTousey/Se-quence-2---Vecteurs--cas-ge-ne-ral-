@@ -1,0 +1,27 @@
+
+\documentclass[border=4pt]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,shapes.misc}
+\renewcommand{\familydefault}{\sfdefault}
+\definecolor{vbleu}{HTML}{1C5FD6}
+\definecolor{orange}{HTML}{E8590C}
+\definecolor{vert}{HTML}{2F9E44}
+\definecolor{gris}{HTML}{495057}
+\definecolor{violet}{HTML}{7048E8}
+\tikzset{
+  vec/.style={->,very thick,>={Stealth[length=2.4mm]}},
+  ref/.style={orange,thick,dashed},
+  par/.style={vert,thick,dashed},
+  sec/.style={gris,thick,dashed},
+  ptcross/.style={cross out,draw,thick,minimum size=1.6mm,inner sep=0pt},
+}
+\usepackage{array}
+\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}
+\newcommand{\V}[1]{\overrightarrow{\mathrm{#1}}}
+\begin{document}
+
+\begin{minipage}{16cm}\large {\color{gris}\Large Remarque — Vérifier avec les carreaux}\par\vspace{4pt}On part du premier point (l'origine) et on compte le déplacement jusqu'au second (l'extrémité).\par {\normalsize\begin{tabular}{l|ccccc} & $\V{AB}$ & $\V{CD}$ & $\V{GH}$ & $\V{AK}$ & $\V{EF}$\\\hline Horizontal (carreaux) & 3 & 6 & 9 & 9 & 3\\ Vertical (carreaux) & 1 & 2 & 3 & 3 & 2\end{tabular}}\par Les déplacements de $\V{CD}$, $\V{GH}$ et $\V{AK}$ sont proportionnels à ceux de $\V{AB}$.\\ Pour $\V{EF}$, 3 n'est pas le triple de 2 : ce n'est pas proportionnel.\end{minipage}
+\end{document}

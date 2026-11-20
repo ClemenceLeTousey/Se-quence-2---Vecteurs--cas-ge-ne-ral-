@@ -4,9 +4,12 @@
 % élève déficiente visuelle. Document autonome (n'utilise PAS CLT2627.sty),
 % sur le même principe que "Séquence 2 - Cours - Vecteurs - Grands
 % Caractères.tex" : police sans-serif, texte non justifié, interligne
-% large, une seule colonne pleine largeur, paysage (comme le cours), et
-% chaque exercice commence sur sa propre page pour rester lisible à cette
-% taille.
+% large, paysage (comme le cours), et chaque exercice tient sur sa propre
+% page pour rester lisible à cette taille. Quand l'exercice a une figure,
+% l'énoncé occupe la colonne de gauche et la figure la colonne de droite
+% (voir \GCexo plus bas) : la page paysage étant large mais basse, c'est
+% ce qui laisse le plus de place à la figure tout en gardant l'ensemble
+% sur une seule page.
 %
 % Ne couvre que les Objectifs 1 à 4 / Exercices 1 à 16 : la feuille source
 % a un \end{document} prématuré juste après l'exercice 16 qui rend tout le
@@ -26,13 +29,27 @@
 \usepackage{xcolor}
 \usepackage[most]{tcolorbox}
 \tcbuselibrary{skins,breakable}
-\usepackage{enumitem}
+\usepackage[inline]{enumitem}
 \usepackage{ragged2e}
 \usepackage{fancyhdr}
 \usepackage{lastpage}
 \usepackage{graphicx}
 \usepackage{adjustbox}
 \usepackage{pifont}
+% Badges « Exercice n » en cursive Playwrite FR Moderne (police du site),
+% chargée à 85 % de la taille courante (XeLaTeX ou LuaLaTeX ; gras sous pdfLaTeX).
+\makeatletter
+\ifdefined\XeTeXrevision\def\ExoFont@ok{}\fi
+\ifdefined\directlua\def\ExoFont@ok{}\fi
+\ifdefined\ExoFont@ok
+\newcommand{\ExoFont}{\font\ExoFont@f="[../polices/PlaywriteFRModerne.ttf]" at \dimexpr\f@size pt*85/100\relax\ExoFont@f}
+\else
+\newcommand{\ExoFont}{\bfseries}
+\fi
+\makeatother
+% \ExoTexte{...} : texte du badge en cursive, avec la hauteur d'une majuscule de la
+% police courante (la cursive est plus haute et ferait grandir chaque badge).
+\newcommand{\ExoTexte}[1]{\raisebox{0pt}[\fontcharht\font`E][0pt]{\ExoFont #1}}
 \usepackage{frcursive}
 % Correctif du bug de crénage de frcursive sous XeLaTeX (repris de
 % CLT2627.sty et de "Séquence 2 - Feuille d'exercices - Vecteurs.tex") :
@@ -116,32 +133,79 @@
 \setlist[enumerate,1]{label=\numeroCerne{\arabic*}, leftmargin=*, labelsep=10pt, itemsep=9pt, topsep=6pt, partopsep=0pt, parsep=0pt}
 \setlist[enumerate,2]{label=(\alph*), leftmargin=1.6em, itemsep=7pt, topsep=5pt, parsep=0pt}
 \setlist[itemize,1]{leftmargin=1.4em, itemsep=8pt, topsep=6pt}
+% Sous-questions (a), (b), (c)... en ligne plutôt qu'empilées : à cette
+% taille de police, une sous-question par ligne fait déborder les
+% exercices 11 et 12 de leur page.
+\newlist{souslist}{enumerate*}{1}
+\setlist[souslist]{label=(\alph*), itemjoin=\hspace{1.6em}, mode=unboxed}
 
 % Titre "Exercice N" + étoiles + compétence cursive, agrandi.
 \newcommand{\ExoTitre}[3]{%
-\noindent\tcbox[on line, colback=skyblue, colframe=skyblue, boxsep=4pt, left=10pt, right=10pt, top=4pt, bottom=4pt, arc=5pt]{\textcolor{white}{\bfseries\large Exercice~#1}}\quad{\Large #2}\hfill{\Large\color{skyblue}\cursive\hyphenchar\font=-1 #3}\par
+\noindent\tcbox[on line, colback=skyblue, colframe=skyblue, boxsep=4pt, left=10pt, right=10pt, top=4pt, bottom=4pt, arc=5pt]{\textcolor{white}{\large\ExoTexte{Exercice~#1}}}\quad{\Large #2}\hfill{\Large\color{skyblue}\cursive\hyphenchar\font=-1 #3}\par
 \vspace{16pt}%
 }
 
 % Rappel d'objectif en haut de chaque page (répété à chaque exercice).
 \newcommand{\ObjRappel}[2]{%
+% \sloppy : sans lui, le rappel de l'objectif 1 dépasse dans la marge de
+% droite (TeX préfère une ligne trop longue à un renvoi à la ligne).
+\begingroup\sloppy
 \noindent{\color{objorange}\bfseries\large Objectif #1~:}~{\large\color{objorange}#2}\par
+\endgroup
 \vspace{6pt}
 \noindent{\color{gray!45}\rule{\linewidth}{0.6pt}}\par
 \vspace{18pt}%
 }
 
-% Figure agrandie : on reprend le tikzpicture original tel quel (mêmes
-% coordonnées, même échelle) et on le redimensionne en bloc, ce qui
-% agrandit uniformément le dessin ET les étiquettes \Pt. On contraint à la
-% fois la largeur ET la hauteur (adjustbox, pas resizebox) : en paysage,
-% la page est large mais basse, donc une contrainte de largeur seule
-% produirait des figures bien trop hautes pour la place restante et les
-% ferait basculer seules sur une page à part.
-\NewDocumentCommand{\GCFig}{O{0.55\linewidth} O{5.3cm} m}{%
-\begin{center}
-\adjustbox{width=#1,height=#2,keepaspectratio}{#3}
-\end{center}
+% Mise en page d'un exercice avec figure : chaque exercice tient sur UNE
+% page. La page étant en paysage (large mais basse), l'énoncé est placé à
+% gauche et la figure à droite, ce qui laisse à la figure toute la
+% hauteur restante au lieu de la coincer sous le texte.
+%
+% La figure reprend le tikzpicture original tel quel (mêmes coordonnées,
+% même échelle) et est redimensionnée en bloc, ce qui agrandit
+% uniformément le dessin ET les étiquettes \Pt. La hauteur disponible est
+% mesurée ici (\pagegoal-\pagetotal = place verticale restante sous le
+% titre de l'exercice) plutôt que fixée à la main, puis largeur ET
+% hauteur sont contraintes (adjustbox, pas resizebox) : la figure ne peut
+% donc jamais basculer seule sur la page suivante.
+%
+% Le \vspace{0pt} en tête de chaque minipage aligne les deux colonnes par
+% leur bord supérieur et non par la ligne de base de leur première ligne ;
+% sans lui, la figure s'empilerait au-dessus de cette ligne de base et le
+% bloc déborderait de la page.
+%
+% #1 = largeur de la colonne de texte (fraction de \linewidth, à réduire
+% pour les figures larges), #2 = énoncé, #3 = figure.
+\newlength{\GCavail}
+\newlength{\GCparskip}
+% (+m : les arguments doivent accepter les paragraphes, certains textes
+%  de corrigé contiennent une ligne blanche.)
+\NewDocumentCommand{\GCexo}{O{0.46} +m +m}{%
+\par\penalty0\relax
+\ifdim\pagegoal=\maxdimen
+  \setlength{\GCavail}{\textheight}%
+\else
+  \setlength{\GCavail}{\dimexpr\pagegoal-\pagetotal\relax}%
+\fi
+\addtolength{\GCavail}{-0.8\baselineskip}% marge de sécurité en bas de page
+\ifdim\GCavail<3cm\relax\setlength{\GCavail}{3cm}\fi
+\setlength{\GCparskip}{\parskip}%
+\noindent
+\begin{minipage}[t]{#1\linewidth}\vspace{0pt}%
+% Une minipage réinitialise les paramètres de paragraphe : sans ces deux
+% lignes, le texte de la colonne redeviendrait justifié (avec des espaces
+% étirés) et les paragraphes ne seraient plus séparés.
+\RaggedRight
+\setlength{\parskip}{\GCparskip}%
+\hyphenpenalty=10000\exhyphenpenalty=10000% pas de mots coupés en fin de ligne
+
+#2
+\end{minipage}\hfill
+\begin{minipage}[t]{\dimexpr0.96\linewidth-#1\linewidth\relax}\vspace{0pt}%
+\centering
+\adjustbox{width=\linewidth,height=\GCavail,keepaspectratio}{#3}%
+\end{minipage}\par
 }
 
 \pagestyle{fancy}
@@ -169,7 +233,7 @@
   halign=center,
   overlay={
     \node[fill=white, anchor=west, font=\large, inner xsep=6pt]
-      at ([xshift=18pt]frame.north west) {Feuille d'exercices n\textdegree{}2 --- Grands caract\`eres};
+      at ([xshift=18pt]frame.north west) {Feuille d'exercices n\textdegree{}2};
   },
 ]
 {\Huge Vecteurs du plan}
@@ -187,14 +251,13 @@
 
 \ObjRappel{1}{Vecteur $\Vj{MM'}$ associ\'e \`a la translation qui transforme $M$ en $M'$ --- direction, sens et norme}
 \ExoTitre{1}{\starfull{diffgreen}\starempty\starempty}{Repr\'esenter}
-\`A partir de la figure ci-dessous,
+\GCexo{%
+\`A partir de la figure ci-contre,
 \begin{enumerate}
 \item donner les images des points $C$, $D$, $E$ dans la translation de vecteur $\Vj{AB}$~;
 \item en d\'eduire trois vecteurs \'egaux au vecteur $\Vj{AB}$.
 \end{enumerate}
-
-\newpage
-\GCFig[0.8\linewidth][15cm]{%
+}{%
 \begin{tikzpicture}[scale=0.38]
 \draw[thin,gray!35] (0,-1) grid (8,6);
 \coordinate (A) at (1,4); \coordinate (B) at (4,5);
@@ -209,15 +272,14 @@
 
 \newpage
 \ExoTitre{2}{\starfull{diffgreen}\starempty\starempty}{Repr\'esenter}
+\GCexo[0.40]{%
 Sans justifier, donner l'image de chaque point par la translation de vecteur indiqu\'ee.
 \begin{enumerate}
 \item Image du point $I$ par la translation de vecteur $\Vj{AD}$.
 \item Image du point $J$ par la translation de vecteur $\Vj{LR}$.
 \item Image du point $R$ par la translation de vecteur $\Vj{NC}$.
 \end{enumerate}
-
-\newpage
-\GCFig[0.85\linewidth][15cm]{%
+}{%
 \begin{tikzpicture}[scale=0.32]
 \draw[thin,gray!35] (-1,-1) grid (11,5);
 \coordinate (A) at (0,4); \coordinate (B) at (2,4); \coordinate (C) at (4,4); \coordinate (D) at (6,4); \coordinate (E) at (8,4); \coordinate (F) at (10,4);
@@ -231,16 +293,15 @@ Sans justifier, donner l'image de chaque point par la translation de vecteur ind
 
 \newpage
 \ExoTitre{3}{\starfull{diffblue}\starfull{diffblue}\starempty}{Repr\'esenter}
-La figure ci-dessous repr\'esente sept hexagones r\'eguliers et num\'erot\'es.
+\GCexo{%
+La figure ci-contre repr\'esente sept hexagones r\'eguliers et num\'erot\'es.
 Compl\`ete les phrases suivantes~:
 \begin{enumerate}
 \item L'hexagone \dots{} est l'image de l'hexagone 1 dans la translation de vecteur $\Vj{AC}$.
 \item L'hexagone 6 est l'image de l'hexagone \dots{} dans la translation de vecteur $\Vj{AB}$.
 \item L'hexagone 3 est l'image de l'hexagone \dots{} dans la translation de vecteur $\Vj{DE}$.
 \end{enumerate}
-
-\newpage
-\GCFig[0.65\linewidth][15cm]{%
+}{%
 \begin{tikzpicture}[scale=0.22]
 \draw (2,0)-- (4,0)-- (5,1.73)-- (4,3.46)-- (2,3.46)-- (1,1.73)-- cycle;
 \draw (3,1.73) node[draw,circle,inner sep=1pt]{\footnotesize 1};
@@ -281,10 +342,9 @@ Soit $\vec u$ un vecteur non nul, et $A$ un point. On note $A'$ l'image de $A$ p
 \newpage
 \ObjRappel{2}{\'Egalit\'e de deux vecteurs, vecteur nul}
 \ExoTitre{5}{\starfull{diffgreen}\starempty\starempty}{Raisonner}
-Sur la figure suivante, expliquer, en utilisant les termes direction, sens ou norme, pourquoi le vecteur $\Vj{AB}$ n'est \'egal \`a aucun des autres vecteurs repr\'esent\'es.
-
-\newpage
-\GCFig[0.65\linewidth][15cm]{%
+\GCexo{%
+Sur la figure ci-contre, expliquer, en utilisant les termes direction, sens ou norme, pourquoi le vecteur $\Vj{AB}$ n'est \'egal \`a aucun des autres vecteurs repr\'esent\'es.
+}{%
 \begin{tikzpicture}[scale=0.4]
 \draw[-{Stealth},thick] (0,2) -- (1,3); \node[below] at (0,2) {\Pt{A}}; \node[above] at (1,3) {\Pt{B}};
 \draw[-{Stealth},thick] (1,0) -- (3,0); \node[below] at (1,0) {\Pt{C}}; \node[below] at (3,0) {\Pt{D}};
@@ -294,16 +354,15 @@ Sur la figure suivante, expliquer, en utilisant les termes direction, sens ou no
 
 \newpage
 \ExoTitre{6}{\starfull{diffgreen}\starempty\starempty}{Repr\'esenter}
-\`A partir de la figure ci-dessous, citer un vecteur~:
+\GCexo{%
+\`A partir de la figure ci-contre, citer un vecteur~:
 \begin{itemize}[label=$\star$]
 \item opposé \`a $\Vj{CD}$
 \item m\^eme direction et sens que $\Vj{AC}$
 \item m\^eme direction que $\Vj{BC}$ mais sens contraire~
 \item \'egal au vecteur $\Vj{BA}$.
 \end{itemize}
-
-\newpage
-\GCFig[0.6\linewidth][15cm]{%
+}{%
 \begin{tikzpicture}[scale=0.32]
 \draw[thin,gray!35] (-0.5,-0.5) grid (9.5,8.5);
 \coordinate (A) at (3,4); \coordinate (B) at (1,1); \coordinate (C) at (3,1); \coordinate (D) at (4,2);
@@ -322,6 +381,7 @@ Sur la figure suivante, expliquer, en utilisant les termes direction, sens ou no
 \newpage
 \ExoTitre{7}{\starfull{diffblue}\starfull{diffblue}\starempty}{Raisonner}
 Soient $A$, $B$, $C$ et $D$ quatre points du plan tels que $\Vj{AB}=\Vj{CD}$.
+
 D\'emontrer que $\Vj{AC}=\Vj{BD}$.
 
 \newpage
@@ -335,14 +395,13 @@ Soient $ABCD$ et $ABEF$ deux parall\'elogrammes.
 
 \newpage
 \ExoTitre{9}{\starfull{diffred}\starfull{diffred}\starfull{diffred}}{Raisonner}
+\GCexo{%
 Sur la figure ci-contre, $ABCD$ est un rectangle, et $AEBC$ et $ACDF$ sont des parall\'elogrammes.
 \begin{enumerate}
 \item Montrer que $\Vj{EB}=\Vj{FD}$.
 \item Montrer que le quadrilat\`ere $EBDF$ est un parall\'elogramme de centre $A$.
 \end{enumerate}
-
-\newpage
-\GCFig[0.6\linewidth][15cm]{%
+}{%
 \begin{tikzpicture}[scale=0.5]
 \coordinate (D) at (0,2); \coordinate (C) at (3,2); \coordinate (A) at (0,0); \coordinate (B) at (3,0);
 \coordinate (F) at (-3,0); \coordinate (E) at (0,-2);
@@ -360,14 +419,13 @@ Sur la figure ci-contre, $ABCD$ est un rectangle, et $AEBC$ et $ACDF$ sont des p
 \newpage
 \ObjRappel{3}{Repr\'esentants d'un vecteur}
 \ExoTitre{10}{\starfull{diffgreen}\starempty\starempty}{Repr\'esenter}
-Sur la figure ci-dessous,
+\GCexo{%
+Sur la figure ci-contre,
 \begin{enumerate}
 \item citer deux repr\'esentants du vecteur $\Vj{AB}$, autres que lui-m\^eme~;
 \item indiquer si le vecteur $\Vj{EF}$ est aussi un repr\'esentant du vecteur $\Vj{AB}$, en justifiant.
 \end{enumerate}
-
-\newpage
-\GCFig[0.65\linewidth][15cm]{%
+}{%
 \begin{tikzpicture}[scale=0.42]
 \draw[thin,gray!35] (-0.5,-0.5) grid (7.5,6.5);
 \coordinate (A) at (0,1); \coordinate (B) at (2,2);
@@ -387,57 +445,56 @@ Sur la figure ci-dessous,
 $EFGH$ est un parall\'elogramme de centre $I$.
 \begin{enumerate}
 \item Donner un vecteur \'egal \`a~:
-\begin{enumerate}
+\begin{souslist}
 \item $\Vj{EF}$
 \item $\Vj{GH}$
 \item $\Vj{EH}$
 \item $\Vj{GF}$
-\end{enumerate}
+\end{souslist}
 \item Donner un vecteur oppos\'e au vecteur $\Vj{EF}$.
 \item Compl\'eter par le point qui convient~:
-\begin{enumerate}
+\begin{souslist}
 \item $\Vj{EI}=\Vj{I\dots}$
 \item $\Vj{HI}=\Vj{I\dots}$
 \item $\Vj{FI}=\Vj{I\dots}$
-\end{enumerate}
+\end{souslist}
 \item Compl\'eter~: $\Vj{EH}=-\Vj{\vphantom{H}\dots}$
 \item Quel est le repr\'esentant d'origine $F$~:
-\begin{enumerate}
+\begin{souslist}
 \item du vecteur $\Vj{EH}$~?
 \item du vecteur $\Vj{IH}$~?
-\end{enumerate}
+\end{souslist}
 \end{enumerate}
 
 \newpage
 \ExoTitre{12}{\starfull{diffblue}\starfull{diffblue}\starempty}{Repr\'esenter}
-On utilisera la figure suivante~:
+\GCexo[0.53]{%
+On utilisera la figure ci-contre~:
 {\setlist[enumerate,1]{label=\numeroCerne{\arabic*}, leftmargin=*, labelsep=10pt, itemsep=3pt, topsep=2pt, partopsep=0pt, parsep=0pt}
 \setlist[enumerate,2]{label=(\alph*), leftmargin=1.6em, itemsep=1pt, topsep=1pt, parsep=0pt}
 \begin{enumerate}
 \item Citer le repr\'esentant du vecteur $\vec u$~:
-\begin{enumerate}
+\begin{souslist}
 \item d'origine $A$
 \item d'origine $C$
-\end{enumerate}
+\end{souslist}
 \item Citer le repr\'esentant du vecteur $\vec u$~:
-\begin{enumerate}
+\begin{souslist}
 \item d'extr\'emit\'e $D$
 \item d'extr\'emit\'e $F$
-\end{enumerate}
+\end{souslist}
 \item Citer le repr\'esentant du vecteur $\vec v$~:
-\begin{enumerate}
+\begin{souslist}
 \item d'origine $P$
 \item d'origine $S$
-\end{enumerate}
+\end{souslist}
 \item Citer le repr\'esentant du vecteur $\vec v$~:
-\begin{enumerate}
+\begin{souslist}
 \item d'extr\'emit\'e $H$
 \item d'extr\'emit\'e $W$
-\end{enumerate}
+\end{souslist}
 \end{enumerate}}
-
-\newpage
-\GCFig[0.65\linewidth][15cm]{%
+}{%
 \begin{tikzpicture}[scale=0.42]
 \draw[thin,gray!35] (-0.5,-0.5) grid (7.5,7.5);
 \draw[-{Stealth},thick,blue] (4,6) -- (6,7) node[midway,above]{\footnotesize $\vec u$};
@@ -470,22 +527,21 @@ On utilisera la figure suivante~:
 \newpage
 \ObjRappel{4}{Somme de deux vecteurs et relation de Chasles}
 \ExoTitre{13}{\starfull{diffgreen}\starempty\starempty}{Repr\'esenter}
+\GCexo[0.44]{%
 Construire~:
 \begin{enumerate}
 \item le point $P$ tel que $\Vj{BP}=\vec u+\vec v$~;
 \item le point $G$ tel que $\Vj{VG}=\vec v+\vec w$~;
 \item le point $K$ tel que $\Vj{IK}=\vec w+\vec u$.
 \end{enumerate}
-
-\newpage
-\GCFig[0.7\linewidth][15cm]{%
+}{%
 \begin{tikzpicture}[scale=0.5]
-\draw[thin,gray!35] (0,0) grid (12,6);
+\draw[thin,black!70] (0,0) grid (12,6);
 \draw[-{Stealth},thick,blue] (2,5) -- (2,3) node[midway,right]{\footnotesize $\vec u$};
 \draw[-{Stealth},thick,red] (6,5) -- (8,4) node[midway,above]{\footnotesize $\vec v$};
 \draw[-{Stealth},thick,teal] (4,1) -- (6,2) node[midway,below]{\footnotesize $\vec w$};
 \coordinate (B) at (1,4); \node[ptcross] at (B) {}; \node[left] at (B) {\Pt{B}};
-\coordinate (V) at (7.5,1); \node[ptcross] at (V) {}; \node[below] at (V) {\Pt{V}};
+\coordinate (V) at (4,4); \node[ptcross] at (V) {}; \node[below] at (V) {\Pt{V}};
 \coordinate (I) at (1,1); \node[ptcross] at (I) {}; \node[below] at (I) {\Pt{I}};
 \end{tikzpicture}}
 
@@ -499,6 +555,7 @@ Construire~:
 
 \newpage
 \ExoTitre{15}{\starfull{diffblue}\starfull{diffblue}\starempty}{Repr\'esenter}
+\GCexo{%
 $ABCDEF$ est un hexagone r\'egulier de centre $O$.
 Compl\'eter les \'egalit\'es suivantes en n'utilisant que des noms de points de la figure.
 \begin{enumerate}
@@ -509,9 +566,7 @@ Compl\'eter les \'egalit\'es suivantes en n'utilisant que des noms de points de 
 \item $\Vj{AF}+\Vj{CD}=\dots$
 \item $\Vj{AB}-\Vj{OA}+\Vj{AF}=\dots$
 \end{enumerate}
-
-\newpage
-\GCFig[0.68\linewidth][15cm]{%
+}{%
 \begin{tikzpicture}[scale=0.55]
 \foreach \i/\lab/\pos in {0/A/below right,60/B/above right,120/C/above,180/D/above left,240/E/below left,300/F/below}
 \coordinate (\lab) at (\i:1.4);

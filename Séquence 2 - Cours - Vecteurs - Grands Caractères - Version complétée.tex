@@ -14,14 +14,23 @@
 % le manuel et la feuille d'exercices, hors sujet pour une version cours)
 % sont retirés, comme dans la version Séquence 1.
 %
-% VERSION COMPLÉTÉE : reprend exactement la mise en page de "Séquence 2 -
-% Cours - Vecteurs - Grands Caractères.tex" (version élève), mais avec
-% toutes les réponses révélées (couleur \surligneReponse, ex-J1 du poly),
-% en s'appuyant sur le contenu de "Séquence 2 - Cours - Vecteurs - Version
-% complétée.tex" (mise en page classique). Les cases à cocher et espaces à
-% compléter de la version élève sont donc soit remplacés par le texte de
-% la réponse, soit cochés (\CaseOui), soit révélés dans les figures TikZ
-% (vecteurs auparavant tracés en blanc/opacity=0).
+% VERSION COMPLÉTÉE : copie exacte de "Séquence 2 - Cours - Vecteurs -
+% Grands Caractères.tex" (même découpage page par page, un bloc par page),
+% où l'on révèle ce que l'élève doit compléter, en reprenant les réponses
+% de "Séquence 2 - Cours - Vecteurs - Version complétée.tex" (mise en
+% page classique). Convention de couleurs, la même que dans cette version
+% classique :
+%   - les mots clés déjà donnés dans la version élève (en rouge
+%     \surligneReponse, ex-J1 du poly) restent tels quels ;
+%   - tout ce que l'élève complète (réponses des Exemples cachées côté
+%     élève par \Trou / \phantom / tracés TikZ invisibles, cases à
+%     cocher, constructions sur quadrillage) est en vert un peu foncé
+%     (\vertComplet), pour le distinguer d'un coup d'œil du cours. Les
+%     vecteurs intermédiaires d'une construction bout à bout sont en
+%     tirets verts, le vecteur somme en rouge plein (étape 4 de la
+%     méthode).
+% Pour reprendre ce fichier après une modification côté élève : repartir
+% du fichier élève et reporter les blocs \Complet / vertComplet.
 \documentclass[a4paper,landscape]{article}
 
 \usepackage{fontspec}
@@ -340,14 +349,28 @@
 
 % Case à cocher (remplace \Square de bbding, non chargé ici).
 \newcommand{\Case}{\raisebox{0pt}{\framebox(18,18){}}}
-% Case cochée (réponse) : même gabarit que \Case, coche colorée dedans.
-\newcommand{\CaseOui}{\raisebox{0pt}{\framebox(18,18){\textcolor{surligneReponse}{\scriptsize$\checkmark$}}}}
 
 % Numéro cerclé simple (remplace \numeroCerne de CLT2627.sty).
 \newcommand{\NumCercle}[1]{\textbf{(#1)}}
 
 % Espace à compléter par l'élève : trait bas gris clair, largeur généreuse.
 \newcommand{\Trou}[1][6cm]{\makebox[#1][l]{\textcolor{gray!55}{\rule[-3pt]{#1}{0.7pt}}}}
+
+% Couleur des complétions (version complétée uniquement) : même vert un
+% peu foncé que dans la version complétée classique, distinct du rouge
+% \surligneReponse des mots clés du cours et du bleu des vecteurs donnés.
+\definecolor{vertComplet}{RGB}{0,125,50}
+\newcommand{\Complet}[1]{\textcolor{vertComplet}{#1}}
+% Styles TikZ des constructions révélées : pointe Stealth agrandie pour le
+% format grands caractères ; vecteurs intermédiaires (verts) en tirets,
+% vecteur somme (rouge) en trait plein.
+\tikzset{
+  flecheComplet/.style={-{Stealth[length=12pt,width=9pt]},very thick},
+  vecInter/.style={flecheComplet,vertComplet,dashed},
+  vecSomme/.style={flecheComplet,red},
+}
+% Case cochée (réponse) : même gabarit que \Case, coche verte dedans.
+\newcommand{\CaseOui}{\raisebox{0pt}{\framebox(18,18){\textcolor{vertComplet}{\small$\checkmark$}}}}
 
 % ============================================================ %
 % En-tête / pied de page
@@ -461,6 +484,20 @@ Soit $ABCD$ un parallélogramme. Construire les points $E$, $F$, $G$ et $H$ tels
     \fill (B) circle (3pt) node[below right] {$B$};
     \fill (C) circle (3pt) node[above right] {$C$};
     \fill (D) circle (3pt) node[above left] {$D$};
+    % Complétion : E = A + CB, F = C + AB, G = C + AD, H = A + CD
+    % (CB = (-1;-2), AB = (2;1), AD = (1;2), CD = (-2;-1)).
+    \coordinate (E) at (-1,-2);
+    \coordinate (F) at (5,4);
+    \coordinate (G) at (4,5);
+    \coordinate (H) at (-2,-1);
+    \draw[-latex,thick,vertComplet,dotted] (A) -- (E);
+    \draw[-latex,thick,vertComplet,dotted] (C) -- (F);
+    \draw[-latex,thick,vertComplet,dotted] (C) -- (G);
+    \draw[-latex,thick,vertComplet,dotted] (A) -- (H);
+    \fill[vertComplet] (E) circle (3pt) node[below right,vertComplet] {$E$};
+    \fill[vertComplet] (F) circle (3pt) node[above right,vertComplet] {$F$};
+    \fill[vertComplet] (G) circle (3pt) node[above,vertComplet] {$G$};
+    \fill[vertComplet] (H) circle (3pt) node[below left,vertComplet] {$H$};
 \end{tikzpicture}
 \end{center}
 }
@@ -496,13 +533,13 @@ Utiliser le quadrillage pour déterminer si les vecteurs suivants sont égaux : 
 \hline
  & \shortstack{même\\direction} & \shortstack{même\\sens} & \shortstack{même\\norme} & Conclusion \\
 \hline
-\NumCercle{1}\ $\Vj{AB}$ et $\Vj{EF}$ & \CaseOui & \CaseOui & \CaseOui & \makebox[3.5cm][l]{\textcolor{surligneReponse}{Égaux}}\\
+\NumCercle{1}\ $\Vj{AB}$ et $\Vj{EF}$ & \CaseOui & \CaseOui & \CaseOui & \makebox[3.5cm][l]{\Complet{Égaux}}\\
 \hline
-\NumCercle{2}\ $\Vj{DA}$ et $\Vj{DB}$ & \Case & \Case & \Case & \makebox[3.5cm][l]{\textcolor{surligneReponse}{Non égaux}}\\
+\NumCercle{2}\ $\Vj{DA}$ et $\Vj{DB}$ & \Case & \Case & \Case & \makebox[3.5cm][l]{\Complet{Non égaux}}\\
 \hline
-\NumCercle{3}\ $\Vj{ED}$ et $\Vj{BD}$ & \CaseOui & \Case & \CaseOui & \makebox[3.5cm][l]{\textcolor{surligneReponse}{Non égaux}}\\
+\NumCercle{3}\ $\Vj{ED}$ et $\Vj{BD}$ & \CaseOui & \Case & \CaseOui & \makebox[3.5cm][l]{\Complet{Non égaux}}\\
 \hline
-\NumCercle{4}\ $\Vj{AE}$ et $\Vj{BF}$ & \CaseOui & \CaseOui & \CaseOui & \makebox[3.5cm][l]{\textcolor{surligneReponse}{Égaux}}\\
+\NumCercle{4}\ $\Vj{AE}$ et $\Vj{BF}$ & \CaseOui & \CaseOui & \CaseOui & \makebox[3.5cm][l]{\Complet{Égaux}}\\
 \hline
 \end{tabular}
 \end{center}
@@ -608,6 +645,8 @@ La \textbf{somme} de $\Vj{u}$ et $\Vj{v}$ est le vecteur $\Vj{w}=\Vj{u}+\Vj{v}$ 
 
 \begin{tikzpicture}[scale=0.8]
 \draw[thin, gray,opacity=0.7] (0,0) grid (6,6);
+\fill[vertComplet] (1,4) circle (2.5pt);
+\draw[vecInter] (1,4) node[left,vertComplet]{M}--(3,5) node[above,vertComplet]{N} node[midway,rotate=30,above]{{\large $\Vj u$}};
 \end{tikzpicture}
 
 \columnbreak
@@ -617,6 +656,11 @@ La \textbf{somme} de $\Vj{u}$ et $\Vj{v}$ est le vecteur $\Vj{w}=\Vj{u}+\Vj{v}$ 
 
 \begin{tikzpicture}[scale=0.8]
 \draw[thin, gray,opacity=0.7] (0,0) grid (6,6);
+\fill[vertComplet] (1,4) circle (2.5pt);
+\draw[vecInter] (1,4) node[left,vertComplet]{M}--(3,5) node[above,vertComplet]{N} node[midway,rotate=30,above]{{\large $\Vj u$}};
+\draw[vecInter] (3,5)--(5,2) node[right,vertComplet]{P} node[midway,rotate=-60,above]{{\large $\Vj v$}};
+% Vecteur somme en rouge, comme le demande l'étape 4 de la méthode.
+\draw[vecSomme] (1,4)--(5,2) node[midway,rotate=-25,below=10pt]{{\large $\Vj u+\Vj v$}};
 \end{tikzpicture}
 
 \end{enumerate}
@@ -636,9 +680,12 @@ Construire le point $D$ tel que $\Vj{ED}=\Vj{BA}+\Vj{CA}$.
 \draw [ ] (3,3) node[above left]{B} -- ++(-4pt,-4pt) -- ++(8pt,8pt) ++(-8pt,0) -- ++(8pt,-8pt);
 \draw [ ] (1,1) node[above left]{C} -- ++(-4pt,-4pt) -- ++(8pt,8pt) ++(-8pt,0) -- ++(8pt,-8pt);
 \draw [ ] (3,5) node[below right]{E} -- ++(-4pt,-4pt) -- ++(8pt,8pt) ++(-8pt,0) -- ++(8pt,-8pt);
-\draw[->,thick,surligneReponse] (3,5)--(0,4) ;
-\draw[->,thick,surligneReponse] (0,4)--(-1,5) ;
-\draw [surligneReponse] (-1,5) node[above right]{D} -- ++(-4pt,-4pt) -- ++(8pt,8pt) ++(-8pt,0) -- ++(8pt,-8pt);
+% Complétion : E + BA = (0;4), puis + CA = (-1;5) = D ; vecteur somme
+% ED en rouge, comme dans la méthode.
+\draw[vecInter] (3,5)--(0,4) ;
+\draw[vecInter] (0,4)--(-1,5) ;
+\draw[vecSomme] (3,5)--(-1,5) node[midway,above]{$\Vj{ED}$};
+\draw [vertComplet] (-1,5) node[above right]{D} -- ++(-4pt,-4pt) -- ++(8pt,8pt) ++(-8pt,0) -- ++(8pt,-8pt);
 \end{tikzpicture}
 \end{center}
 }
@@ -654,9 +701,11 @@ Construire le point $F$ tel que $\Vj{GF}=\Vj{AB}-\Vj{AC}$.
 \draw [ ] (3,3) node[above right]{B} -- ++(-4pt,-4pt) -- ++(8pt,8pt) ++(-8pt,0) -- ++(8pt,-8pt);
 \draw [ ] (1,1) node[above left]{C} -- ++(-4pt,-4pt) -- ++(8pt,8pt) ++(-8pt,0) -- ++(8pt,-8pt);
 \draw [ ] (1,0) node[above left]{G} -- ++(-4pt,-4pt) -- ++(8pt,8pt) ++(-8pt,0) -- ++(8pt,-8pt);
-\draw[->,thick,surligneReponse] (1,0)--(4,1) ;
-\draw[->,thick,surligneReponse] (4,1)--(3,2) ;
-\draw [surligneReponse] (3,2) node[above right]{F} -- ++(-4pt,-4pt) -- ++(8pt,8pt) ++(-8pt,0) -- ++(8pt,-8pt);
+% Complétion : G + AB = (4;1), puis - AC = + CA = (3;2) = F.
+\draw[vecInter] (1,0)--(4,1) ;
+\draw[vecInter] (4,1)--(3,2) ;
+\draw[vecSomme] (1,0)--(3,2) node[midway,below right=-1pt]{$\Vj{GF}$};
+\draw [vertComplet] (3,2) node[above right]{F} -- ++(-4pt,-4pt) -- ++(8pt,8pt) ++(-8pt,0) -- ++(8pt,-8pt);
 \end{tikzpicture}
 \end{center}
 \end{BoiteExemple}
@@ -678,13 +727,13 @@ Soient $A$ et $B$ deux points du plan. Pour tout point $M$, on a :
 Simplifier les expressions en utilisant la relation de Chasles :
 \begin{enumerate}
 \item $\Vj{TR}+\Vj{RP}$\\[4pt]
-$= \textcolor{surligneReponse}{\Vj{TP}}$
+$= \Complet{\Vj{TP}}$
 \item $\Vj{GT}+\Vj{AG}$\\[4pt]
-$= \textcolor{surligneReponse}{\Vj{AG}+\Vj{GT} = \Vj{AT}}$
+$= \Complet{\Vj{AG}+\Vj{GT} = \Vj{AT}}$
 \item $\Vj{AB}-\Vj{AC}-\Vj{CB}$\\[4pt]
-$= \textcolor{surligneReponse}{\Vj{AB}-(\Vj{AC}+\Vj{CB}) = \Vj{AB}-\Vj{AB} = \Vj{0}}$
+$= \Complet{\Vj{AB}+\Vj{CA}+\Vj{BC} = \Vj{AB}+\Vj{BC}+\Vj{CA} = \Vj{AC}+\Vj{CA} = \Vj{AA} = \Vj{0}}$
 \item $\Vj{BC}-\Vj{BA}+\Vj{BD}-\Vj{BC}$\\[4pt]
-$= \textcolor{surligneReponse}{\Vj{BD}-\Vj{BA} = \Vj{AD}}$
+$= \Complet{\Vj{BC}+\Vj{AB}+\Vj{BD}+\Vj{CB} = \Vj{AB}+\Vj{BD}+\Vj{BC}+\Vj{CB} = \Vj{AD}+\Vj{BB} = \Vj{AD}}$
 \end{enumerate}
 }
 
@@ -716,12 +765,12 @@ $= \textcolor{surligneReponse}{\Vj{BD}-\Vj{BA} = \Vj{AD}}$
 \draw[thin, gray,opacity=0.7] (0,0) grid (6,6);
 \draw[-{Stealth},thick,blue] (1,1)--(3,2) node[midway,rotate=27,below]{{\large $\Vj u$}};
 \draw[-{Stealth},thick,blue] (1,1)--(2,4) node[midway,rotate=72,above]{{\large $\Vj v$}};
-\node[anchor=north east] at (1,1) {M};
-\node[anchor=south west,surligneReponse] at (3,2) {N};
-\node[anchor=south east,surligneReponse] at (2,4) {P};
 \fill (1,1) circle (2.5pt);
-\fill[surligneReponse] (3,2) circle (2.5pt);
-\fill[surligneReponse] (2,4) circle (2.5pt);
+\node[anchor=north east] at (1,1) {M};
+\fill[vertComplet] (3,2) circle (2.5pt);
+\node[anchor=north west,vertComplet] at (3,2) {N};
+\fill[vertComplet] (2,4) circle (2.5pt);
+\node[anchor=south east,vertComplet] at (2,4) {P};
 \end{tikzpicture}
 
 \columnbreak
@@ -732,17 +781,20 @@ $= \textcolor{surligneReponse}{\Vj{BD}-\Vj{BA} = \Vj{AD}}$
 \draw[thin, gray,opacity=0.7] (0,0) grid (6,6);
 \draw[-{Stealth},thick,blue] (1,1)--(3,2) node[midway,rotate=27,below]{{\large $\Vj u$}};
 \draw[-{Stealth},thick,blue] (1,1)--(2,4) node[midway,rotate=72,above]{{\large $\Vj v$}};
-\node[anchor=north east] at (1,1) {M};
-\node[anchor=south west] at (3,2) {N};
-\node[anchor=south east] at (2,4) {P};
-\draw[dotted,surligneReponse] (3,2)--(4,5);
-\draw[dotted,surligneReponse] (2,4)--(4,5);
-\draw[-{Stealth},thick,surligneReponse] (1,1)--(4,5) node[midway,rotate=52,above]{{\large $\Vj u+\Vj v$}};
-\node[anchor=south west,surligneReponse] at (4,5) {Q};
 \fill (1,1) circle (2.5pt);
-\fill (3,2) circle (2.5pt);
-\fill (2,4) circle (2.5pt);
-\fill[surligneReponse] (4,5) circle (2.5pt);
+\node[anchor=north east] at (1,1) {M};
+\fill[vertComplet] (3,2) circle (2.5pt);
+\node[anchor=north west,vertComplet] at (3,2) {N};
+\fill[vertComplet] (2,4) circle (2.5pt);
+\node[anchor=south east,vertComplet] at (2,4) {P};
+\draw[dotted,thick,vertComplet] (3,2)--(4,5);
+\draw[dotted,thick,vertComplet] (2,4)--(4,5);
+\fill[vertComplet] (4,5) circle (2.5pt);
+\node[anchor=south west,vertComplet] at (4,5) {Q};
+% Étiquette posée à droite de Q, hors du parallélogramme (le long de [MQ]
+% elle chevauchait soit v, soit le côté pointillé [NQ]).
+\draw[vecSomme] (1,1)--(4,5);
+\node[red,anchor=west] at (4.15,4.1) {{\large $\Vj u+\Vj v$}};
 \end{tikzpicture}
 
 \end{enumerate}
@@ -763,23 +815,23 @@ $= \textcolor{surligneReponse}{\Vj{BD}-\Vj{BA} = \Vj{AD}}$
 				\item de même sens que $\Vj{v}$ ;
 				\item de norme $3$ fois celle de $\Vj{v}$.
 			\end{itemize}
-			On écrit alors : $\textcolor{surligneReponse}{\Vj{u} = 3\Vj{v}}$
+			On écrit alors : $\Complet{\Vj{u} = 3\Vj{v}}$
 	\item $\Vj{j}$ est le vecteur
 			\begin{itemize}
 				\item de même direction que $\Vj{i}$ ;
 				\item de sens opposé à $\Vj{i}$ ;
 				\item de norme deux fois celle de $\Vj{i}$.
 			\end{itemize}
-			On écrit alors : $\textcolor{surligneReponse}{\Vj{j} = -2\Vj{i}}$
+			On écrit alors : $\Complet{\Vj{j} = -2\Vj{i}}$
 \end{enumerate}
 
 \begin{center}
 \begin{tikzpicture}[scale=0.75]
 \draw[thin,gray,opacity=0.7] (0,0) grid  (12,12);
 \draw[->,ultra thick] (3,5)--(1,7) node[midway,rotate=-45,above]{$\Vj v$};
-\draw[->,ultra thick,surligneReponse] (7,5)--(1,11) node[midway,rotate=-45,above]{$\Vj u$};
+\draw[->,ultra thick,vertComplet] (7,5)--(1,11) node[midway,rotate=-45,above]{$\Vj u$};
 \draw[->,ultra thick] (7,9)--(9,11) node[midway,rotate=45,above]{$\Vj i$};
-\draw[->,ultra thick,surligneReponse] (11,5)--(7,1) node[midway,rotate=45,above]{$\Vj j$};
+\draw[->,ultra thick,vertComplet] (11,5)--(7,1) node[midway,rotate=45,above]{$\Vj j$};
 \end{tikzpicture}
 \end{center}
 }
@@ -835,7 +887,20 @@ de norme $k$ fois celle de $\Vj{u}$ & de norme $(-k)$ fois celle de $\Vj{u}$\\
     \node[ptcross] at (-1.5,0) {};
     \node[anchor=south,yshift=2pt] at (-1.5,0) {$C$};
 \end{tikzpicture}\\[6pt]
-$\Vj{AC} = \textcolor{surligneReponse}{2\Vj{AB}}$ & $\Vj{AC} = \textcolor{surligneReponse}{-5\Vj{AB}}$
+$\Vj{AC} = \Complet{2\Vj{AB}}$ & $\Vj{AC} = \Complet{-5\Vj{AB}}$
+\end{tabular}
+\end{center}
+
+% Rédaction du raisonnement (reprise de la version complétée classique :
+% direction, sens, longueurs en graduations, rapport, conclusion), en
+% deux colonnes sous les figures. En \small et sans minipage imbriquée
+% (qui rétrécirait encore les colonnes) : la page doit rester la même que
+% côté élève, une page par Exemple.
+\begin{center}
+\begin{tabular}{@{}p{0.46\linewidth}@{\hspace{0.04\linewidth}}p{0.46\linewidth}@{}}
+\RaggedRight\Complet{Même direction, même sens ; $AC=4$ et $AB=2$ graduations, donc $AC=2\times AB$, soit $\Vj{AC}=2\,\Vj{AB}$.}
+&
+\RaggedRight\Complet{Même direction, sens opposé ; $AC=5$ et $AB=1$ graduation, donc $AC=5\times AB$, soit $\Vj{AC}=-5\,\Vj{AB}$.}
 \end{tabular}
 \end{center}
 \end{enumerate}
@@ -859,8 +924,11 @@ $\Vj{AC} = -3\Vj{AB}$ & $\Vj{AC} = \dfrac{1}{3}\Vj{AB}$ \\[8pt]
     \node[anchor=south,yshift=2pt] at (0,0) {$A$};
     \node[ptcross] at (0.5,0) {};
     \node[anchor=south,yshift=2pt] at (0.5,0) {$B$};
-    \node[ptcross,surligneReponse] at (-1.5,0) {};
-    \node[anchor=south,yshift=2pt,surligneReponse] at (-1.5,0) {$C$};
+    % Complétion : AB = 1 graduation, donc C à 3 graduations de A, à
+    % l'opposé de B.
+    \node[ptcross,vertComplet] at (-1.5,0) {};
+    \node[anchor=south,yshift=2pt,vertComplet] at (-1.5,0) {$C$};
+    \draw[flecheComplet,vertComplet] (0,0) -- (-1.5,0) node[midway,below=4pt,font=\small]{$\Vj{AC}$};
 \end{tikzpicture}
 &
 \begin{tikzpicture}[x=1.6cm, y=1.3cm]
@@ -872,9 +940,23 @@ $\Vj{AC} = -3\Vj{AB}$ & $\Vj{AC} = \dfrac{1}{3}\Vj{AB}$ \\[8pt]
     \node[anchor=south,yshift=2pt] at (0,0) {$A$};
     \node[ptcross] at (1.5,0) {};
     \node[anchor=south,yshift=2pt] at (1.5,0) {$B$};
-    \node[ptcross,surligneReponse] at (0.5,0) {};
-    \node[anchor=south,yshift=2pt,surligneReponse] at (0.5,0) {$C$};
+    % Complétion : AB = 3 graduations, donc C à 1 graduation de A, du
+    % côté de B.
+    \node[ptcross,vertComplet] at (0.5,0) {};
+    \node[anchor=south,yshift=2pt,vertComplet] at (0.5,0) {$C$};
+    \draw[flecheComplet,vertComplet] (0,0) -- (0.5,0) node[midway,below=4pt,font=\small]{$\Vj{AC}$};
 \end{tikzpicture}
+\end{tabular}
+\end{center}
+
+% Rédaction de la construction (même canevas que la question 1 : sens
+% d'après le signe de k, longueur d'après |k|), en \small pour tenir sur
+% la même page que côté élève.
+\begin{center}
+\begin{tabular}{@{}p{0.46\linewidth}@{\hspace{0.04\linewidth}}p{0.46\linewidth}@{}}
+\RaggedRight\Complet{Comme $-3<0$, sens opposé à $\Vj{AB}$ ; $AB=1$~graduation, donc $AC=3$~graduations.}
+&
+\RaggedRight\Complet{Comme $\dfrac13>0$, même sens que $\Vj{AB}$ ; $AB=3$~graduations, donc $AC=1$~graduation.}
 \end{tabular}
 \end{center}
 \end{enumerate}
@@ -884,7 +966,7 @@ $\Vj{AC} = -3\Vj{AB}$ & $\Vj{AC} = \dfrac{1}{3}\Vj{AB}$ \\[8pt]
 \Exemple{
 \begin{enumerate}
 \item Placer les points H, I et J tels que :\\
-(a) $\Vj{AH}=\dfrac54\Vj{AB}$ \quad (b) $\Vj{BI}=\dfrac23\Vj{BC}$ \quad (c) $\Vj{DJ}=\dfrac59\Vj{DC}$
+(a) $\Vj{AH}=\dfrac53\Vj{AB}$ \quad (b) $\Vj{BI}=\dfrac23\Vj{BC}$ \quad (c) $\Vj{DJ}=\dfrac58\Vj{DC}$
 
 \begin{center}
 \begin{tikzpicture}[scale=1]
@@ -896,9 +978,10 @@ $\Vj{AC} = -3\Vj{AB}$ & $\Vj{AC} = \dfrac{1}{3}\Vj{AB}$ \\[8pt]
 \node[ptcross] at (9,2) {}; \node[anchor=west] at (9,2) {C};
 \node[ptcross] at (1,1) {}; \node[anchor=north east] at (1,1) {D};
 \node[ptcross] at (2,3) {}; \node[anchor=east] at (2,3) {F};
-\node[ptcross,surligneReponse] at (6.75,5) {}; \node[anchor=south,surligneReponse] at (6.75,5) {H};
-\node[ptcross,surligneReponse] at (8,3) {}; \node[anchor=west,surligneReponse] at (8,3) {I};
-\node[ptcross,surligneReponse] at (5.4,1.6) {}; \node[anchor=south,surligneReponse] at (5.4,1.6) {J};
+% H = A + 5/3 AB = (8 ; 5) ; I = B + 2/3 BC ; J = D + 5/8 DC = (1+5 ; 1+5/8).
+\node[ptcross,vertComplet] at (8,5) {}; \node[anchor=south,vertComplet] at (8,5) {H};
+\node[ptcross,vertComplet] at (8,3) {}; \node[anchor=west,vertComplet] at (8,3) {I};
+\node[ptcross,vertComplet] at (6,1.625) {}; \node[anchor=south,vertComplet] at (6,1.625) {J};
 \end{tikzpicture}
 \end{center}
 \end{enumerate}
@@ -914,9 +997,9 @@ $\Vj{AC} = -3\Vj{AB}$ & $\Vj{AC} = \dfrac{1}{3}\Vj{AB}$ \\[8pt]
 \begin{tikzpicture}[scale=1.15, line width=1.3pt]
 \draw[thin,gray,opacity=0.7] (-3,-1) grid (6,3);
 \draw[->,thick,blue] (0,0) -- (3,1) node[midway,rotate=20,above]{$\Vj{u}$};
-\draw[->,thick,surligneReponse] (-2,-1) -- (4,1) node[midway,rotate=20,above]{$2\Vj{u}$};
-\draw[->,thick,surligneReponse] (2,3) -- (-1,2) node[midway,rotate=20,above]{$-\Vj{u}$};
-\draw[->,thick,surligneReponse] (-3,2) -- (-1.5,2.5) node[midway,rotate=20,above]{$\frac12\Vj{u}$};
+\draw[->,thick,vertComplet] (-2,-1) -- (4,1) node[midway,rotate=20,below]{$2\Vj{u}$};
+\draw[->,thick,vertComplet] (2,3) -- (-1,2) node[midway,rotate=20,above]{$-\Vj{u}$};
+\draw[->,thick,vertComplet] (-3,2) -- (-1.5,2.5) node[midway,rotate=20,above]{$\frac12\Vj{u}$};
 \end{tikzpicture}
 \end{center}
 \end{enumerate}
@@ -948,7 +1031,9 @@ Deux vecteurs $\Vj{u}$ et $\Vj{v}$ sont dits \textbf{colinéaires} s'il existe u
 \draw[->,thick,red] (5,3) -- (3,2) node[midway,rotate=27,above]{$\Vj v$};
 \end{tikzpicture}
 \end{center}
-$\Vj{v} = \textcolor{surligneReponse}{-2}\,\Vj{u}$
+$\Vj{v} = \Complet{-2}\,\Vj{u}$
+
+\Complet{Donc $\Vj{u}$ et $\Vj{v}$ sont colinéaires.}
 }
 
 \ANoter[À retenir]{La notion de colinéarité est fortement liée à celle de parallélisme et d'alignement.}
@@ -976,11 +1061,11 @@ Les vecteurs $\Vj{AB}$ et $\Vj{CD}$ sont colinéaires si et seulement si les dro
 
 \medskip
 
-Ici, on a : $\Vj{CD} = \textcolor{surligneReponse}{-2} \  \Vj{AB}$ donc $\Vj{AB}$ et $\Vj{CD}$ sont \textcolor{surligneReponse}{colinéaires}.
+\Complet{Ici, on a : $\Vj{CD} = -2 \  \Vj{AB}$ donc $\Vj{AB}$ et $\Vj{CD}$ sont colinéaires.}
 
 \medskip
 
-Ainsi : les droites \textcolor{surligneReponse}{$(AB)$} et \textcolor{surligneReponse}{$(CD)$} sont \textcolor{surligneReponse}{parallèles}.
+\Complet{Ainsi : les droites $(AB)$ et $(CD)$ sont parallèles.}
 }
 
 \clearpage
@@ -1000,15 +1085,15 @@ Les points A, B et C sont alignés si et seulement si les vecteurs $\Vj{AB}$ et 
 \end{tikzpicture}
 \end{center}
 
-\textbf{Notation : }
+\textbf{Rédaction : }
 
 \medskip
 
-Ici, on a : $\Vj{AB} = \dfrac35 \  \Vj{AC}$ donc \textcolor{surligneReponse}{$\Vj{AB}$} et \textcolor{surligneReponse}{$\Vj{AC}$} sont \textcolor{surligneReponse}{colinéaires}.
+\Complet{Ici, on a : $\Vj{AB} = \dfrac35 \  \Vj{AC}$ donc $\Vj{AB}$ et $\Vj{AC}$ sont colinéaires.}
 
 \medskip
 
-Ainsi : \textcolor{surligneReponse}{les points A, B et C sont alignés.}
+\Complet{Ainsi : les points A, B et C sont alignés.}
 }
 
 \end{document}

@@ -1,0 +1,237 @@
+% !TEX program = xelatex
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage[left=0.6cm,right=0.6cm,top=1cm,bottom=1cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{multicol}
+\usepackage{pifont}
+\usepackage{frcursive}
+% Correctif du bug de crénage de frcursive sous XeLaTeX (repris de CLT2627.sty) :
+% sans lui, certaines paires de lettres consécutives dans \cursive explosent
+% (une lettre projetée loin à droite), ce qui coupe des mots comme "Représenter".
+\makeatletter
+\ifdefined\XeTeXcharclass
+\XeTeXcharclass `a 201 \XeTeXcharclass `b 201 \XeTeXcharclass `c 201
+\XeTeXcharclass `d 201 \XeTeXcharclass `e 201 \XeTeXcharclass `f 201
+\XeTeXcharclass `g 201 \XeTeXcharclass `h 201 \XeTeXcharclass `i 201
+\XeTeXcharclass `j 201 \XeTeXcharclass `k 201 \XeTeXcharclass `l 201
+\XeTeXcharclass `m 201 \XeTeXcharclass `n 201 \XeTeXcharclass `o 201
+\XeTeXcharclass `p 201 \XeTeXcharclass `q 201 \XeTeXcharclass `r 201
+\XeTeXcharclass `s 201 \XeTeXcharclass `t 201 \XeTeXcharclass `u 201
+\XeTeXcharclass `v 201 \XeTeXcharclass `w 201 \XeTeXcharclass `x 201
+\XeTeXcharclass `y 201 \XeTeXcharclass `z 201
+\XeTeXcharclass `A 201 \XeTeXcharclass `B 201 \XeTeXcharclass `C 201
+\XeTeXcharclass `D 201 \XeTeXcharclass `E 201 \XeTeXcharclass `F 201
+\XeTeXcharclass `G 201 \XeTeXcharclass `H 201 \XeTeXcharclass `I 201
+\XeTeXcharclass `J 201 \XeTeXcharclass `K 201 \XeTeXcharclass `L 201
+\XeTeXcharclass `M 201 \XeTeXcharclass `N 201 \XeTeXcharclass `O 201
+\XeTeXcharclass `P 201 \XeTeXcharclass `Q 201 \XeTeXcharclass `R 201
+\XeTeXcharclass `S 201 \XeTeXcharclass `T 201 \XeTeXcharclass `U 201
+\XeTeXcharclass `V 201 \XeTeXcharclass `W 201 \XeTeXcharclass `X 201
+\XeTeXcharclass `Y 201 \XeTeXcharclass `Z 201
+\XeTeXcharclass `\é 201 \XeTeXcharclass `\è 201 \XeTeXcharclass `\ê 201
+\XeTeXcharclass `\ë 201 \XeTeXcharclass `\É 201 \XeTeXcharclass `\È 201
+\XeTeXcharclass `\Ê 201 \XeTeXcharclass `\Ë 201 \XeTeXcharclass `\à 201
+\XeTeXcharclass `\â 201 \XeTeXcharclass `\ä 201 \XeTeXcharclass `\À 201
+\XeTeXcharclass `\Â 201 \XeTeXcharclass `\Ä 201 \XeTeXcharclass `\ô 201
+\XeTeXcharclass `\ö 201 \XeTeXcharclass `\Ô 201 \XeTeXcharclass `\Ö 201
+\XeTeXcharclass `\î 201 \XeTeXcharclass `\ï 201 \XeTeXcharclass `\Î 201
+\XeTeXcharclass `\Ï 201 \XeTeXcharclass `\ù 201 \XeTeXcharclass `\û 201
+\XeTeXcharclass `\ü 201 \XeTeXcharclass `\Ù 201 \XeTeXcharclass `\Û 201
+\XeTeXcharclass `\Ü 201 \XeTeXcharclass `\ç 201 \XeTeXcharclass `\Ç 201
+\XeTeXcharclass `\œ 201 \XeTeXcharclass `\Œ 201 \XeTeXcharclass `\æ 201
+\XeTeXcharclass `\Æ 201
+\let\cursive@orig\cursive
+\renewcommand{\cursive}{%
+  \cursive@orig
+  \XeTeXinterchartoks 201 201 = {\kern0pt }%
+}
+\fi
+\makeatother
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,shapes.misc}
+\tikzset{ptcross/.style={cross out,draw,thick,minimum size=3pt,inner sep=0pt}}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fontawesome5}
+\definecolor{calcblue}{HTML}{1C7ED6}
+\definecolor{diffgreen}{HTML}{40C057}
+\definecolor{diffblue}{HTML}{228BE6}
+\definecolor{diffred}{HTML}{FA5252}
+\definecolor{skyblue}{HTML}{339AF0}
+\definecolor{objorange}{HTML}{F76707}
+\newcommand{\starfull}[1]{{\color{#1}\ding{72}}}
+\newcommand{\starempty}{{\color{gray!45}\ding{73}}}
+\newcommand{\Vj}[1]{\overrightarrow{\text{#1}}}
+\newcommand{\VBlank}{\rule[0.15ex]{0.55cm}{0.35pt}}
+\newcommand{\Pt}[1]{\textsf{\footnotesize #1}}
+\renewcommand{\familydefault}{\sfdefault}
+\DeclareSymbolFont{sfnumbers}{OT1}{cmss}{m}{n}
+\SetSymbolFont{sfnumbers}{bold}{OT1}{cmss}{bx}{n}
+\DeclareMathSymbol{0}{\mathalpha}{sfnumbers}{`0}
+\DeclareMathSymbol{1}{\mathalpha}{sfnumbers}{`1}
+\DeclareMathSymbol{2}{\mathalpha}{sfnumbers}{`2}
+\DeclareMathSymbol{3}{\mathalpha}{sfnumbers}{`3}
+\DeclareMathSymbol{4}{\mathalpha}{sfnumbers}{`4}
+\DeclareMathSymbol{5}{\mathalpha}{sfnumbers}{`5}
+\DeclareMathSymbol{6}{\mathalpha}{sfnumbers}{`6}
+\DeclareMathSymbol{7}{\mathalpha}{sfnumbers}{`7}
+\DeclareMathSymbol{8}{\mathalpha}{sfnumbers}{`8}
+\DeclareMathSymbol{9}{\mathalpha}{sfnumbers}{`9}
+\setlength{\parindent}{0pt}
+\graphicspath{{./}}
+\newcommand*{\textcircledd}[1]{\begin{tikzpicture}[baseline=(letter.base)]\node[draw,circle,inner sep=1pt] (letter) {#1};\end{tikzpicture}}
+\newcommand{\numeroCerne}[1]{\protect\textcircledd{\bfseries\scriptsize #1}}
+\setlist[itemize]{label=$\star$}
+\setlist[enumerate,1]{label=\numeroCerne{\arabic*}, leftmargin=*, labelsep=6pt, itemsep=3pt, topsep=2pt, partopsep=0pt, parsep=0pt}
+
+\NewDocumentEnvironment{Exo}{O{breakable} m m m}{%
+  \begin{tcolorbox}[
+    enhanced,
+    #1,
+    colback=white,
+    colframe=white,
+    boxrule=0pt,
+    arc=4pt, outer arc=4pt, sharp corners=south,
+    left=8pt, right=8pt, top=5pt, bottom=3pt,
+    before skip=4pt, after skip=4pt,
+  ]
+  \noindent\tcbox[on line, colback=skyblue, colframe=skyblue, boxsep=1pt, left=4pt, right=4pt, top=1pt, bottom=1pt, arc=2pt]{\textcolor{white}{\bfseries Exercice~#2}}~#3\hfill\mbox{\color{skyblue}\normalsize\cursive\hyphenchar\font=-1 #4}\par\vspace{3pt}%
+}{%
+  \end{tcolorbox}
+}
+
+\NewDocumentEnvironment{ExoCont}{O{unbreakable}}{%
+  \begin{tcolorbox}[
+    enhanced,
+    #1,
+    colback=white,
+    colframe=white,
+    boxrule=0pt,
+    arc=4pt, outer arc=4pt, sharp corners=south,
+    left=8pt, right=8pt, top=5pt, bottom=3pt,
+    before skip=4pt, after skip=4pt,
+  ]
+}{%
+  \end{tcolorbox}
+}
+
+\newcommand{\Objectif}[2]{%
+\vspace{4pt}
+\noindent{\large\color{objorange}\bfseries Objectif #1~:}\\{\large\color{objorange}#2}\par
+\vspace{2pt}
+}
+
+\NewDocumentCommand{\FeuilletTitre}{m}{%
+  \begin{center}
+  \begin{tcolorbox}[
+    enhanced,
+    width=0.58\linewidth,
+    colback=white,
+    colframe=black,
+    boxrule=0.8pt,
+    arc=8pt,
+    sharp corners=downhill,
+    left=10pt, right=10pt, top=8pt, bottom=6pt,
+    halign=center,
+    overlay={
+      \node[fill=white, anchor=west, font=\normalsize, inner xsep=4pt]
+        at ([xshift=14pt]frame.north west) {Exemples};
+    },
+  ]
+  {\huge #1}
+  \end{tcolorbox}
+  \end{center}
+}
+
+\pagestyle{empty}
+\newcommand{\Ligne}{\par\vspace{9pt}\noindent\makebox[\linewidth]{\dotfill}\par}
+\begin{document}
+
+\FeuilletTitre{Vecteurs colin\'eaires}
+
+\Objectif{5}{Produit d'un vecteur par un nombre r\'eel et colin\'earit\'e de deux vecteurs}
+
+% ============================================================
+% Exercice 1 — dix vecteurs nommés a, b, c, d, r, s, t, u, v, w
+% u(2;1)   v(-4;-2)=-2u   c(4;2)=2u   r(6;3)=3u=-3/2 v=3/2 c
+% w(3;-2)  b(-3;2)=-w     s(-6;4)=-2w=2b
+% t(1;2)   a(-2;-4)=-2t
+% d(3;1) : colinéaire à aucun (piège : « presque » comme u)
+% ============================================================
+\begin{Exo}[unbreakable]{1}{\starfull{diffgreen}\starempty\starempty}{Repr\'esenter}
+On a repr\'esent\'e ci-dessous dix vecteurs dans un quadrillage.
+
+\medskip
+{\centering
+\begin{tikzpicture}[scale=0.5]
+\draw[thin,gray,opacity=0.5] (0,0) grid (22,9);
+\draw[->,very thick,blue]   (1,7)  -- (3,8)  node[midway,above left]{$\Vj{u}$};
+\draw[->,very thick,blue]   (5,6)  -- (6,8)  node[midway,left]{$\Vj{t}$};
+\draw[->,very thick,blue]   (8,8)  -- (11,6) node[midway,above right]{$\Vj{w}$};
+\draw[->,very thick,blue]   (17,9) -- (13,7) node[midway,above left]{$\Vj{v}$};
+\draw[->,very thick,blue]   (18,6) -- (22,8) node[midway,above left]{$\Vj{c}$};
+\draw[->,very thick,blue]   (20,5) -- (18,1) node[midway,right]{$\Vj{a}$};
+\draw[->,very thick,blue]   (16,1) -- (13,3) node[midway,below left]{$\Vj{b}$};
+\draw[->,very thick,blue]   (16,4) -- (19,5) node[midway,above left]{$\Vj{d}$};
+\draw[->,very thick,blue]   (7,0)  -- (1,4)  node[midway,above right]{$\Vj{s}$};
+\draw[->,very thick,blue]   (8,2)  -- (14,5) node[midway,above left]{$\Vj{r}$};
+\end{tikzpicture}\par}
+
+\medskip
+\begin{enumerate}
+\item Rep\'erer les vecteurs colin\'eaires au vecteur $\Vj{u}$.
+\item Rep\'erer les vecteurs colin\'eaires au vecteur $\Vj{w}$, puis celui qui est colin\'eaire au vecteur $\Vj{t}$.
+\item Le vecteur $\Vj{d}$ est-il colin\'eaire au vecteur $\Vj{u}$~? Justifier.
+\item Compl\'eter avec le coefficient de colin\'earit\'e qui convient~:\\[8pt]
+$\Vj{v}=\dots\dots\,\Vj{u}$ \qquad\quad
+$\Vj{c}=\dots\dots\,\Vj{u}$ \qquad\quad
+$\Vj{r}=\dots\dots\,\Vj{u}$ \qquad\quad
+$\Vj{b}=\dots\dots\,\Vj{w}$ \qquad\quad
+$\Vj{s}=\dots\dots\,\Vj{w}$\\[10pt]
+$\Vj{a}=\dots\dots\,\Vj{t}$ \qquad\quad
+$\Vj{s}=\dots\dots\,\Vj{b}$ \qquad\quad
+$\Vj{u}=\dots\dots\,\Vj{v}$ \qquad\quad
+$\Vj{r}=\dots\dots\,\Vj{c}$ \qquad\quad
+$\Vj{r}=\dots\dots\,\Vj{v}$
+\end{enumerate}
+\end{Exo}
+
+% ============================================================
+% Exercice 2 — vecteurs définis par des points
+% AB(3;1)  CD(-6;-2)=-2AB  GH(-9;-3)=-3AB=3/2 CD  AK(9;3)=3AB
+% EF(3;2) : non colinéaire à AB (piège visuel)
+% ============================================================
+\begin{Exo}[unbreakable]{2}{\starfull{diffblue}\starfull{diffblue}\starempty}{Raisonner}
+On consid\`ere les points plac\'es dans le quadrillage ci-dessous.
+
+\medskip
+{\centering
+\begin{tikzpicture}[scale=0.5]
+\draw[thin,gray,opacity=0.5] (0,0) grid (14,8);
+\foreach \P/\x/\y/\pos in {A/1/2/below, B/4/3/above, C/11/7/above, D/5/5/above,
+                           E/6/1/below, F/9/3/above, G/13/4/right, H/4/1/below, K/10/5/above}
+  {\node[ptcross] at (\x,\y) {}; \node[\pos] at (\x,\y) {\Pt{\P}};}
+\end{tikzpicture}\par}
+
+\medskip
+\begin{enumerate}
+\item Parmi les vecteurs $\Vj{CD}$, $\Vj{EF}$, $\Vj{GH}$ et $\Vj{AK}$, rep\'erer ceux qui sont colin\'eaires au vecteur $\Vj{AB}$.
+\item Pour chaque vecteur trouv\'e \`a la question \numeroCerne{1}, donner le r\'eel $k$ tel que ce vecteur soit \'egal \`a $k\,\Vj{AB}$.
+\Ligne
+\item Les vecteurs $\Vj{CD}$ et $\Vj{GH}$ sont-ils colin\'eaires~? Si oui, d\'eterminer le r\'eel $k$ tel que $\Vj{GH}=k\,\Vj{CD}$.
+\Ligne
+\item Que peut-on en d\'eduire pour les droites (AB) et (CD)~? Et pour les points A, B et K~?
+\end{enumerate}
+\end{Exo}
+
+\end{document}

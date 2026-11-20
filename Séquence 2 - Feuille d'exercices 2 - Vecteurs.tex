@@ -1,3 +1,4 @@
+% !TEX program = xelatex
 
 \documentclass[10pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
@@ -13,6 +14,20 @@
 \usepackage{enumitem}
 \usepackage{multicol}
 \usepackage{pifont}
+% Badges « Exercice n » en cursive Playwrite FR Moderne (police du site),
+% chargée à 85 % de la taille courante (XeLaTeX ou LuaLaTeX ; gras sous pdfLaTeX).
+\makeatletter
+\ifdefined\XeTeXrevision\def\ExoFont@ok{}\fi
+\ifdefined\directlua\def\ExoFont@ok{}\fi
+\ifdefined\ExoFont@ok
+\newcommand{\ExoFont}{\font\ExoFont@f="[../polices/PlaywriteFRModerne.ttf]" at \dimexpr\f@size pt*85/100\relax\ExoFont@f}
+\else
+\newcommand{\ExoFont}{\bfseries}
+\fi
+\makeatother
+% \ExoTexte{...} : texte du badge en cursive, avec la hauteur d'une majuscule de la
+% police courante (la cursive est plus haute et ferait grandir chaque badge).
+\newcommand{\ExoTexte}[1]{\raisebox{0pt}[\fontcharht\font`E][0pt]{\ExoFont #1}}
 \usepackage{frcursive}
 % Correctif du bug de crénage de frcursive sous XeLaTeX (repris de CLT2627.sty) :
 % sans lui, certaines paires de lettres consécutives dans \cursive explosent
@@ -104,7 +119,7 @@
     left=8pt, right=8pt, top=5pt, bottom=3pt,
     before skip=4pt, after skip=4pt,
   ]
-  \noindent\tcbox[on line, colback=skyblue, colframe=skyblue, boxsep=1pt, left=4pt, right=4pt, top=1pt, bottom=1pt, arc=2pt]{\textcolor{white}{\bfseries Exercice~#2}}~#3\hfill\mbox{\color{skyblue}\normalsize\cursive\hyphenchar\font=-1 #4}\par\vspace{3pt}%
+  \noindent\tcbox[on line, colback=skyblue, colframe=skyblue, boxsep=1pt, left=4pt, right=4pt, top=1pt, bottom=1pt, arc=2pt]{\textcolor{white}{\ExoTexte{Exercice~#2}}}~#3\hfill\mbox{\color{skyblue}\normalsize\cursive\hyphenchar\font=-1 #4}\par\vspace{3pt}%
 }{%
   \end{tcolorbox}
 }
@@ -476,7 +491,7 @@ Construire~:
 \end{enumerate}
 \begin{center}
 \begin{tikzpicture}[scale=0.5]
-\draw[thin,gray!35] (0,0) grid (12,6);
+\draw[thin,black!70] (0,0) grid (12,6);
 \draw[-{Stealth},thick,blue] (2,5) -- (2,3) node[midway,right]{$\vec u$};
 \draw[-{Stealth},thick,red] (6,5) -- (8,4) node[midway,above]{$\vec v$};
 \draw[-{Stealth},thick,teal] (4,1) -- (6,2) node[midway,below]{$\vec w$};

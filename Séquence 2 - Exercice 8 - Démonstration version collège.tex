@@ -1,0 +1,125 @@
+% !TEX program = lualatex
+% Démonstration « version collège » (sans vecteurs : côtés parallèles et de
+% même longueur) de la question 3 de l'exercice 8 de la Feuille
+% d'exercices n°2 de la Séquence 2. Le corrigé de la feuille en donne la
+% version vectorielle ; ce document est la rédaction parallèle, à
+% comparer avec elle en classe.
+%
+% Préambule repris de "Séquence 2 - Feuille d'exercices 2 - Corrigé.tex"
+% pour que la présentation soit celle du reste de la séquence.
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage[left=2.2cm,right=2.2cm,top=1.6cm,bottom=1.4cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usetikzlibrary{calc,arrows.meta,shapes.misc}
+\usepackage[most]{tcolorbox}
+\usepackage[hidelinks]{hyperref}
+
+\definecolor{skyblue}{HTML}{339AF0}
+\definecolor{objorange}{HTML}{F76707}
+\definecolor{repred}{HTML}{E03131}
+\newcommand{\Vj}[1]{\overrightarrow{\text{#1}}}
+\newcommand{\Pt}[1]{\textsf{\small #1}}
+\renewcommand{\familydefault}{\sfdefault}
+\DeclareSymbolFont{sfnumbers}{OT1}{cmss}{m}{n}
+\SetSymbolFont{sfnumbers}{bold}{OT1}{cmss}{bx}{n}
+\DeclareMathSymbol{0}{\mathalpha}{sfnumbers}{`0}
+\DeclareMathSymbol{1}{\mathalpha}{sfnumbers}{`1}
+\DeclareMathSymbol{2}{\mathalpha}{sfnumbers}{`2}
+\DeclareMathSymbol{3}{\mathalpha}{sfnumbers}{`3}
+\DeclareMathSymbol{4}{\mathalpha}{sfnumbers}{`4}
+\DeclareMathSymbol{5}{\mathalpha}{sfnumbers}{`5}
+\DeclareMathSymbol{6}{\mathalpha}{sfnumbers}{`6}
+\DeclareMathSymbol{7}{\mathalpha}{sfnumbers}{`7}
+\DeclareMathSymbol{8}{\mathalpha}{sfnumbers}{`8}
+\DeclareMathSymbol{9}{\mathalpha}{sfnumbers}{`9}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+% Tout le document tient sur une page : on resserre les formules centrées.
+\setlength{\abovedisplayskip}{4pt}\setlength{\belowdisplayskip}{4pt}
+\setlength{\abovedisplayshortskip}{4pt}\setlength{\belowdisplayshortskip}{4pt}
+
+\newcommand*{\textcircledd}[1]{\begin{tikzpicture}[baseline=(letter.base)]\node[draw,circle,inner sep=2pt] (letter) {#1};\end{tikzpicture}}
+\newcommand{\numeroCerne}[1]{\protect\textcircledd{\bfseries\footnotesize #1}}
+\setlist[enumerate,1]{label=\numeroCerne{\arabic*}, leftmargin=*, labelsep=8pt, itemsep=6pt, topsep=3pt, parsep=0pt}
+
+% Bandeau de section, dans le style des bandeaux d'objectif de la feuille.
+\newcommand{\Bandeau}[1]{%
+\par\vspace{10pt}
+\noindent{\large\color{objorange}\bfseries #1}\par\nobreak
+\vspace{2pt}\nobreak
+\noindent{\color{gray!45}\rule{\linewidth}{0.6pt}}\par\nobreak
+\vspace{4pt}%
+}
+
+\title{\vspace{-1.5cm}\textbf{S\'equence 2 --- Feuille d'exercices n\textdegree{}2 : Vecteurs du plan}\\[4pt]\large Exercice 8, question 3 : d\'emonstration \og version coll\`ege \fg{}}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+\vspace{-1.6cm}
+
+\Bandeau{\'Enonc\'e}
+
+$ABCD$ et $ABEF$ sont deux parall\'elogrammes. Quelle est la nature du quadrilat\`ere $EFDC$~?
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+\coordinate (A) at (0,0); \coordinate (B) at (3,0);
+\coordinate (D) at (1.2,1.6); \coordinate (C) at (4.2,1.6);
+\coordinate (F) at (-1,2.6); \coordinate (E) at (2,2.6);
+% les deux parallélogrammes de l'énoncé
+\draw[thick] (A)--(B)--(C)--(D)--cycle;
+\draw[thick] (A)--(B)--(E)--(F)--cycle;
+% le quadrilatère EFDC, dont on cherche la nature
+\draw[repred,dashed,thick] (F)--(D); \draw[repred,dashed,thick] (C)--(E);
+% les deux côtés opposés [DC] et [FE], parallèles et de même longueur
+\draw[repred,very thick] (D)--(C); \draw[repred,very thick] (F)--(E);
+\draw[repred,very thick] ($(D)!0.5!(C)+(0,-0.16)$) -- ($(D)!0.5!(C)+(0,0.16)$);
+\draw[repred,very thick] ($(F)!0.5!(E)+(0,-0.16)$) -- ($(F)!0.5!(E)+(0,0.16)$);
+\node[below left] at (A) {\Pt{A}}; \node[below right] at (B) {\Pt{B}};
+\node[right] at (C) {\Pt{C}}; \node[below=3pt] at (D) {\Pt{D}};
+\node[left] at (F) {\Pt{F}}; \node[above] at (E) {\Pt{E}};
+\end{tikzpicture}
+\end{center}
+
+\Bandeau{D\'emonstration}
+
+\begin{enumerate}
+\item $ABCD$ est un parall\'elogramme, donc ses c\^ot\'es oppos\'es $[AB]$ et $[DC]$ sont parall\`eles et de m\^eme longueur~:
+\[(AB) ~//~(DC) \qquad\text{et}\qquad AB=DC.\]
+
+\item $ABEF$ est un parall\'elogramme, donc ses c\^ot\'es oppos\'es $[AB]$ et $[FE]$ sont parall\`eles et de m\^eme longueur~:
+\[(AB) ~//~(FE) \qquad\text{et}\qquad AB=FE.\]
+
+\item Les droites $(DC)$ et $(FE)$ sont toutes les deux parall\`eles \`a la droite $(AB)$. Or deux droites parall\`eles \`a une m\^eme troisi\`eme droite sont parall\`eles entre elles, donc
+\[(DC) ~//~(FE).\]
+
+\item De plus $DC=AB$ et $FE=AB$, donc
+\[DC=FE.\]
+
+\item Dans le quadrilat\`ere $EFDC$, les segments $[EF]$ et $[DC]$ sont deux c\^ot\'es \textbf{oppos\'es}. Ils sont parall\`eles et de m\^eme longueur, donc
+\[\text{\textbf{$EFDC$ est un parall\'elogramme.}}\]
+\end{enumerate}
+
+\Bandeau{Remarques}
+\vspace{-2pt}
+
+\begin{tcolorbox}[enhanced, colback=white, colframe=skyblue, boxrule=0.8pt, arc=3pt, left=8pt, right=8pt, top=6pt, bottom=6pt]
+\small
+\textbf{Sur la propri\'et\'e utilis\'ee \`a l'\'etape \numeroCerne{5}.} Elle s'\'enonce en toute rigueur~: \og si un quadrilat\`ere \textbf{non crois\'e} a deux c\^ot\'es oppos\'es parall\`eles et de m\^eme longueur, alors c'est un parall\'elogramme \fg{}. Deux segments parall\`eles et de m\^eme longueur peuvent en effet \^etre \og parcourus \fg{} dans le m\^eme sens --- le quadrilat\`ere est alors un parall\'elogramme --- ou en sens contraires, et il est alors crois\'e. La r\'edaction ci-dessus s'appuie donc sur la figure pour \'ecarter ce second cas.
+
+\smallskip
+\textbf{Comparaison avec la r\'edaction vectorielle.} La d\'emonstration du corrig\'e \'etablit l'\'egalit\'e de vecteurs $\Vj{DC}=\Vj{FE}$. Comme un vecteur porte \`a la fois la direction, le sens et la longueur, cette seule \'egalit\'e \'ecarte d'elle-m\^eme le cas crois\'e~: c'est pr\'ecis\'ement ce que l'outil vectoriel fait gagner ici.
+
+\smallskip
+\textbf{Cas particuliers.} Si les deux parall\'elogrammes sont confondus, ou sym\'etriques l'un de l'autre par rapport \`a la droite $(AB)$, le quadrilat\`ere $EFDC$ est aplati.
+\end{tcolorbox}
+
+\end{document}

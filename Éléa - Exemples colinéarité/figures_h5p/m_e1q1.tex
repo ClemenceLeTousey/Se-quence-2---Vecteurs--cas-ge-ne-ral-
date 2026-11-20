@@ -1,0 +1,27 @@
+
+\documentclass[border=4pt]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,shapes.misc}
+\renewcommand{\familydefault}{\sfdefault}
+\definecolor{vbleu}{HTML}{1C5FD6}
+\definecolor{orange}{HTML}{E8590C}
+\definecolor{vert}{HTML}{2F9E44}
+\definecolor{gris}{HTML}{495057}
+\definecolor{violet}{HTML}{7048E8}
+\tikzset{
+  vec/.style={->,very thick,>={Stealth[length=2.4mm]}},
+  ref/.style={orange,thick,dashed},
+  par/.style={vert,thick,dashed},
+  sec/.style={gris,thick,dashed},
+  ptcross/.style={cross out,draw,thick,minimum size=1.6mm,inner sep=0pt},
+}
+\usepackage{array}
+\setlength{\parindent}{0pt}\setlength{\parskip}{5pt}
+\newcommand{\V}[1]{\overrightarrow{\mathrm{#1}}}
+\begin{document}
+
+\begin{minipage}{8.5cm}\large \colorbox{orange!8}{\begin{minipage}{8.2cm}\vspace{4pt}{\color{orange}\large Point méthode}\par Deux vecteurs sont colinéaires s'ils ont la \textit{même direction}.\par On imagine la droite qui porte chaque vecteur : deux vecteurs ont la même direction lorsque ces droites sont parallèles (ou confondues). Le sens et la longueur n'ont pas d'importance.\par En pratique, il est possible de lire les déplacements avec les carreaux et de regarder s'ils sont proportionnels à ceux de $\vec{u}$.\vspace{4pt}\end{minipage}}\end{minipage}
+\end{document}
